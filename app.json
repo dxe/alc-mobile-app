@@ -30,7 +30,7 @@
       "package": "com.dxe.alcmobileapp",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/img/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000"
       }
     },
