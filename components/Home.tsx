@@ -36,11 +36,13 @@ function HomeScreen() {
       contentContainerStyle={{
         flexGrow: 1,
         alignItems: "center",
-        padding: 8,
+        justifyContent: 'space-between',
+        paddingHorizontal: 8,
+        paddingBottom: 10,
       }}
     >
       {/*TODO: cards should link to various screens in the app*/}
-      <Card containerStyle={{ width: "100%", height: "25%", borderRadius: 15, borderWidth: 0, padding: 0 }}>
+      <Card containerStyle={{ width: "100%", height: 125, borderRadius: 15, borderWidth: 0, padding: 0 }}>
         <ImageBackground
           style={{
             width: "100%",
@@ -67,13 +69,14 @@ function HomeScreen() {
             borderRadius: 15,
             backgroundColor: "rgba(0,0,0,0.45)",
           }}
-        ></View>
-        <View style={{ position: "absolute", top: 10, left: 10 }}>
-          <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Schedule</Text>
+        >
+          <View style={{ position: "absolute", top: 10, left: 10 }}>
+            <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Schedule</Text>
+          </View>
         </View>
       </Card>
 
-      <Card containerStyle={{ width: "100%", height: "25%", borderRadius: 15, borderWidth: 0, padding: 0 }}>
+      <Card containerStyle={{ width: "100%", height: 125, borderRadius: 15, borderWidth: 0, padding: 0 }}>
         <ImageBackground
           style={{
             width: "100%",
@@ -100,9 +103,10 @@ function HomeScreen() {
             borderRadius: 15,
             backgroundColor: "rgba(0,0,0,0.45)",
           }}
-        ></View>
-        <View style={{ position: "absolute", top: 10, left: 10 }}>
-          <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Speakers</Text>
+        >
+          <View style={{ position: "absolute", top: 10, left: 10 }}>
+            <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Speakers</Text>
+          </View>
         </View>
       </Card>
 
@@ -115,7 +119,7 @@ function HomeScreen() {
       {/*  <Text>4</Text>*/}
       {/*</View>*/}
 
-      <Card containerStyle={{ width: "100%", height: "25%", borderRadius: 15, borderWidth: 0, padding: 0 }}>
+      <Card containerStyle={{ width: "100%", height: 125, borderRadius: 15, borderWidth: 0, padding: 0 }}>
         <ImageBackground
           style={{
             width: "100%",
@@ -142,13 +146,14 @@ function HomeScreen() {
             borderRadius: 15,
             backgroundColor: "rgba(0,0,0,0.45)",
           }}
-        ></View>
-        <View style={{ position: "absolute", top: 10, left: 10 }}>
-          <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Chants & Lyrics</Text>
+        >
+          <View style={{ position: "absolute", top: 10, left: 10 }}>
+            <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Chants & Lyrics</Text>
+          </View>
         </View>
       </Card>
 
-      <Card containerStyle={{ width: "100%", height: "25%", borderRadius: 15, borderWidth: 0, padding: 0 }}>
+      <Card containerStyle={{ width: "100%", height: 125, borderRadius: 15, borderWidth: 0, padding: 0 }}>
         <ImageBackground
           style={{
             width: "100%",
@@ -175,9 +180,10 @@ function HomeScreen() {
             borderRadius: 15,
             backgroundColor: "rgba(0,0,0,0.45)",
           }}
-        ></View>
-        <View style={{ position: "absolute", top: 10, left: 10 }}>
-          <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Contact Us</Text>
+        >
+          <View style={{ position: "absolute", top: 10, left: 10 }}>
+            <Text style={{ fontSize: 40, color: "white", fontWeight: "bold" }}>Contact Us</Text>
+          </View>
         </View>
       </Card>
     </ScrollView>

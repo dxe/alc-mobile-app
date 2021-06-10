@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { Text, View } from "react-native";
+import {ScrollView, Text, View} from "react-native";
 import React from "react";
 import { colors, styles } from "../styles";
 
@@ -28,9 +28,12 @@ export default function ScheduleStack() {
 
 function ScheduleScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Calendar Line</Text>
-      <Text>List of Events</Text>
-    </View>
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+        justifyContent: 'space-between'
+      }}>
+      <Text>TODO: Implement schedule</Text>
+    </ScrollView>
   );
 }
