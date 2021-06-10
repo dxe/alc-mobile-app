@@ -29,19 +29,23 @@ export default function HomeStack() {
 
 function HomeScreen() {
   // TODO: refactor these cards into their own components (i.e. "HomeScreenCard")
-  // TODO: fix scrolling bug
+  // TODO: if multiple events are at the same time (i.e. breakout sessions), we need to render multiple cards
   return (
     <ScrollView style={{ backgroundColor: colors.white }} contentContainerStyle={{ padding: 8 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", padding: 5 }}>Happening now</Text>
       <Card
         containerStyle={{
           width: "100%",
-          height: 125,
+          height: 175,
           borderRadius: 15,
           borderWidth: 0,
           padding: 0,
           margin: 0,
           marginBottom: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 5,
         }}
       >
         <ImageBackground
@@ -71,10 +75,11 @@ function HomeScreen() {
             backgroundColor: "rgba(0,0,0,0.45)",
           }}
         >
-          <View style={{ position: "absolute", top: 10, left: 10 }}>
-            <Text style={{ fontSize: 36, color: "white", fontWeight: "bold" }}>Some event</Text>
+          <View style={{ position: "absolute", top: 0, left: 0, padding: 10 }}>
+            {/*TODO: truncate text and put "..." if it's too long to fit on the cards*/}
+            <Text style={{ fontSize: 36, color: "white", fontWeight: "bold" }}>Registration & Coffee</Text>
           </View>
-          <View style={{ position: "absolute", bottom: 10, left: 10 }}>
+          <View style={{ position: "absolute", bottom: 0, left: 0, padding: 10 }}>
             <Text style={{ fontSize: 18, color: "white", fontWeight: "bold", marginBottom: 5 }}>
               2910 Shattuck Ave, Berkeley
             </Text>
@@ -87,12 +92,16 @@ function HomeScreen() {
       <Card
         containerStyle={{
           width: "100%",
-          height: 125,
+          height: 175,
           borderRadius: 15,
           borderWidth: 0,
           padding: 0,
           margin: 0,
           marginBottom: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 5,
         }}
       >
         <ImageBackground
@@ -122,10 +131,10 @@ function HomeScreen() {
             backgroundColor: "rgba(0,0,0,0.45)",
           }}
         >
-          <View style={{ position: "absolute", top: 10, left: 10 }}>
-            <Text style={{ fontSize: 36, color: "white", fontWeight: "bold" }}>Some event</Text>
+          <View style={{ position: "absolute", top: 0, left: 0, padding: 10 }}>
+            <Text style={{ fontSize: 36, color: "white", fontWeight: "bold" }}>Intro to Nonviolence</Text>
           </View>
-          <View style={{ position: "absolute", bottom: 10, left: 10 }}>
+          <View style={{ position: "absolute", bottom: 0, left: 0, padding: 10 }}>
             <Text style={{ fontSize: 18, color: "white", fontWeight: "bold", marginBottom: 5 }}>
               2910 Shattuck Ave, Berkeley
             </Text>
@@ -146,6 +155,10 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 3,
           }}
         >
           {/*<ImageBackground*/}
@@ -191,6 +204,10 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 3,
           }}
         >
           {/*<ImageBackground*/}
@@ -236,6 +253,10 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 3,
           }}
         >
           {/*<ImageBackground*/}
@@ -281,6 +302,10 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 3,
           }}
         >
           {/*<ImageBackground*/}

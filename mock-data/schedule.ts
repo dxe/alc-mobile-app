@@ -15,6 +15,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: false,
   },
   {
     id: 2,
@@ -32,6 +33,7 @@ export const scheduleData = [
     city: "Berkeley",
     lat: 37.8747675,
     lng: -122.2682963,
+    key: false,
   },
   {
     id: 3,
@@ -49,6 +51,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: true,
   },
   {
     id: 4,
@@ -66,6 +69,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: false,
   },
   {
     id: 5,
@@ -83,6 +87,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: true,
   },
   {
     id: 6,
@@ -100,6 +105,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: false,
   },
   {
     id: 7,
@@ -117,6 +123,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: true,
   },
   {
     id: 8,
@@ -133,6 +140,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: false,
   },
   {
     id: 9,
@@ -149,6 +157,7 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: false,
   },
   {
     id: 10,
@@ -166,5 +175,6 @@ export const scheduleData = [
     city: "Oakland",
     lat: 37.79459542,
     lng: -122.2718875,
+    key: false,
   },
 ];
