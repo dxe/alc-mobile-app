@@ -36,7 +36,7 @@ function HomeScreen() {
       contentContainerStyle={{
         flexGrow: 1,
         alignItems: "center",
-        justifyContent: 'space-between',
+        justifyContent: "space-between",
         paddingHorizontal: 8,
         paddingBottom: 10,
       }}

@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import {ScrollView, Text, View} from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import React from "react";
 import { colors, styles } from "../styles";
 
@@ -31,8 +31,9 @@ function ScheduleScreen() {
     <ScrollView
       contentContainerStyle={{
         flexGrow: 1,
-        justifyContent: 'space-between'
-      }}>
+        justifyContent: "space-between",
+      }}
+    >
       <Text>TODO: Implement schedule</Text>
     </ScrollView>
   );
