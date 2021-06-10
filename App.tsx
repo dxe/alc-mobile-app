@@ -1,14 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { announcementData } from './mock-data/announcements'
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import {styles, colors} from "./styles";
+import { styles, colors } from "./styles";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,26 +15,26 @@ export default function App() {
   StatusBar.setBarStyle("light-content", true);
   return (
     <NavigationContainer>
+      {/*TODO: create welcome flow for the first time the app is opened*/}
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
             switch (route.name) {
-              case 'Home':
-                iconName = 'home-outline'
-                break
-              case 'Schedule':
-                iconName = 'calendar-outline'
-                break
-              case 'Announcements':
-                iconName = 'notifications-outline'
-                break
+              case "Home":
+                iconName = "home-outline";
+                break;
+              case "Schedule":
+                iconName = "calendar-outline";
+                break;
+              case "Announcements":
+                iconName = "notifications-outline";
+                break;
               default:
-                iconName = 'information-circle-outline'
+                iconName = "information-circle-outline";
             }
 
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}

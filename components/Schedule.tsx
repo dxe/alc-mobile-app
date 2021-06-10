@@ -1,7 +1,7 @@
-import {createStackNavigator} from "@react-navigation/stack";
-import {Text, View} from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Text, View } from "react-native";
 import React from "react";
-import {colors, styles} from "../styles";
+import { colors, styles } from "../styles";
 
 const Stack = createStackNavigator();
 
@@ -12,13 +12,13 @@ export default function ScheduleStack() {
         name="Home"
         component={ScheduleScreen}
         options={{
-          title: 'Schedule',
+          title: "Schedule",
           headerStyle: {
             backgroundColor: colors.blue,
           },
           headerTintColor: colors.white,
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontWeight: "bold",
           },
         }}
       />
