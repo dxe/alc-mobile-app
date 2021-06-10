@@ -2,7 +2,7 @@ export const announcementData = [
   {
     id: 1,
     timestamp: "2021-05-28T03:40:00Z",
-    title: "consequat ut 'newspaper-o'a",
+    title: "consequat ut a",
     message:
       "Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio.",
     icon: "exclamation-triangle",
