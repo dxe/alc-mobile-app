@@ -1,8 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { ImageBackground, Text, View, Image, ScrollView } from "react-native";
+import { ImageBackground, Text, View, Image, ScrollView, RefreshControl } from "react-native";
 import { colors, styles } from "../styles";
 import { Card } from "react-native-elements";
+import { wait } from "../util";
 
 const Stack = createStackNavigator();
 
@@ -28,11 +29,23 @@ export default function HomeStack() {
 }
 
 function HomeScreen() {
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  // TODO: implement fetching data from server & caching
+  const onRefresh = () => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  };
+
   // TODO: refactor these cards into their own components (i.e. "HomeScreenCard")
   // TODO: if multiple events are at the same time (i.e. breakout sessions), we need to render multiple cards
   return (
-    <ScrollView style={{ backgroundColor: colors.white }} contentContainerStyle={{ padding: 8 }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold", padding: 5 }}>Happening now</Text>
+    <ScrollView
+      style={{ backgroundColor: colors.white }}
+      contentContainerStyle={{ padding: 8 }}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
+      <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: 5, paddingBottom: 15 }}>Happening now</Text>
       <Card
         containerStyle={{
           width: "100%",
@@ -42,7 +55,7 @@ function HomeScreen() {
           padding: 0,
           margin: 0,
           marginBottom: 20,
-          shadowColor: '#000',
+          shadowColor: "#000",
           shadowOffset: { width: 0, height: 1 },
           shadowOpacity: 0.8,
           shadowRadius: 5,
@@ -88,7 +101,7 @@ function HomeScreen() {
         </View>
       </Card>
 
-      <Text style={{ fontSize: 20, fontWeight: "bold", padding: 5 }}>Coming up next</Text>
+      <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: 5, paddingBottom: 15 }}>Coming up next</Text>
       <Card
         containerStyle={{
           width: "100%",
@@ -98,7 +111,7 @@ function HomeScreen() {
           padding: 0,
           margin: 0,
           marginBottom: 20,
-          shadowColor: '#000',
+          shadowColor: "#000",
           shadowOffset: { width: 0, height: 1 },
           shadowOpacity: 0.8,
           shadowRadius: 5,
@@ -143,7 +156,7 @@ function HomeScreen() {
         </View>
       </Card>
 
-      <Text style={{ fontSize: 20, fontWeight: "bold", padding: 5 }}>Key events</Text>
+      <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: 5, paddingBottom: 15 }}>Key events</Text>
       <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
         <Card
           containerStyle={{
@@ -155,28 +168,12 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
-            shadowColor: '#000',
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.8,
-            shadowRadius: 3,
+            shadowRadius: 2,
           }}
         >
-          {/*<ImageBackground*/}
-          {/*  style={{*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*  }}*/}
-          {/*  imageStyle={{*/}
-          {/*    resizeMode: "cover",*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*    margin: 0,*/}
-          {/*    borderRadius: 15,*/}
-          {/*  }}*/}
-          {/*  source={require("../assets/home-calendar.jpg")}*/}
-          {/*/>*/}
           <View
             style={{
               position: "absolute",
@@ -204,28 +201,12 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
-            shadowColor: '#000',
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.8,
-            shadowRadius: 3,
+            shadowRadius: 2,
           }}
         >
-          {/*<ImageBackground*/}
-          {/*  style={{*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*  }}*/}
-          {/*  imageStyle={{*/}
-          {/*    resizeMode: "cover",*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*    margin: 0,*/}
-          {/*    borderRadius: 15,*/}
-          {/*  }}*/}
-          {/*  source={require("../assets/home-calendar.jpg")}*/}
-          {/*/>*/}
           <View
             style={{
               position: "absolute",
@@ -253,28 +234,12 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
-            shadowColor: '#000',
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.8,
-            shadowRadius: 3,
+            shadowRadius: 2,
           }}
         >
-          {/*<ImageBackground*/}
-          {/*  style={{*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*  }}*/}
-          {/*  imageStyle={{*/}
-          {/*    resizeMode: "cover",*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*    margin: 0,*/}
-          {/*    borderRadius: 15,*/}
-          {/*  }}*/}
-          {/*  source={require("../assets/home-calendar.jpg")}*/}
-          {/*/>*/}
           <View
             style={{
               position: "absolute",
@@ -302,28 +267,12 @@ function HomeScreen() {
             margin: 0,
             marginBottom: 8,
             backgroundColor: "orange",
-            shadowColor: '#000',
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.8,
-            shadowRadius: 3,
+            shadowRadius: 2,
           }}
         >
-          {/*<ImageBackground*/}
-          {/*  style={{*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*  }}*/}
-          {/*  imageStyle={{*/}
-          {/*    resizeMode: "cover",*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    padding: 0,*/}
-          {/*    margin: 0,*/}
-          {/*    borderRadius: 15,*/}
-          {/*  }}*/}
-          {/*  source={require("../assets/home-calendar.jpg")}*/}
-          {/*/>*/}
           <View
             style={{
               position: "absolute",
