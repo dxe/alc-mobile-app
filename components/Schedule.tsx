@@ -103,7 +103,7 @@ function ScheduleScreen() {
             color: colors.white,
           }}
           //@ts-ignore (valid type options seem incorrect for daySelectionAnimation)
-          daySelectionAnimation={{ type: "background", highlightColor: colors.blue }}
+          daySelectionAnimation={{ type: "background", highlightColor: colors.blue, duration: 100 }}
           scrollable={false}
           startingDate={CONFERENCE_START_DATE}
           // useIsoWeekday starts the strip on the startingDate instead of on Sunday/Monday.
