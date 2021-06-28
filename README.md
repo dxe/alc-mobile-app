@@ -3,6 +3,7 @@
 ## Pre-reqs
 
 Node.js LTS
+
 Expo CLI: `npm install --global expo-cli`
 
 ## Install deps
