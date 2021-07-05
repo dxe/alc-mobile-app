@@ -4,7 +4,7 @@ import { Text, View, ScrollView, RefreshControl } from "react-native";
 import { colors } from "../styles";
 import { Card } from "react-native-elements";
 import { wait } from "../util";
-import { TripleTextCard } from './common/TripleTextCard';
+import { TripleTextCard } from "./common/TripleTextCard";
 
 const Stack = createStackNavigator();
 

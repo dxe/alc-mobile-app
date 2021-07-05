@@ -1,5 +1,5 @@
 import React from "react";
-import {ImageBackground, Text, View, ImageSourcePropType} from "react-native";
+import { ImageBackground, Text, View, ImageSourcePropType } from "react-native";
 import { Card } from "react-native-elements";
 
 interface Props {
@@ -58,9 +58,7 @@ export function TripleTextCard(props: Props) {
           <Text style={{ fontSize: 36, color: "white", fontWeight: "bold" }}>{props.topText}</Text>
         </View>
         <View style={{ position: "absolute", bottom: 0, left: 0, padding: 10 }}>
-          <Text style={{ fontSize: 18, color: "white", fontWeight: "bold", marginBottom: 5 }}>
-            {props.middleText}
-          </Text>
+          <Text style={{ fontSize: 18, color: "white", fontWeight: "bold", marginBottom: 5 }}>{props.middleText}</Text>
           <Text style={{ fontSize: 12, color: "white", fontWeight: "bold" }}>{props.bottomText}</Text>
         </View>
       </View>
