@@ -23,7 +23,7 @@ export const infoData = [
   {
     id: 4,
     title: "Chants & Lyrics",
-    subtitle: "Unsure of what's being said or sung? Follow along here.",
+    subtitle: "Unsure of what's being said or sang? Follow along here.",
     content: `<p><strong>Title</strong><br/>Text</p><p><strong>Title</strong><br/>Text</p>`,
     icon: "microphone",
   },
