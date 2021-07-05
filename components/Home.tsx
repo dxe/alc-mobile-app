@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { ImageBackground, Text, View, Image, ScrollView, RefreshControl } from "react-native";
-import { colors, styles } from "../styles";
+import { Text, View, ScrollView, RefreshControl } from "react-native";
+import { colors } from "../styles";
 import { Card } from "react-native-elements";
 import { wait } from "../util";
 import { TripleTextCard } from './common/TripleTextCard';
@@ -38,8 +38,6 @@ function HomeScreen() {
     wait(2000).then(() => setRefreshing(false));
   };
 
-  // TODO: refactor these cards into their own components (i.e. "HomeScreenCard")
-  // TODO: if multiple events are at the same time (i.e. breakout sessions), we need to render multiple cards
   return (
     <ScrollView
       style={{ backgroundColor: colors.white }}

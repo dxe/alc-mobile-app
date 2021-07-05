@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 import React, { useEffect, useRef } from "react";
-import { colors, styles } from "../styles";
+import { colors } from "../styles";
 import { wait } from "../util";
 import { scheduleData } from "../mock-data/schedule";
 import CalendarStrip from "react-native-calendar-strip";
@@ -33,8 +33,6 @@ export default function ScheduleStack() {
   );
 }
 
-// TODO: clean up how events are filtered so there is no duplicate code
-
 function ScheduleScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(CONFERENCE_START_DATE);
@@ -61,7 +59,6 @@ function ScheduleScreen() {
 
   const initSelectedDate = () => {
     const now = moment();
-    // TODO: update "now" in state as well & set up an interval in the useEffect to watch it
     return now.isBefore(CONFERENCE_START_DATE) ? CONFERENCE_START_DATE : now;
   };
 
@@ -77,8 +74,6 @@ function ScheduleScreen() {
       })
     );
   }, []);
-
-  // TODO: Advance the selected date if midnight has past (or maybe whenever app enters the foreground).
 
   return (
     <ScrollView
@@ -115,7 +110,6 @@ function ScheduleScreen() {
           ref={calendarStrip}
         />
       </View>
-      {/*// TODO: filter schedule based on selected date (use state for selected date)*/}
       {filteredSchedule.map((item: any) => {
         return (
           <Text key={item.id}>

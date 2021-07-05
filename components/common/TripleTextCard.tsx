@@ -1,11 +1,11 @@
 import React from "react";
-import { ImageBackground, Text, View, Image, ScrollView, RefreshControl } from "react-native";
+import {ImageBackground, Text, View, ImageSourcePropType} from "react-native";
 import { Card } from "react-native-elements";
 
 interface Props {
-  imageSource: string;
+  imageSource: ImageSourcePropType;
   topText: string;
-  middleText;
+  middleText: string;
   bottomText: string;
 }
 

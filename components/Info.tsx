@@ -1,7 +1,7 @@
 import { createStackNavigator, HeaderTitle } from "@react-navigation/stack";
-import { Text, View, ScrollView, RefreshControl } from "react-native";
+import { ScrollView, RefreshControl } from "react-native";
 import React from "react";
-import { colors, styles } from "../styles";
+import { colors } from "../styles";
 import { infoData } from "../mock-data/info";
 import { ListItem, Icon } from "react-native-elements";
 import { wait } from "../util";
