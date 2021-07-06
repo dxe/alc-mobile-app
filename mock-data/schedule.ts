@@ -36,6 +36,24 @@ export const scheduleData = [
     key: false,
   },
   {
+    id: 11,
+    name: "Event 11",
+    description:
+      "Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\n\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
+    start_time: "2021-09-24T18:00:01Z",
+    length: 2,
+    attendees: [],
+    attendee_count: 0,
+    attending: false,
+    location_name: "The Flying Falafel",
+    place_id: "ChIJvWI2gp5-hYARbzMnkKTNAng",
+    address: "2114 Shattuck Ave",
+    city: "Berkeley",
+    lat: 37.8747675,
+    lng: -122.2682963,
+    key: false,
+  },
+  {
     id: 3,
     name: "Event 3",
     description:

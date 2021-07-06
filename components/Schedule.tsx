@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { RefreshControl, ScrollView, SectionList, StyleSheet, Text, View, LogBox } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { wait } from "../util";
@@ -28,6 +28,22 @@ export default function ScheduleStack() {
   );
 }
 
+const sectionizeSchedule = (data: any[]) => {
+  return data.reduce((re, o) => {
+    let existObj = re.find((obj: any) => obj.title === o.start_time);
+
+    if (existObj) {
+      existObj.data.push(o);
+    } else {
+      re.push({
+        title: o.start_time,
+        data: [o],
+      });
+    }
+    return re;
+  }, []);
+};
+
 function ScheduleScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(CONFERENCE_START_DATE);
@@ -42,6 +58,7 @@ function ScheduleScreen() {
   };
 
   const onDateSelected = (date: moment.Moment) => {
+    if (date.format("YYYY-MM-DD") === selectedDate.format("YYYY-MM-DD")) return;
     setSelectedDate(date);
     setFilteredSchedule(
       schedule.filter((item: any) => {
@@ -57,6 +74,7 @@ function ScheduleScreen() {
   };
 
   useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     // TODO: load from API instead of using mock data
     setSchedule(scheduleData);
     const initDate = initSelectedDate();
@@ -95,13 +113,15 @@ function ScheduleScreen() {
           ref={calendarStrip}
         />
       </View>
-      {filteredSchedule.map((item: any) => {
-        return (
-          <Text key={item.id}>
-            {item.name} | {item.start_time}
-          </Text>
-        );
-      })}
+
+      {filteredSchedule && (
+        <SectionList
+          sections={sectionizeSchedule(filteredSchedule)}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => <Text>{item.name}</Text>}
+          renderSectionHeader={({ section: { title } }) => <Text>{title}</Text>}
+        />
+      )}
     </ScrollView>
   );
 }
