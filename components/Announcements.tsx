@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl } from "react-native";
+import { ScrollView, RefreshControl, StyleSheet } from "react-native";
 import React from "react";
-import { colors } from "../styles";
+import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { announcementData } from "../mock-data/announcements";
 import { ListItem, Icon } from "react-native-elements";
 import { wait } from "../util";
@@ -18,14 +18,8 @@ export default function AnnouncementsStack() {
         name="Home"
         component={AnnouncementsScreen}
         options={{
+          ...screenHeaderOptions,
           title: "Announcements",
-          headerStyle: {
-            backgroundColor: colors.blue,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
         }}
       />
     </Stack.Navigator>
@@ -43,40 +37,33 @@ function AnnouncementsScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.white }}
-      contentContainerStyle={{ padding: 8 }}
+      style={globalStyles.scrollView}
+      contentContainerStyle={globalStyles.scrollViewContentContainer}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       {announcementData.map((a, i) => (
-        <ListItem
-          key={i}
-          style={{
-            borderStyle: "solid",
-            borderWidth: 2,
-            borderRadius: 15,
-            marginBottom: 5,
-            overflow: "hidden",
-            borderColor: colors.lightgrey,
-          }}
-        >
+        <ListItem key={i} style={globalStyles.listItem}>
           <Icon
             raised
             reverse
             name={a.icon}
             type="font-awesome"
-            color={a.icon === "exclamation-triangle" ? "red" : colors.blue}
+            color={a.icon === "exclamation-triangle" ? "red" : colors.primary}
           />
           <ListItem.Content>
-            <ListItem.Title style={{ fontWeight: "bold", textTransform: "capitalize", marginBottom: 6 }}>
-              {a.title}
-            </ListItem.Title>
+            <ListItem.Title style={globalStyles.listItemTitle}>{a.title}</ListItem.Title>
             <ListItem.Subtitle>{a.message}</ListItem.Subtitle>
-            <ListItem.Subtitle style={{ fontSize: 12, paddingTop: 5 }}>
-              {dayjs(a.timestamp).fromNow()}
-            </ListItem.Subtitle>
+            <ListItem.Subtitle style={styles.timestamp}>{dayjs(a.timestamp).fromNow()}</ListItem.Subtitle>
           </ListItem.Content>
         </ListItem>
       ))}
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  timestamp: {
+    fontSize: 12,
+    paddingTop: 5,
+  },
+});

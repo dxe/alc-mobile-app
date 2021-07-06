@@ -1,7 +1,7 @@
-import { createStackNavigator, HeaderTitle } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl } from "react-native";
 import React from "react";
-import { colors } from "../styles";
+import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { infoData } from "../mock-data/info";
 import { ListItem, Icon } from "react-native-elements";
 import { wait } from "../util";
@@ -16,28 +16,15 @@ export default function InfoStack() {
         name="Info"
         component={InfoScreen}
         options={{
+          ...screenHeaderOptions,
           title: "Information",
-          headerStyle: {
-            backgroundColor: colors.blue,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
         }}
       />
       <Stack.Screen
         name="Details"
         component={InfoDetails}
         options={{
-          title: "Details",
-          headerStyle: {
-            backgroundColor: colors.blue,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
+          ...screenHeaderOptions,
         }}
       />
     </Stack.Navigator>
@@ -55,22 +42,14 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.white }}
-      contentContainerStyle={{ padding: 8 }}
+      style={globalStyles.scrollView}
+      contentContainerStyle={globalStyles.scrollViewContentContainer}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       {infoData.map((item, i) => (
         <ListItem
           key={i}
-          style={{
-            borderStyle: "solid",
-            borderWidth: 2,
-            borderRadius: 15,
-            marginBottom: 5,
-            overflow: "hidden",
-            borderColor: colors.lightgrey,
-          }}
-          containerStyle={{ backgroundColor: "white" }}
+          style={globalStyles.listItem}
           onPress={() => navigation.navigate("Details", { infoItem: item })}
         >
           <Icon
@@ -78,10 +57,10 @@ function InfoScreen({ navigation }: any) {
             reverse
             name={item.icon}
             type="font-awesome"
-            color={item.icon === "exclamation-triangle" ? "red" : colors.blue}
+            color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
           />
           <ListItem.Content>
-            <ListItem.Title style={{ fontWeight: "bold", marginBottom: 6 }}>{item.title}</ListItem.Title>
+            <ListItem.Title style={globalStyles.listItemTitle}>{item.title}</ListItem.Title>
             <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
           </ListItem.Content>
         </ListItem>
@@ -100,7 +79,7 @@ function InfoDetails({ route, navigation }: any) {
   }, [navigation, infoItem]);
 
   return (
-    <ScrollView style={{ backgroundColor: colors.white }} contentContainerStyle={{ padding: 8 }}>
+    <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
       <HTML source={{ html: infoItem.content }} />
     </ScrollView>
   );

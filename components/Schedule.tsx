@@ -1,14 +1,15 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RefreshControl, ScrollView, Text, View } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useRef } from "react";
-import { colors } from "../styles";
+import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { wait } from "../util";
 import { scheduleData } from "../mock-data/schedule";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 
-const CONFERENCE_START_DATE = moment("2021-09-24");
-const CONFERENCE_END_DATE = moment("2021-09-30");
+// TODO: Get start & end date from the backend.
+export const CONFERENCE_START_DATE = moment("2021-09-24");
+export const CONFERENCE_END_DATE = moment("2021-09-30");
 
 const Stack = createStackNavigator();
 
@@ -19,14 +20,8 @@ export default function ScheduleStack() {
         name="Home"
         component={ScheduleScreen}
         options={{
+          ...screenHeaderOptions,
           title: "Schedule",
-          headerStyle: {
-            backgroundColor: colors.blue,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
         }}
       />
     </Stack.Navigator>
@@ -36,7 +31,6 @@ export default function ScheduleStack() {
 function ScheduleScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(CONFERENCE_START_DATE);
-  const [today, setToday] = React.useState(moment());
   const [schedule, setSchedule] = React.useState<any>([]);
   const [filteredSchedule, setFilteredSchedule] = React.useState<any>([]);
   const calendarStrip = useRef<any>();
@@ -77,28 +71,19 @@ function ScheduleScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.white }}
-      contentContainerStyle={{ padding: 8 }}
+      style={globalStyles.scrollView}
+      contentContainerStyle={globalStyles.scrollViewContentContainer}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       <View style={{ flex: 1 }}>
         <CalendarStrip
-          style={{
-            height: 90,
-            paddingTop: 0,
-            paddingBottom: 10,
-            borderBottomWidth: 1,
-            borderColor: colors.lightgrey,
-          }}
-          calendarHeaderStyle={{ color: colors.blue }}
-          dateNumberStyle={{ color: colors.blue }}
-          dateNameStyle={{ color: colors.blue }}
-          highlightDateNameStyle={{ color: colors.white }}
-          highlightDateNumberStyle={{
-            color: colors.white,
-          }}
-          //@ts-ignore (valid type options seem incorrect for daySelectionAnimation)
-          daySelectionAnimation={{ type: "background", highlightColor: colors.blue, duration: 100 }}
+          style={styles.calendarStrip}
+          calendarHeaderStyle={styles.colorPrimary}
+          dateNumberStyle={styles.colorPrimary}
+          dateNameStyle={styles.colorPrimary}
+          highlightDateNameStyle={styles.colorWhite}
+          highlightDateNumberStyle={styles.colorWhite}
+          daySelectionAnimation={{ type: "background", highlightColor: colors.primary, duration: 100 }}
           scrollable={false}
           startingDate={CONFERENCE_START_DATE}
           // useIsoWeekday starts the strip on the startingDate instead of on Sunday/Monday.
@@ -120,3 +105,15 @@ function ScheduleScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  calendarStrip: {
+    height: 90,
+    paddingTop: 0,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderColor: colors.lightgrey,
+  },
+  colorPrimary: { color: colors.primary },
+  colorWhite: { color: colors.white },
+});

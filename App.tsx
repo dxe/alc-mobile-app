@@ -7,7 +7,7 @@ import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import { colors } from "./styles";
+import { colors } from "./global-styles";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +39,7 @@ export default function App() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: colors.blue,
+          activeTintColor: colors.primary,
           inactiveTintColor: colors.grey,
         }}
       >

@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { Text, View, ScrollView, RefreshControl } from "react-native";
-import { colors } from "../styles";
+import { Text, View, ScrollView, RefreshControl, StyleSheet } from "react-native";
+import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
 import { wait } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
@@ -15,14 +15,8 @@ export default function HomeStack() {
         name="Home"
         component={HomeScreen}
         options={{
+          ...screenHeaderOptions,
           title: "Animal Liberation Conference",
-          headerStyle: {
-            backgroundColor: colors.blue,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
         }}
       />
     </Stack.Navigator>
@@ -40,11 +34,11 @@ function HomeScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.white }}
-      contentContainerStyle={{ padding: 8 }}
+      style={globalStyles.scrollView}
+      contentContainerStyle={globalStyles.scrollViewContentContainer}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-      <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: 5, paddingBottom: 15 }}>Happening now</Text>
+      <Text style={styles.heading}>Happening now</Text>
       <TripleTextCard
         imageSource={require("../assets/home-march.jpg")}
         topText={"Registration & Coffee"}
@@ -52,7 +46,7 @@ function HomeScreen() {
         bottomText={"Started 5 minutes ago"}
       />
 
-      <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: 5, paddingBottom: 15 }}>Coming up next</Text>
+      <Text style={styles.heading}>Coming up next</Text>
       <TripleTextCard
         imageSource={require("../assets/home-community.jpg")}
         topText={"Intro to Nonviolence"}
@@ -60,136 +54,36 @@ function HomeScreen() {
         bottomText={"Starts in 1 hour"}
       />
 
-      <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: 5, paddingBottom: 15 }}>Key events</Text>
-      <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
-        <Card
-          containerStyle={{
-            width: "49%",
-            height: 125,
-            borderRadius: 15,
-            borderWidth: 0,
-            padding: 0,
-            margin: 0,
-            marginBottom: 8,
-            backgroundColor: "orange",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.8,
-            shadowRadius: 2,
-          }}
-        >
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              borderRadius: 15,
-              backgroundColor: "rgba(0,0,0,0.45)",
-            }}
-          >
-            <View style={{ position: "absolute", top: 0, left: 0 }}>
-              <Text style={{ fontSize: 36, color: "white", fontWeight: "bold", padding: 10 }}>Some event</Text>
+      <Text style={styles.heading}>Key events</Text>
+      <View style={styles.keyEventsView}>
+        <Card containerStyle={styles.keyEventCard}>
+          <View style={styles.keyEventView}>
+            <View style={styles.keyEventInnerView}>
+              <Text style={styles.keyEventText}>Some event</Text>
             </View>
           </View>
         </Card>
 
-        <Card
-          containerStyle={{
-            width: "49%",
-            height: 125,
-            borderRadius: 15,
-            borderWidth: 0,
-            padding: 0,
-            margin: 0,
-            marginBottom: 8,
-            backgroundColor: "orange",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.8,
-            shadowRadius: 2,
-          }}
-        >
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              borderRadius: 15,
-              backgroundColor: "rgba(0,0,0,0.45)",
-            }}
-          >
-            <View style={{ position: "absolute", top: 0, left: 0 }}>
-              <Text style={{ fontSize: 36, color: "white", fontWeight: "bold", padding: 10 }}>Some event</Text>
+        <Card containerStyle={styles.keyEventCard}>
+          <View style={styles.keyEventView}>
+            <View style={styles.keyEventInnerView}>
+              <Text style={styles.keyEventText}>Some event</Text>
             </View>
           </View>
         </Card>
 
-        <Card
-          containerStyle={{
-            width: "49%",
-            height: 125,
-            borderRadius: 15,
-            borderWidth: 0,
-            padding: 0,
-            margin: 0,
-            marginBottom: 8,
-            backgroundColor: "orange",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.8,
-            shadowRadius: 2,
-          }}
-        >
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              borderRadius: 15,
-              backgroundColor: "rgba(0,0,0,0.45)",
-            }}
-          >
-            <View style={{ position: "absolute", top: 0, left: 0 }}>
-              <Text style={{ fontSize: 36, color: "white", fontWeight: "bold", padding: 10 }}>Some event</Text>
+        <Card containerStyle={styles.keyEventCard}>
+          <View style={styles.keyEventView}>
+            <View style={styles.keyEventInnerView}>
+              <Text style={styles.keyEventText}>Some event</Text>
             </View>
           </View>
         </Card>
 
-        <Card
-          containerStyle={{
-            width: "49%",
-            height: 125,
-            borderRadius: 15,
-            borderWidth: 0,
-            padding: 0,
-            margin: 0,
-            marginBottom: 8,
-            backgroundColor: "orange",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.8,
-            shadowRadius: 2,
-          }}
-        >
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              borderRadius: 15,
-              backgroundColor: "rgba(0,0,0,0.45)",
-            }}
-          >
-            <View style={{ position: "absolute", top: 0, left: 0 }}>
-              <Text style={{ fontSize: 36, color: "white", fontWeight: "bold", padding: 10 }}>Some event</Text>
+        <Card containerStyle={styles.keyEventCard}>
+          <View style={styles.keyEventView}>
+            <View style={styles.keyEventInnerView}>
+              <Text style={styles.keyEventText}>Some event</Text>
             </View>
           </View>
         </Card>
@@ -197,3 +91,52 @@ function HomeScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  heading: {
+    fontSize: 30,
+    fontWeight: "bold",
+    paddingTop: 5,
+    paddingBottom: 15,
+  },
+  keyEventsView: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  keyEventCard: {
+    width: "49%",
+    height: 125,
+    borderRadius: 15,
+    borderWidth: 0,
+    padding: 0,
+    margin: 0,
+    marginBottom: 8,
+    backgroundColor: colors.primary,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+  },
+  keyEventView: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    borderRadius: 15,
+    backgroundColor: "rgba(0,0,0,0.45)",
+  },
+  keyEventInnerView: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
+  keyEventText: {
+    fontSize: 36,
+    color: "white",
+    fontWeight: "bold",
+    padding: 10,
+  },
+});
