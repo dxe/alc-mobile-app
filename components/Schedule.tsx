@@ -6,6 +6,8 @@ import { wait } from "../util";
 import { scheduleData } from "../mock-data/schedule";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
+import { Icon, ListItem } from "react-native-elements";
+import dayjs from "dayjs";
 
 // TODO: Get start & end date from the backend.
 export const CONFERENCE_START_DATE = moment("2021-09-24");
@@ -88,12 +90,8 @@ function ScheduleScreen() {
   }, []);
 
   return (
-    <ScrollView
-      style={globalStyles.scrollView}
-      contentContainerStyle={globalStyles.scrollViewContentContainer}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-      <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
+      <View style={{ paddingTop: 10 }}>
         <CalendarStrip
           style={styles.calendarStrip}
           calendarHeaderStyle={styles.colorPrimary}
@@ -114,15 +112,45 @@ function ScheduleScreen() {
         />
       </View>
 
+      {/*TODO: This is a work in progress.*/}
       {filteredSchedule && (
         <SectionList
           sections={sectionizeSchedule(filteredSchedule)}
           keyExtractor={(item, index) => item + index}
-          renderItem={({ item }) => <Text>{item.name}</Text>}
-          renderSectionHeader={({ section: { title } }) => <Text>{title}</Text>}
+          renderItem={({ item, section, index }) => (
+            <ListItem
+              key={item.id}
+              style={[
+                {
+                  borderStyle: "solid",
+                  paddingBottom: 5,
+                  overflow: "hidden",
+                  borderColor: colors.lightgrey,
+                  borderLeftWidth: 2,
+                  borderRightWidth: 2,
+                  borderTopWidth: index === 0 ? 2 : 0,
+                  borderBottomWidth: index === section.data.length - 1 ? 2 : 0,
+                  borderTopLeftRadius: index === 0 ? 15 : 0,
+                  borderBottomLeftRadius: index === section.data.length - 1 ? 15 : 0,
+                  borderTopRightRadius: index === 0 ? 15 : 0,
+                  borderBottomRightRadius: index === section.data.length - 1 ? 15 : 0,
+                },
+              ]}
+            >
+              <ListItem.Content>
+                <ListItem.Title style={globalStyles.listItemTitle}>{index + " " + item.name}</ListItem.Title>
+                <ListItem.Subtitle>{item.location_name}</ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+          )}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={{ textAlign: "center", backgroundColor: colors.white }}>{dayjs(title).format("h:mm A")}</Text>
+          )}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          style={[globalStyles.scrollView, { paddingHorizontal: 8 }]}
         />
       )}
-    </ScrollView>
+    </View>
   );
 }
 
