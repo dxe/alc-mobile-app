@@ -138,16 +138,25 @@ function ScheduleScreen() {
               ]}
             >
               <ListItem.Content>
-                <ListItem.Title style={globalStyles.listItemTitle}>{index + " " + item.name}</ListItem.Title>
-                <ListItem.Subtitle>{item.location_name}</ListItem.Subtitle>
-                {index === 0 && index !== section.data.length - 1 && (
-                  <View style={{ height: 2, width: "100%", backgroundColor: colors.lightgrey, marginTop: 35 }} />
-                )}
+                <View style={{ flex: 1, flexDirection: "row" }}>
+                  <View style={{ paddingRight: 10 }}>
+                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>{dayjs(item.start_time).format("h:mm A")}</Text>
+                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>|</Text>
+                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>{dayjs(item.start_time).format("h:mm A")}</Text>
+                  </View>
+                  <View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
+                    <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20 }]}>{item.name}</ListItem.Title>
+                    <ListItem.Subtitle>{item.location_name}</ListItem.Subtitle>
+                    {index === 0 && index !== section.data.length - 1 && (
+                      <View style={{ height: 2, width: "100%", backgroundColor: colors.lightgrey, marginTop: 35 }} />
+                    )}
+                  </View>
+                </View>
               </ListItem.Content>
             </ListItem>
           )}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{ textAlign: "center", backgroundColor: colors.white }}>{dayjs(title).format("h:mm A")}</Text>
+            <Text style={{ textAlign: "center", backgroundColor: colors.white, margin: 11, fontSize: 20, fontWeight: "bold" }}>{dayjs(title).format("h:mm A")}</Text>
           )}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           style={[globalStyles.scrollView, { paddingHorizontal: 8 }]}
