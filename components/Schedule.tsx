@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RefreshControl, ScrollView, SectionList, StyleSheet, Text, View, LogBox } from "react-native";
+import { RefreshControl, ScrollView, SectionList, StyleSheet, Text, View, LogBox, Pressable } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { wait } from "../util";
@@ -144,11 +144,16 @@ function ScheduleScreen() {
                     <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>|</Text>
                     <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>{dayjs(item.start_time).format("h:mm A")}</Text>
                   </View>
-                  <View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
-                    <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20 }]}>{item.name}</ListItem.Title>
+                  <View style={{ flex: 1, flexDirection: "column", justifyContent: "start", alignItems: "flex-start" }}>
+                    <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20, marginBottom: 30 }]}>{item.name}</ListItem.Title>
                     <ListItem.Subtitle>{item.location_name}</ListItem.Subtitle>
+                    <Pressable onPress={() => console.log("pressed")}>
+                      <View style={{ backgroundColor: colors.lightgreen, padding: 10, marginTop: 10, borderRadius: 100 }}>
+                        <Text style={{ color: colors.white,  }}>Attending</Text>
+                      </View>
+                    </Pressable>
                     {index === 0 && index !== section.data.length - 1 && (
-                      <View style={{ height: 2, width: "100%", backgroundColor: colors.lightgrey, marginTop: 35 }} />
+                      <View style={{ height: 2, width: "100%", backgroundColor: colors.lightgrey, marginTop: 10 }} />
                     )}
                   </View>
                 </View>
