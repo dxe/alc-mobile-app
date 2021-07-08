@@ -1,12 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RefreshControl, ScrollView, SectionList, StyleSheet, Text, View, LogBox, Pressable } from "react-native";
+import { RefreshControl, SectionList, StyleSheet, Text, View, LogBox, Pressable } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { wait } from "../util";
 import { scheduleData } from "../mock-data/schedule";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
-import { Icon, ListItem } from "react-native-elements";
+import { ListItem } from "react-native-elements";
 import dayjs from "dayjs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FeatherIcon from "react-native-vector-icons/Feather";
@@ -121,6 +121,7 @@ function ScheduleScreen() {
           keyExtractor={(item, index) => item + index}
           renderItem={({ item, section, index }) => (
             <ListItem
+              containerStyle={{ backgroundColor: "transparent" }}
               key={item.id}
               style={[
                 {
@@ -142,23 +143,48 @@ function ScheduleScreen() {
               <ListItem.Content>
                 <View style={{ flex: 1, flexDirection: "row" }}>
                   <View style={{ paddingRight: 10 }}>
-                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>{dayjs(item.start_time).format("h:mm A")}</Text>
+                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>
+                      {dayjs(item.start_time).format("h:mm A")}
+                    </Text>
                     <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>|</Text>
-                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>{dayjs(item.start_time).format("h:mm A")}</Text>
+                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>
+                      {dayjs(item.start_time).format("h:mm A")}
+                    </Text>
                   </View>
                   <View style={{ flexGrow: 1 }}>
                     <View style={{ flex: 1, flexDirection: "row" }}>
-                      <View style={{ flex: 1, flexDirection: "column", justifyContent: "start", alignItems: "flex-start" }}>
-                        <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20, marginBottom: 30 }]}>{item.name}</ListItem.Title>
-                        <ListItem.Subtitle><FeatherIcon name="map-pin" size={16} /> <Text style={{ fontSize: 16 }}>{item.location_name}</Text></ListItem.Subtitle>
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20, marginBottom: 30 }]}>
+                          {item.name}
+                        </ListItem.Title>
+                        <ListItem.Subtitle>
+                          <FeatherIcon name="map-pin" size={16} />{" "}
+                          <Text style={{ fontSize: 16 }}>{item.location_name}</Text>
+                        </ListItem.Subtitle>
                         <Pressable onPress={() => console.log("pressed")}>
-                          <View style={{ backgroundColor: colors.lightgreen, padding: 10, marginTop: 10, borderRadius: 100 }}>
+                          <View
+                            style={{
+                              backgroundColor: colors.lightgreen,
+                              padding: 10,
+                              marginTop: 10,
+                              borderRadius: 100,
+                            }}
+                          >
                             <Text style={{ color: colors.white, fontWeight: "bold" }}>Attending</Text>
                           </View>
                         </Pressable>
                       </View>
                       <Pressable onPress={() => console.log("pressed")}>
-                        <View style={{ flex: 1, justifyContent: "center", padding: 10, borderRadius: 100, height: "100%" }}>
+                        <View
+                          style={{ flex: 1, justifyContent: "center", padding: 10, borderRadius: 100, height: "100%" }}
+                        >
                           <Ionicons name="caret-forward" size={30} />
                         </View>
                       </Pressable>
@@ -172,7 +198,17 @@ function ScheduleScreen() {
             </ListItem>
           )}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{ textAlign: "center", backgroundColor: colors.white, margin: 11, fontSize: 20, fontWeight: "bold" }}>{dayjs(title).format("h:mm A")}</Text>
+            <Text
+              style={{
+                textAlign: "center",
+                backgroundColor: colors.white,
+                margin: 11,
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              {dayjs(title).format("h:mm A")}
+            </Text>
           )}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           style={[globalStyles.scrollView, { paddingHorizontal: 8 }]}
