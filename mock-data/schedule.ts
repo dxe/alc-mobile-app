@@ -1,7 +1,7 @@
 export const scheduleData = [
   {
     id: 1,
-    name: "Event 1",
+    name: "Registration",
     description:
       "Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.\n\nCum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
     start_time: "2021-09-24T17:00:01Z",
@@ -9,7 +9,7 @@ export const scheduleData = [
     attendees: ["Bob", "Jim", "Mary", "Tim", "O.J.", "Jack", "Jill", "Sandy", "Thomas", "Frank"],
     attendee_count: 10,
     attending: false,
-    location_name: "BLOC15",
+    location_name: "Anna Head Almunae Hall",
     place_id: "ChIJq6o6Q8mAj4ARsF7I2SLSZC4",
     address: "252 2nd St",
     city: "Oakland",

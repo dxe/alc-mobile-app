@@ -3,9 +3,10 @@ import { StackNavigationOptions } from "@react-navigation/stack";
 
 export const colors = {
   primary: "#335CCF",
-  white: "#fff",
+  white: "#FFF",
   grey: "#888",
-  lightgrey: "#ccc",
+  lightgrey: "#CCC",
+  lightgreen: "#5CCC78"
 };
 
 export const globalStyles = StyleSheet.create({
