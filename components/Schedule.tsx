@@ -1,5 +1,16 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RefreshControl, SectionList, StyleSheet, Text, View, LogBox, Pressable } from "react-native";
+import {
+    RefreshControl,
+    SectionList,
+    StyleSheet,
+    Text,
+    View,
+    LogBox,
+    Pressable,
+    ScrollView,
+    Dimensions,
+    Button
+} from "react-native";
 import React, { useEffect, useRef } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { wait } from "../util";
@@ -10,6 +21,8 @@ import { ListItem } from "react-native-elements";
 import dayjs from "dayjs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FeatherIcon from "react-native-vector-icons/Feather";
+import MapView, {Marker} from 'react-native-maps';
+import {showLocation} from "react-native-map-link";
 
 // TODO: Get start & end date from the backend.
 export const CONFERENCE_START_DATE = moment("2021-09-24");
@@ -21,11 +34,18 @@ export default function ScheduleStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
+        name="Schedule"
         component={ScheduleScreen}
         options={{
           ...screenHeaderOptions,
           title: "Schedule",
+        }}
+      />
+      <Stack.Screen
+        name="Event Details"
+        component={EventDetails}
+        options={{
+          ...screenHeaderOptions,
         }}
       />
     </Stack.Navigator>
@@ -48,7 +68,7 @@ const sectionizeSchedule = (data: any[]) => {
   }, []);
 };
 
-function ScheduleScreen() {
+function ScheduleScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(CONFERENCE_START_DATE);
   const [schedule, setSchedule] = React.useState<any>([]);
@@ -92,8 +112,8 @@ function ScheduleScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ paddingTop: 10 }}>
+    <View style={{ flex: 1, }}>
+      <View style={ styles.calendarStripWrapper }>
         <CalendarStrip
           style={styles.calendarStrip}
           calendarHeaderStyle={styles.colorPrimary}
@@ -114,98 +134,98 @@ function ScheduleScreen() {
         />
       </View>
 
-      {/*TODO: This is a work in progress.*/}
       {filteredSchedule && (
         <SectionList
           sections={sectionizeSchedule(filteredSchedule)}
           keyExtractor={(item, index) => item + index}
-          renderItem={({ item, section, index }) => (
-            <ListItem
-              containerStyle={{ backgroundColor: "transparent" }}
-              key={item.id}
-              style={[
-                {
-                  borderStyle: "solid",
-                  paddingBottom: 5,
-                  overflow: "hidden",
-                  borderColor: colors.lightgrey,
-                  borderLeftWidth: 2,
-                  borderRightWidth: 2,
-                  borderTopWidth: index === 0 ? 2 : 0,
-                  borderBottomWidth: index === section.data.length - 1 ? 2 : 0,
-                  borderTopLeftRadius: index === 0 ? 15 : 0,
-                  borderBottomLeftRadius: index === section.data.length - 1 ? 15 : 0,
-                  borderTopRightRadius: index === 0 ? 15 : 0,
-                  borderBottomRightRadius: index === section.data.length - 1 ? 15 : 0,
-                },
-              ]}
-            >
-              <ListItem.Content>
-                <View style={{ flex: 1, flexDirection: "row" }}>
-                  <View style={{ paddingRight: 10 }}>
-                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>
-                      {dayjs(item.start_time).format("h:mm A")}
-                    </Text>
-                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>|</Text>
-                    <Text style={{ textAlign: "center", backgroundColor: colors.white, fontSize: 15 }}>
-                      {dayjs(item.start_time).format("h:mm A")}
-                    </Text>
-                  </View>
-                  <View style={{ flexGrow: 1 }}>
-                    <View style={{ flex: 1, flexDirection: "row" }}>
-                      <View
-                        style={{
-                          flex: 1,
-                          flexDirection: "column",
-                          justifyContent: "flex-start",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20, marginBottom: 30 }]}>
-                          {item.name}
-                        </ListItem.Title>
-                        <ListItem.Subtitle>
-                          <FeatherIcon name="map-pin" size={16} />{" "}
-                          <Text style={{ fontSize: 16 }}>{item.location_name}</Text>
-                        </ListItem.Subtitle>
-                        <Pressable onPress={() => console.log("pressed")}>
+          renderItem={({ item, section, index }) => {
+
+            const itemsInSection =  section.data.length - 1
+
+            return (
+            <Pressable onPress={() => navigation.navigate("Event Details", { scheduleItem: item })}>
+
+              <ListItem
+                containerStyle={{ backgroundColor: "transparent", paddingVertical: 5 }}
+                key={item.id}
+                // TODO: move this styling into a stylesheet if it will work w/ the variables?
+                style={[
+                  {
+                    borderStyle: "solid",
+                    paddingBottom: 0,
+                    marginBottom: index === itemsInSection ? 5 : 0,
+                    overflow: "hidden",
+                    borderColor: colors.lightgrey,
+                    borderLeftWidth: 2,
+                    borderRightWidth: 2,
+                    borderTopWidth: index === 0 ? 2 : 0,
+                    borderBottomWidth: index === itemsInSection ? 2 : 0,
+                    borderTopLeftRadius: index === 0 ? 15 : 0,
+                    borderBottomLeftRadius: index === itemsInSection ? 15 : 0,
+                    borderTopRightRadius: index === 0 ? 15 : 0,
+                    borderBottomRightRadius: index === itemsInSection ? 15 : 0,
+                  },
+                ]}
+              >
+                <ListItem.Content>
+                  <View style={{ flex: 1, flexDirection: "row" }}>
+                    <View style={{ paddingRight: 10 }}>
+                      <Text style={ styles.startTime }>
+                        {dayjs(item.start_time).format("h:mm A")}
+                      </Text>
+                      <Text style={ styles.endTime }>|</Text>
+                      <Text style={ styles.endTime }>
+                        {dayjs(item.start_time).add(item.length, "minute").format("h:mm A")}
+                      </Text>
+                    </View>
+                    <View style={{ flexGrow: 1 }}>
+                      <View style={{ flex: 1, flexDirection: "row" }}>
+                        <View
+                          style={{
+                            flex: 1,
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20, marginBottom: 10 }]}>
+                            {item.name}
+                          </ListItem.Title>
+                          <ListItem.Subtitle>
+                            <FeatherIcon name="map-pin" size={16} />{" "}
+                            <Text style={{ fontSize: 16 }}>{item.location_name}</Text>
+                          </ListItem.Subtitle>
+                          <Pressable onPress={() => console.log("rsvp status pressed")}>
+                            <View style={ styles.rsvpStatus }>
+                              <Text style={ styles.rsvpStatusText }>Attending</Text>
+                            </View>
+                          </Pressable>
+                        </View>
+                        <Pressable onPress={() => navigation.navigate("Event Details", { scheduleItem: item })}>
                           <View
                             style={{
-                              backgroundColor: colors.lightgreen,
-                              padding: 10,
-                              marginTop: 10,
+                              flex: 1,
+                              justifyContent: "center",
                               borderRadius: 100,
+                              height: "100%",
                             }}
                           >
-                            <Text style={{ color: colors.white, fontWeight: "bold" }}>Attending</Text>
+                            <Ionicons name="caret-forward" size={30} />
                           </View>
                         </Pressable>
                       </View>
-                      <Pressable onPress={() => console.log("pressed")}>
-                        <View
-                          style={{ flex: 1, justifyContent: "center", padding: 10, borderRadius: 100, height: "100%" }}
-                        >
-                          <Ionicons name="caret-forward" size={30} />
-                        </View>
-                      </Pressable>
+                      {index === 0 && index !== section.data.length - 1 && (
+                        <View style={ styles.divider } />
+                      )}
                     </View>
-                    {index === 0 && index !== section.data.length - 1 && (
-                      <View style={{ height: 2, width: "100%", backgroundColor: colors.lightgrey, marginTop: 10 }} />
-                    )}
                   </View>
-                </View>
-              </ListItem.Content>
-            </ListItem>
-          )}
+                </ListItem.Content>
+              </ListItem>
+            </Pressable>
+          )}}
           renderSectionHeader={({ section: { title } }) => (
             <Text
-              style={{
-                textAlign: "center",
-                backgroundColor: colors.white,
-                margin: 11,
-                fontSize: 20,
-                fontWeight: "bold",
-              }}
+              style={ styles.sectionHeader }
             >
               {dayjs(title).format("h:mm A")}
             </Text>
@@ -218,6 +238,59 @@ function ScheduleScreen() {
   );
 }
 
+export function EventDetails({ route, navigation }: any) {
+  const { scheduleItem } = route.params;
+
+  return (
+      // TODO: finish this once API is working
+    <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
+      <Text style={{fontWeight: "bold", fontSize: 26, paddingTop: 16}}>{scheduleItem.name}</Text>
+      <Text style={{paddingTop: 5,}}>{dayjs(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
+      <Text>
+        {dayjs(scheduleItem.start_time).format("h:mm A")} -&nbsp;
+        {dayjs(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
+      </Text>
+        <View style={{paddingTop: 12, }}>
+        <MapView
+            style={styles.map}
+            initialRegion={{
+                latitude: scheduleItem.lat,
+                longitude: scheduleItem.lng,
+                latitudeDelta: 0.00922,
+                longitudeDelta: 0.00421,
+            }}
+        >
+            <Marker
+                key={scheduleItem.id}
+                coordinate={{ latitude : scheduleItem.lat , longitude : scheduleItem.lng }}
+                title={scheduleItem.location_name}
+                description={scheduleItem.address + ", " + scheduleItem.city}
+            />
+        </MapView>
+        </View>
+        <Button
+            onPress={
+                () => {
+                    showLocation({
+                        latitude: scheduleItem.lat,
+                        longitude: scheduleItem.lng,
+                        title: scheduleItem.location_name,
+                        googleForceLatLon: true,  // optionally force GoogleMaps to use the latlon for the query instead of the title
+                        googlePlaceId: scheduleItem.place_id,
+                    })
+                }
+            }
+            title="Get directions"
+            color={colors.primary}
+        />
+      <Text style={{paddingTop: 10}}>ATTENDEE COUNT</Text>
+      <Text>RSVP BUTTON</Text>
+      <Text style={{fontWeight: "bold", fontSize: 18, paddingTop: 10, }}>Description</Text>
+      <Text>{scheduleItem.description}</Text>
+    </ScrollView>
+  );
+}
+
 const styles = StyleSheet.create({
   calendarStrip: {
     height: 90,
@@ -226,6 +299,29 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.lightgrey,
   },
+  calendarStripWrapper: { paddingTop: 10 },
+  divider: { height: 2, width: "100%", backgroundColor: colors.lightgrey, marginTop: 10 },
+  startTime: { textAlign: "center", backgroundColor: colors.white, fontSize: 15, paddingTop: 3, },
+  endTime: { textAlign: "center", backgroundColor: colors.white, color: colors.grey, fontSize: 15, },
+  rsvpStatus: {
+    backgroundColor: colors.lightgreen,
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 100,
+  },
+  rsvpStatusText: { color: colors.white, fontWeight: "bold" },
+  sectionHeader: {
+    textAlign: "center",
+    backgroundColor: colors.white,
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 0,
+    paddingVertical: 5,
+  },
+    map: {
+        width: Dimensions.get('window').width - 20,
+        height: 200,
+    },
   colorPrimary: { color: colors.primary },
   colorWhite: { color: colors.white },
 });

@@ -5,7 +5,7 @@ export const scheduleData = [
     description:
       "Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.\n\nCum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
     start_time: "2021-09-24T17:00:01Z",
-    length: 1,
+    length: 60,
     attendees: ["Bob", "Jim", "Mary", "Tim", "O.J.", "Jack", "Jill", "Sandy", "Thomas", "Frank"],
     attendee_count: 10,
     attending: false,
@@ -23,7 +23,7 @@ export const scheduleData = [
     description:
       "Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\n\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
     start_time: "2021-09-24T18:00:01Z",
-    length: 2,
+    length: 120,
     attendees: [],
     attendee_count: 0,
     attending: false,
@@ -41,7 +41,7 @@ export const scheduleData = [
     description:
       "Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\n\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
     start_time: "2021-09-24T18:00:01Z",
-    length: 2,
+    length: 120,
     attendees: [],
     attendee_count: 0,
     attending: false,
@@ -59,7 +59,7 @@ export const scheduleData = [
     description:
       "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.\n\nVestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.",
     start_time: "2021-09-24T20:00:01Z",
-    length: 3,
+    length: 120,
     attendees: ["Bob", "Jim", "Mary", "Tim", "O.J."],
     attendee_count: 5,
     attending: true,
@@ -77,7 +77,7 @@ export const scheduleData = [
     description:
       "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
     start_time: "2021-09-24T23:00:01Z",
-    length: 2.5,
+    length: 90,
     attendees: '["Bob", "Jim", "Mary", "Tim", "O.J." "Jack", "Jill"]',
     attendee_count: 7,
     attending: false,
@@ -95,7 +95,7 @@ export const scheduleData = [
     description:
       "Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\n\nAenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
     start_time: "2021-09-25T01:30:01Z",
-    length: 2,
+    length: 30,
     attendees: [],
     attendee_count: 0,
     attending: true,
@@ -113,7 +113,7 @@ export const scheduleData = [
     description:
       "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.",
     start_time: "2021-09-25T17:00:01Z",
-    length: 1,
+    length: 45,
     attendees: [],
     attendee_count: 0,
     attending: true,
@@ -131,7 +131,7 @@ export const scheduleData = [
     description:
       "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\n\nIn congue. Etiam justo. Etiam pretium iaculis justo.",
     start_time: "2021-09-25T18:00:01Z",
-    length: 2,
+    length: 30,
     attendees: [],
     attendee_count: 0,
     attending: false,
@@ -148,7 +148,7 @@ export const scheduleData = [
     name: "Event 8",
     description: "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.",
     start_time: "2021-09-25T20:00:01Z",
-    length: 3,
+    length: 25,
     attendees: [],
     attendee_count: 0,
     attending: true,
@@ -165,7 +165,7 @@ export const scheduleData = [
     name: "Event 9",
     description: "Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
     start_time: "2021-09-25T23:00:01Z",
-    length: 2.5,
+    length: 90,
     attendees: [],
     attendee_count: 0,
     attending: false,
@@ -183,7 +183,7 @@ export const scheduleData = [
     description:
       "Fusce consequat. Nulla nisl. Nunc nisl.\n\nDuis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
     start_time: "2021-09-26T01:30:01Z",
-    length: 2,
+    length: 30,
     attendees: [],
     attendee_count: 0,
     attending: true,
