@@ -5,12 +5,12 @@ import {
     StyleSheet,
     Text,
     View,
-    LogBox,
     Pressable,
     ScrollView,
     Dimensions,
     Button
 } from "react-native";
+import { LogBox } from "react-native-web-log-box";
 import React, { useEffect, useRef } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { wait } from "../util";
