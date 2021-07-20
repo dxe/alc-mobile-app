@@ -1,11 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { infoData } from "../mock-data/info";
 import { ListItem, Icon } from "react-native-elements";
-import { wait } from "../util";
 import HTML from "react-native-render-html";
+import { getInfo, Info } from "../api/info";
 
 const Stack = createStackNavigator();
 
@@ -33,11 +32,31 @@ export default function InfoStack() {
 
 function InfoScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false);
+  const [info, setInfo] = React.useState<Info[]>([]);
 
-  // TODO: implement fetching data from server & caching
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await getInfo();
+      if (error) {
+        // TODO: display error message
+      }
+      setInfo(data);
+    })();
+  }, []);
+
   const onRefresh = () => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+
+    // TODO: set a minimum refresh time to improve UX if the data loads too quickly?
+
+    (async () => {
+      const { data, error } = await getInfo();
+      if (error) {
+        // TODO: display error message
+      }
+      setInfo(data);
+      setRefreshing(false);
+    })();
   };
 
   return (
@@ -46,7 +65,7 @@ function InfoScreen({ navigation }: any) {
       contentContainerStyle={globalStyles.scrollViewContentContainer}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-      {infoData.map((item, i) => (
+      {info.map((item, i) => (
         <ListItem
           key={i}
           style={globalStyles.listItem}

@@ -1,12 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl, StyleSheet } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
-import { announcementData } from "../mock-data/announcements";
 import { ListItem, Icon } from "react-native-elements";
-import { wait } from "../util";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { getAnnouncements, Announcement } from "../api/announcement";
 dayjs.extend(relativeTime);
 
 const Stack = createStackNavigator();
@@ -28,11 +27,31 @@ export default function AnnouncementsStack() {
 
 function AnnouncementsScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
+  const [announcements, setAnnouncements] = React.useState<Announcement[]>([]);
 
-  // TODO: implement fetching data from server & caching
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await getAnnouncements();
+      if (error) {
+        // TODO: display error message
+      }
+      setAnnouncements(data);
+    })();
+  }, []);
+
   const onRefresh = () => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+
+    // TODO: set a minimum refresh time to improve UX if the data loads too quickly?
+
+    (async () => {
+      const { data, error } = await getAnnouncements();
+      if (error) {
+        // TODO: display error message
+      }
+      setAnnouncements(data);
+      setRefreshing(false);
+    })();
   };
 
   return (
@@ -41,7 +60,7 @@ function AnnouncementsScreen() {
       contentContainerStyle={globalStyles.scrollViewContentContainer}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-      {announcementData.map((a, i) => (
+      {announcements.map((a, i) => (
         <ListItem key={i} style={globalStyles.listItem}>
           <Icon
             raised

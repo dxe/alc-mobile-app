@@ -12,20 +12,16 @@ import {
 } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { wait } from "../util";
-import { scheduleData } from "../mock-data/schedule";
+import { utcToLocal, wait } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
-import dayjs from "dayjs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
-
-// TODO: Get start & end date from the backend.
-export const CONFERENCE_START_DATE = moment("2021-09-24");
-export const CONFERENCE_END_DATE = moment("2021-09-30");
+import { ConferenceEvent, getSchedule } from "../api/schedule";
+import { Conference, getConferences } from "../api/conference";
 
 const Stack = createStackNavigator();
 
@@ -69,19 +65,29 @@ const sectionizeSchedule = (data: any[]) => {
 
 function ScheduleScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState(CONFERENCE_START_DATE);
   const [schedule, setSchedule] = React.useState<any>([]);
-  const [filteredSchedule, setFilteredSchedule] = React.useState<any>([]);
+  const [filteredSchedule, setFilteredSchedule] = React.useState<ConferenceEvent[]>([]);
   const calendarStrip = useRef<any>();
+  const [conference, setConference] = React.useState<Conference | null>(null);
+  const [selectedDate, setSelectedDate] = React.useState(utcToLocal(conference?.start_date));
 
-  // TODO: implement fetching data from server & caching
   const onRefresh = () => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+
+    // TODO: set a minimum refresh time to improve UX if the data loads too quickly?
+
+    (async () => {
+      const { data, error } = await getSchedule();
+      if (error) {
+        // TODO: display error message
+      }
+      setSchedule(data);
+      setRefreshing(false);
+    })();
   };
 
   const onDateSelected = (date: moment.Moment) => {
-    if (date.format("YYYY-MM-DD") === selectedDate.format("YYYY-MM-DD")) return;
+    if (date.format("YYYY-MM-DD") === selectedDate?.format("YYYY-MM-DD")) return;
     setSelectedDate(date);
     setFilteredSchedule(
       schedule.filter((item: any) => {
@@ -93,21 +99,43 @@ function ScheduleScreen({ navigation }: any) {
 
   const initSelectedDate = () => {
     const now = moment();
-    return now.isBefore(CONFERENCE_START_DATE) ? CONFERENCE_START_DATE : now;
+    if (conference == null) {
+      return now;
+    }
+    return now.isBefore(utcToLocal(conference.start_date)) ? utcToLocal(conference.start_date) : now;
   };
 
   useEffect(() => {
-    // TODO: load from API instead of using mock data
-    setSchedule(scheduleData);
-    const initDate = initSelectedDate();
-    setSelectedDate(initDate);
-    setFilteredSchedule(
-      scheduleData.filter((item: any) => {
-        const localDate = moment(moment(item.start_time).utc(item.start_time).toDate()).local().format("YYYY-MM-DD");
-        return localDate === initDate.format("YYYY-MM-DD");
-      })
-    );
+    (async () => {
+      const { data, error } = await getConferences();
+      if (error) {
+        // TODO: display error message
+      }
+      setConference(data[0]);
+    })();
   }, []);
+
+  useEffect(() => {
+    if (conference) {
+      const initDate = initSelectedDate();
+      setSelectedDate(initDate);
+      (async () => {
+        const { data, error } = await getSchedule();
+        if (error) {
+          // TODO: display error message
+        }
+        setSchedule(data);
+        setFilteredSchedule(
+          data.filter((item: any) => {
+            const localDate = moment(moment(item.start_time).utc(item.start_time).toDate())
+              .local()
+              .format("YYYY-MM-DD");
+            return localDate === initDate.format("YYYY-MM-DD");
+          })
+        );
+      })();
+    }
+  }, [conference]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -121,11 +149,11 @@ function ScheduleScreen({ navigation }: any) {
           highlightDateNumberStyle={styles.colorWhite}
           daySelectionAnimation={{ type: "background", highlightColor: colors.primary, duration: 100 }}
           scrollable={false}
-          startingDate={CONFERENCE_START_DATE}
+          startingDate={utcToLocal(conference?.start_date)}
           // useIsoWeekday starts the strip on the startingDate instead of on Sunday/Monday.
           useIsoWeekday={false}
-          minDate={CONFERENCE_START_DATE}
-          maxDate={CONFERENCE_END_DATE}
+          minDate={utcToLocal(conference?.start_date)}
+          maxDate={utcToLocal(conference?.end_date)}
           selectedDate={selectedDate}
           onDateSelected={onDateSelected}
           ref={calendarStrip}
@@ -135,12 +163,14 @@ function ScheduleScreen({ navigation }: any) {
       {filteredSchedule && (
         <SectionList
           sections={sectionizeSchedule(filteredSchedule)}
-          keyExtractor={(item, index) => item + index}
+          keyExtractor={(item: ConferenceEvent, index: number) => (item.id + index).toString()}
           renderItem={({ item, section, index }) => {
             const itemsInSection = section.data.length - 1;
 
             return (
-              <Pressable onPress={() => navigation.navigate("Event Details", { scheduleItem: item })}>
+              <Pressable
+                onPress={() => navigation.navigate("Event Details", { scheduleItem: item as ConferenceEvent })}
+              >
                 <ListItem
                   containerStyle={{ backgroundColor: "transparent", paddingVertical: 5 }}
                   key={item.id}
@@ -166,10 +196,10 @@ function ScheduleScreen({ navigation }: any) {
                   <ListItem.Content>
                     <View style={{ flex: 1, flexDirection: "row" }}>
                       <View style={{ paddingRight: 10 }}>
-                        <Text style={styles.startTime}>{dayjs(item.start_time).format("h:mm A")}</Text>
+                        <Text style={styles.startTime}>{utcToLocal(item.start_time).format("h:mm A")}</Text>
                         <Text style={styles.endTime}>|</Text>
                         <Text style={styles.endTime}>
-                          {dayjs(item.start_time).add(item.length, "minute").format("h:mm A")}
+                          {utcToLocal(item.start_time).add(item.length, "minute").format("h:mm A")}
                         </Text>
                       </View>
                       <View style={{ flexGrow: 1 }}>
@@ -187,7 +217,7 @@ function ScheduleScreen({ navigation }: any) {
                             </ListItem.Title>
                             <ListItem.Subtitle>
                               <FeatherIcon name="map-pin" size={16} />{" "}
-                              <Text style={{ fontSize: 16 }}>{item.location_name}</Text>
+                              <Text style={{ fontSize: 16 }}>{item.location.name}</Text>
                             </ListItem.Subtitle>
                             <Pressable onPress={() => console.log("rsvp status pressed")}>
                               <View style={styles.rsvpStatus}>
@@ -195,7 +225,11 @@ function ScheduleScreen({ navigation }: any) {
                               </View>
                             </Pressable>
                           </View>
-                          <Pressable onPress={() => navigation.navigate("Event Details", { scheduleItem: item })}>
+                          <Pressable
+                            onPress={() =>
+                              navigation.navigate("Event Details", { scheduleItem: item as ConferenceEvent })
+                            }
+                          >
                             <View
                               style={{
                                 flex: 1,
@@ -217,7 +251,7 @@ function ScheduleScreen({ navigation }: any) {
             );
           }}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={styles.sectionHeader}>{dayjs(title).format("h:mm A")}</Text>
+            <Text style={styles.sectionHeader}>{utcToLocal(title).format("h:mm A")}</Text>
           )}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           style={[globalStyles.scrollView, { paddingHorizontal: 8 }]}
@@ -227,44 +261,44 @@ function ScheduleScreen({ navigation }: any) {
   );
 }
 
-export function EventDetails({ route, navigation }: any) {
-  const { scheduleItem } = route.params;
+export function EventDetails({ route }: any) {
+  const { scheduleItem }: { scheduleItem: ConferenceEvent } = route.params;
 
   return (
-    // TODO: finish this once API is working
+    // TODO: improve the Event Details screen.
     <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
       <Text style={{ fontWeight: "bold", fontSize: 26, paddingTop: 16 }}>{scheduleItem.name}</Text>
-      <Text style={{ paddingTop: 5 }}>{dayjs(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
+      <Text style={{ paddingTop: 5 }}>{moment(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
       <Text>
-        {dayjs(scheduleItem.start_time).format("h:mm A")} -&nbsp;
-        {dayjs(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
+        {utcToLocal(scheduleItem.start_time).format("h:mm A")} -&nbsp;
+        {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
       </Text>
       <View style={{ paddingTop: 12 }}>
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: scheduleItem.lat,
-            longitude: scheduleItem.lng,
+            latitude: scheduleItem.location.lat,
+            longitude: scheduleItem.location.lng,
             latitudeDelta: 0.00922,
             longitudeDelta: 0.00421,
           }}
         >
           <Marker
             key={scheduleItem.id}
-            coordinate={{ latitude: scheduleItem.lat, longitude: scheduleItem.lng }}
-            title={scheduleItem.location_name}
-            description={scheduleItem.address + ", " + scheduleItem.city}
+            coordinate={{ latitude: scheduleItem.location.lat, longitude: scheduleItem.location.lng }}
+            title={scheduleItem.location.name}
+            description={scheduleItem.location.address + ", " + scheduleItem.location.city}
           />
         </MapView>
       </View>
       <Button
         onPress={() => {
           showLocation({
-            latitude: scheduleItem.lat,
-            longitude: scheduleItem.lng,
-            title: scheduleItem.location_name,
-            googleForceLatLon: true, // optionally force GoogleMaps to use the latlon for the query instead of the title
-            googlePlaceId: scheduleItem.place_id,
+            latitude: scheduleItem.location.lat,
+            longitude: scheduleItem.location.lng,
+            title: scheduleItem.location.name,
+            googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
+            googlePlaceId: scheduleItem.location.place_id,
           });
         }}
         title="Get directions"
