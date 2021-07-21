@@ -5,6 +5,7 @@ import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { getInfo, Info } from "../api/info";
+import { getStoredJSON, storeJSON } from "../util";
 
 const Stack = createStackNavigator();
 
@@ -36,11 +37,14 @@ function InfoScreen({ navigation }: any) {
 
   useEffect(() => {
     (async () => {
+      setInfo((await getStoredJSON("info")) || []);
       const { data, error } = await getInfo();
       if (error) {
         // TODO: display error message
+        return;
       }
       setInfo(data);
+      await storeJSON("info", data);
     })();
   }, []);
 
@@ -53,9 +57,11 @@ function InfoScreen({ navigation }: any) {
       const { data, error } = await getInfo();
       if (error) {
         // TODO: display error message
+        return;
       }
       setInfo(data);
       setRefreshing(false);
+      await storeJSON("info", data);
     })();
   };
 

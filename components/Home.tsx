@@ -5,7 +5,7 @@ import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
 import { wait } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
-import { EventDetails } from "./Schedule";
+import { EventDetails } from "./EventDetails";
 
 const Stack = createStackNavigator();
 

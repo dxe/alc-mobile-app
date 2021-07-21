@@ -6,6 +6,7 @@ import { ListItem, Icon } from "react-native-elements";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getAnnouncements, Announcement } from "../api/announcement";
+import { getStoredJSON, storeJSON } from "../util";
 dayjs.extend(relativeTime);
 
 const Stack = createStackNavigator();
@@ -31,11 +32,14 @@ function AnnouncementsScreen() {
 
   useEffect(() => {
     (async () => {
+      setAnnouncements((await getStoredJSON("announcements")) || []);
       const { data, error } = await getAnnouncements();
       if (error) {
         // TODO: display error message
+        return;
       }
       setAnnouncements(data);
+      await storeJSON("announcements", data);
     })();
   }, []);
 
@@ -48,9 +52,11 @@ function AnnouncementsScreen() {
       const { data, error } = await getAnnouncements();
       if (error) {
         // TODO: display error message
+        return;
       }
       setAnnouncements(data);
       setRefreshing(false);
+      await storeJSON("announcements", data);
     })();
   };
 

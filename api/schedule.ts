@@ -1,5 +1,17 @@
 import { APIResponse, CONFERENCE_ID, post } from "./api";
 
+export interface Schedule {
+  events: ConferenceEvent[];
+  conference: Conference;
+}
+
+export interface Conference {
+  id: number;
+  name: string;
+  start_date: string; // TODO: use Date?
+  end_date: string; // TODO: use Date?
+}
+
 export interface ConferenceEvent {
   attendees: Attendee[] | null;
   attending: boolean;
