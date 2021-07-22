@@ -8,6 +8,7 @@ import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
 import { colors } from "./global-styles";
+import FlashMessage from "react-native-flash-message";
 
 const Tab = createBottomTabNavigator();
 
@@ -48,6 +49,7 @@ export default function App() {
         <Tab.Screen name="Announcements" component={AnnouncementsStack} />
         <Tab.Screen name="Info" component={InfoStack} />
       </Tab.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   );
 }

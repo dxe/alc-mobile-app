@@ -1,12 +1,14 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getAnnouncements, Announcement } from "../api/announcement";
-import { getStoredJSON, storeJSON } from "../util";
+import { delayFunc, getStoredJSON, storeJSON } from "../util";
+import { showMessage } from "react-native-flash-message";
+import { TimeAgo } from "./common/TimeAgo";
 dayjs.extend(relativeTime);
 
 const Stack = createStackNavigator();
@@ -27,15 +29,21 @@ export default function AnnouncementsStack() {
 }
 
 function AnnouncementsScreen() {
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [announcements, setAnnouncements] = React.useState<Announcement[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [currentTime, setCurrentTime] = useState<dayjs.Dayjs>(dayjs());
 
   useEffect(() => {
+    // Load announcement data when this component loads.
     (async () => {
       setAnnouncements((await getStoredJSON("announcements")) || []);
       const { data, error } = await getAnnouncements();
       if (error) {
-        // TODO: display error message
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest announcements.",
+          type: "danger",
+        });
         return;
       }
       setAnnouncements(data);
@@ -45,13 +53,14 @@ function AnnouncementsScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
-
-    // TODO: set a minimum refresh time to improve UX if the data loads too quickly?
-
     (async () => {
-      const { data, error } = await getAnnouncements();
+      const { data, error } = await delayFunc(getAnnouncements());
       if (error) {
-        // TODO: display error message
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest announcements.",
+          type: "danger",
+        });
         return;
       }
       setAnnouncements(data);
@@ -78,7 +87,9 @@ function AnnouncementsScreen() {
           <ListItem.Content>
             <ListItem.Title style={globalStyles.listItemTitle}>{a.title}</ListItem.Title>
             <ListItem.Subtitle>{a.message}</ListItem.Subtitle>
-            <ListItem.Subtitle style={styles.timestamp}>{dayjs(a.timestamp).fromNow()}</ListItem.Subtitle>
+            <ListItem.Subtitle style={styles.timestamp}>
+              <TimeAgo time={a.send_time} />
+            </ListItem.Subtitle>
           </ListItem.Content>
         </ListItem>
       ))}

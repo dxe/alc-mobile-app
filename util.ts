@@ -1,8 +1,19 @@
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const wait = (timeout: number) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
+export const wait = (timeout: number): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
+
+const DEFAULT_TIMEOUT = 750;
+
+// delayFunc wraps an async function and causes it to take at least a certain amount of time to resolve.
+// This is used to improve the UX in case something loads so quickly that the user thinks nothing happened.
+export const delayFunc = async (fn: Promise<any>, timeout: number = DEFAULT_TIMEOUT): Promise<any> => {
+  const [value] = await Promise.all([fn, wait(timeout)]);
+  return value;
 };
 
 export const utcToLocal = (date: string | undefined): moment.Moment => {

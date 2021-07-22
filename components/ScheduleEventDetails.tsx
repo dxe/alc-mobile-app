@@ -7,7 +7,7 @@ import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React from "react";
 
-export function EventDetails({ route }: any) {
+export function ScheduleEventDetails({ route }: any) {
   const { scheduleItem }: { scheduleItem: ConferenceEvent } = route.params;
 
   return (
@@ -50,7 +50,7 @@ export function EventDetails({ route }: any) {
         title="Get directions"
         color={colors.primary}
       />
-      <Text style={{ paddingTop: 10 }}>ATTENDEE COUNT</Text>
+      <Text style={{ paddingTop: 10 }}>Attending: {scheduleItem.total_attendees}</Text>
       <Text>RSVP BUTTON</Text>
       <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 10 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>

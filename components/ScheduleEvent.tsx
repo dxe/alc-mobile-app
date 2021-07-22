@@ -13,7 +13,7 @@ interface Props {
   nav: NavigationProp<any>;
 }
 
-export function EventCard(props: Props) {
+export function ScheduleEvent(props: Props) {
   return (
     <View style={{ flex: 1, flexDirection: "row" }}>
       <View style={{ paddingRight: 10 }}>

@@ -2,13 +2,14 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { getStoredJSON, storeJSON, utcToLocal } from "../util";
+import { delayFunc, getStoredJSON, storeJSON, utcToLocal } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
 import { Schedule, ConferenceEvent, getSchedule } from "../api/schedule";
-import { EventDetails } from "./EventDetails";
-import { EventCard } from "./EventCard";
+import { ScheduleEventDetails } from "./ScheduleEventDetails";
+import { ScheduleEvent } from "./ScheduleEvent";
+import { showMessage } from "react-native-flash-message";
 
 const Stack = createStackNavigator();
 
@@ -25,7 +26,7 @@ export default function ScheduleStack() {
       />
       <Stack.Screen
         name="Event Details"
-        component={EventDetails}
+        component={ScheduleEventDetails}
         options={{
           ...screenHeaderOptions,
         }}
@@ -62,12 +63,14 @@ function ScheduleScreen({ navigation }: any) {
   const onRefresh = () => {
     setRefreshing(true);
 
-    // TODO: set a minimum refresh time to improve UX if the data loads too quickly?
-
     (async () => {
-      const { data, error } = await getSchedule();
+      const { data, error } = await delayFunc(getSchedule());
       if (error) {
-        // TODO: display error message
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest schedule information.",
+          type: "danger",
+        });
         return;
       }
       setSchedule(data);
@@ -82,7 +85,11 @@ function ScheduleScreen({ navigation }: any) {
       setSchedule((await getStoredJSON("schedule")) || null);
       const { data, error } = await getSchedule();
       if (error) {
-        // TODO: display error message
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest schedule information.",
+          type: "danger",
+        });
         return;
       }
       setSchedule(data);
@@ -169,7 +176,7 @@ function ScheduleScreen({ navigation }: any) {
                   ]}
                 >
                   <ListItem.Content>
-                    <EventCard event={item} nav={navigation} />
+                    <ScheduleEvent event={item} nav={navigation} />
                     {index === 0 && index !== section.data.length - 1 && <View style={styles.divider} />}
                   </ListItem.Content>
                 </ListItem>

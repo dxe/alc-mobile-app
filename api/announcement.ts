@@ -4,7 +4,7 @@ export interface Announcement {
   id: number;
   icon: string;
   title: string;
-  timestamp: string; // TODO: use Date instead?
+  send_time: string; // TODO: use Date instead?
   message: string;
 }
 

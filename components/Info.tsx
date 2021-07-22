@@ -5,7 +5,8 @@ import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { getInfo, Info } from "../api/info";
-import { getStoredJSON, storeJSON } from "../util";
+import { delayFunc, getStoredJSON, storeJSON } from "../util";
+import { showMessage } from "react-native-flash-message";
 
 const Stack = createStackNavigator();
 
@@ -40,7 +41,11 @@ function InfoScreen({ navigation }: any) {
       setInfo((await getStoredJSON("info")) || []);
       const { data, error } = await getInfo();
       if (error) {
-        // TODO: display error message
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest information.",
+          type: "danger",
+        });
         return;
       }
       setInfo(data);
@@ -51,12 +56,14 @@ function InfoScreen({ navigation }: any) {
   const onRefresh = () => {
     setRefreshing(true);
 
-    // TODO: set a minimum refresh time to improve UX if the data loads too quickly?
-
     (async () => {
-      const { data, error } = await getInfo();
+      const { data, error } = await delayFunc(getInfo());
       if (error) {
-        // TODO: display error message
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest information.",
+          type: "danger",
+        });
         return;
       }
       setInfo(data);

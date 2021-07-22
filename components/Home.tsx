@@ -1,11 +1,15 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import { Text, View, ScrollView, RefreshControl, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable } from "react-native";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
-import { wait } from "../util";
+import { delayFunc, getStoredJSON, storeJSON, wait } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
-import { EventDetails } from "./EventDetails";
+import { ScheduleEventDetails } from "./ScheduleEventDetails";
+import { ConferenceEvent, getSchedule, Schedule } from "../api/schedule";
+import { showMessage } from "react-native-flash-message";
+import { TimeAgo } from "./common/TimeAgo";
+import moment from "moment";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +26,7 @@ export default function HomeStack() {
       />
       <Stack.Screen
         name="Event Details"
-        component={EventDetails}
+        component={ScheduleEventDetails}
         options={{
           ...screenHeaderOptions,
         }}
@@ -31,72 +35,171 @@ export default function HomeStack() {
   );
 }
 
-function HomeScreen() {
+function HomeScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false);
+  const [currentTime, setCurrentTime] = useState<moment.Moment>(moment());
+  const [schedule, setSchedule] = useState<Schedule | null>(null);
+  const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
+  const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
 
-  // TODO: implement fetching data from server & caching
+  // When the component initially loads, load the schedule data & update the cache.
+  useEffect(() => {
+    (async () => {
+      setSchedule((await getStoredJSON("schedule")) || null);
+      const { data, error } = await getSchedule();
+      if (error) {
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest schedule information.",
+          type: "danger",
+        });
+        return;
+      }
+      setSchedule(data);
+      await storeJSON("schedule", data);
+    })();
+  }, []);
+
   const onRefresh = () => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+
+    (async () => {
+      const { data, error } = await delayFunc(getSchedule());
+      if (error) {
+        showMessage({
+          message: "Error",
+          description: "Unable to retrieve latest schedule information.",
+          type: "danger",
+        });
+        return;
+      }
+      setSchedule(data);
+      await storeJSON("schedule", data);
+      setRefreshing(false);
+    })();
   };
 
+  // Update displayed current & next events.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(moment().utc());
+
+      console.log(`Current time: ${currentTime.toISOString()}`);
+
+      if (!schedule) return;
+
+      // Find the events that are happening next.
+      const nextStartTime = schedule.events
+        .filter((x) => {
+          return moment(x.start_time).utc(true).isAfter(moment());
+        })
+        .sort((a, b) => {
+          return moment(a.start_time).utc(true).isAfter(moment(b.start_time).utc(true)) ? 1 : -1;
+        })[0].start_time;
+
+      setNextEvents(
+        schedule.events.filter((x) => {
+          return x.start_time === nextStartTime;
+        })
+      );
+
+      // Find events happening now.
+      setCurrentEvents(
+        schedule.events
+          .filter((x) => {
+            // First find events whose start time is before now.
+            return moment(x.start_time).utc(true).isBefore(moment().utc());
+          })
+          .filter((x) => {
+            // Then find events that have not yet ended.
+            return moment(x.start_time).utc(true).add(x.length, "minute").isAfter(currentTime);
+          })
+      );
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [currentTime, schedule]);
+
   return (
-    <ScrollView
-      style={globalStyles.scrollView}
-      contentContainerStyle={globalStyles.scrollViewContentContainer}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-      <Text style={styles.heading}>Happening now</Text>
-      <TripleTextCard
-        imageSource={require("../assets/home-march.jpg")}
-        topText={"Registration & Coffee"}
-        middleText={"2910 Shattuck Ave, Berkeley"}
-        bottomText={"Started 5 minutes ago"}
-      />
+    schedule && (
+      <ScrollView
+        style={globalStyles.scrollView}
+        contentContainerStyle={globalStyles.scrollViewContentContainer}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {currentEvents && currentEvents.length > 0 && (
+          <View>
+            <Text style={styles.heading}>Happening now</Text>
 
-      <Text style={styles.heading}>Coming up next</Text>
-      <TripleTextCard
-        imageSource={require("../assets/home-community.jpg")}
-        topText={"Intro to Nonviolence"}
-        middleText={"2910 Shattuck Ave, Berkeley"}
-        bottomText={"Starts in 1 hour"}
-      />
-
-      <Text style={styles.heading}>Key events</Text>
-      <View style={styles.keyEventsView}>
-        <Card containerStyle={styles.keyEventCard}>
-          <View style={styles.keyEventView}>
-            <View style={styles.keyEventInnerView}>
-              <Text style={styles.keyEventText}>Some event</Text>
-            </View>
+            {currentEvents.map((e: ConferenceEvent) => {
+              return (
+                <Pressable
+                  key={e.id}
+                  onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
+                >
+                  <TripleTextCard
+                    imageSource={e.image_url}
+                    topText={e.name}
+                    middleText={e.location.name + ", " + e.location.city}
+                    bottomElement={
+                      <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Started " />
+                    }
+                  />
+                </Pressable>
+              );
+            })}
           </View>
-        </Card>
+        )}
 
-        <Card containerStyle={styles.keyEventCard}>
-          <View style={styles.keyEventView}>
-            <View style={styles.keyEventInnerView}>
-              <Text style={styles.keyEventText}>Some event</Text>
-            </View>
-          </View>
-        </Card>
+        {nextEvents && nextEvents.length > 0 && (
+          <View>
+            <Text style={styles.heading}>Coming up next</Text>
 
-        <Card containerStyle={styles.keyEventCard}>
-          <View style={styles.keyEventView}>
-            <View style={styles.keyEventInnerView}>
-              <Text style={styles.keyEventText}>Some event</Text>
-            </View>
+            {nextEvents.map((e: ConferenceEvent) => {
+              return (
+                <Pressable
+                  key={e.id}
+                  onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
+                >
+                  <TripleTextCard
+                    imageSource={e.image_url}
+                    topText={e.name}
+                    middleText={e.location.name + ", " + e.location.city}
+                    bottomElement={
+                      <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Starts in " />
+                    }
+                  />
+                </Pressable>
+              );
+            })}
           </View>
-        </Card>
+        )}
 
-        <Card containerStyle={styles.keyEventCard}>
-          <View style={styles.keyEventView}>
-            <View style={styles.keyEventInnerView}>
-              <Text style={styles.keyEventText}>Some event</Text>
-            </View>
-          </View>
-        </Card>
-      </View>
-    </ScrollView>
+        <Text style={styles.heading}>Key events</Text>
+
+        <View style={styles.keyEventsView}>
+          {schedule.events
+            .filter((e) => {
+              return e.key_event;
+            })
+            .map((e) => {
+              return (
+                <Card key={e.id} containerStyle={styles.keyEventCard}>
+                  <Pressable
+                    style={{ height: "100%" }}
+                    onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
+                  >
+                    <View style={styles.keyEventView}>
+                      <View style={styles.keyEventInnerView}>
+                        <Text style={styles.keyEventText}>{e.name}</Text>
+                      </View>
+                    </View>
+                  </Pressable>
+                </Card>
+              );
+            })}
+        </View>
+      </ScrollView>
+    )
   );
 }
 
@@ -142,7 +245,7 @@ const styles = StyleSheet.create({
     left: 0,
   },
   keyEventText: {
-    fontSize: 36,
+    fontSize: 22,
     color: "white",
     fontWeight: "bold",
     padding: 10,

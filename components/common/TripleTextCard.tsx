@@ -1,18 +1,26 @@
 import React from "react";
-import { ImageBackground, Text, View, ImageSourcePropType, StyleSheet } from "react-native";
+import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 
+// TODO: Consider storing the fallback image locally in case someone has no Internet connection.
+const FALLBACK_IMAGE = "https://alc-img.s3.us-west-2.amazonaws.com/home-march.jpg.1626905834..jpg";
+
 interface Props {
-  imageSource: ImageSourcePropType;
+  imageSource: string | null;
   topText: string;
   middleText: string;
-  bottomText: string;
+  bottomElement: React.ReactElement;
 }
 
 export function TripleTextCard(props: Props) {
   return (
     <Card containerStyle={styles.cardContainer}>
-      <ImageBackground style={styles.imageBackground} imageStyle={styles.image} source={props.imageSource} />
+      {/*TODO: maybe fallback to a local image here if the source fails to load or is empty? or just use a solid color?*/}
+      <ImageBackground
+        style={styles.imageBackground}
+        imageStyle={styles.image}
+        source={{ uri: props.imageSource || FALLBACK_IMAGE }}
+      />
       <View style={styles.textWrapperView}>
         <View style={styles.topView}>
           {/*TODO: truncate text and put "..." if it's too long to fit on the cards*/}
@@ -20,7 +28,7 @@ export function TripleTextCard(props: Props) {
         </View>
         <View style={styles.bottomView}>
           <Text style={{ ...styles.text, fontSize: 18 }}>{props.middleText}</Text>
-          <Text style={{ ...styles.text, fontSize: 12 }}>{props.bottomText}</Text>
+          <Text style={{ ...styles.text, fontSize: 12 }}>{props.bottomElement}</Text>
         </View>
       </View>
     </Card>
