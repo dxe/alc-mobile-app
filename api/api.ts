@@ -17,9 +17,6 @@ export const post = async function (options: APIOptions): Promise<APIResponse> {
   try {
     console.log(`fetching: ${options.path}`); // TODO: remove after debugging
     const res = await axios.post(BASE_URL + options.path, options.body);
-    if (res.status != 200) {
-      return { data: null, error: new Error("API returned status code " + res.status) };
-    }
     //console.log(res.data); // TODO: remove after debugging
     return { data: res.data, error: null };
   } catch (err) {

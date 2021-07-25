@@ -41,6 +41,19 @@ function HomeScreen({ navigation }: any) {
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
+  const [isError, setIsError] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!isError) return
+    showMessage({
+      message: "Error",
+      description: "Unable to retrieve latest schedule information.",
+      type: "danger",
+    });
+    setIsError((v: boolean) => {
+      return !v
+    })
+  }, [isError])
 
   // When the component initially loads, load the schedule data & update the cache.
   useEffect(() => {
@@ -48,11 +61,7 @@ function HomeScreen({ navigation }: any) {
       setSchedule((await getStoredJSON("schedule")) || null);
       const { data, error } = await getSchedule();
       if (error) {
-        showMessage({
-          message: "Error",
-          description: "Unable to retrieve latest schedule information.",
-          type: "danger",
-        });
+        setIsError(true)
         return;
       }
       setSchedule(data);
@@ -66,11 +75,8 @@ function HomeScreen({ navigation }: any) {
     (async () => {
       const { data, error } = await delayFunc(getSchedule());
       if (error) {
-        showMessage({
-          message: "Error",
-          description: "Unable to retrieve latest schedule information.",
-          type: "danger",
-        });
+        setIsError(true)
+        setRefreshing(false)
         return;
       }
       setSchedule(data);
@@ -84,7 +90,7 @@ function HomeScreen({ navigation }: any) {
     const interval = setInterval(() => {
       setCurrentTime(moment().utc());
 
-      console.log(`Current time: ${currentTime.toISOString()}`);
+      //console.log(`Current time: ${currentTime.toISOString()}`); // TODO: remove after debugging
 
       if (!schedule) return;
 
