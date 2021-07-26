@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 interface Props {
   time: string;

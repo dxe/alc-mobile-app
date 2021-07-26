@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { StackNavigationOptions } from "@react-navigation/stack";
 
 export const colors = {
-  primary: "#335CCF",
+  primary: "#491887",
   white: "#FFF",
   grey: "#888",
   lightgrey: "#CCC",

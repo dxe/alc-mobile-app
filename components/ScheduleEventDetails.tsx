@@ -1,11 +1,12 @@
 import { ConferenceEvent } from "../api/schedule";
-import { Button, Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
 import moment from "moment";
 import { utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React from "react";
+import { Button } from "react-native-elements";
 
 export function ScheduleEventDetails({ route }: any) {
   const { scheduleItem }: { scheduleItem: ConferenceEvent } = route.params;
@@ -48,7 +49,6 @@ export function ScheduleEventDetails({ route }: any) {
           });
         }}
         title="Get directions"
-        color={colors.primary}
       />
       <Text style={{ paddingTop: 10 }}>Attending: {scheduleItem.total_attendees}</Text>
       <Text>RSVP BUTTON</Text>

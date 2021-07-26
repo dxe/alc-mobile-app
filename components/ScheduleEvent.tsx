@@ -39,11 +39,9 @@ export function ScheduleEvent(props: Props) {
             <ListItem.Subtitle>
               <FeatherIcon name="map-pin" size={16} /> <Text style={{ fontSize: 16 }}>{props.event.location.name}</Text>
             </ListItem.Subtitle>
-            <Pressable onPress={() => console.log("rsvp status pressed")}>
-              <View style={styles.rsvpStatus}>
-                <Text style={styles.rsvpStatusText}>Attending</Text>
-              </View>
-            </Pressable>
+            <View style={styles.rsvpStatus}>
+              <Text style={styles.rsvpStatusText}>Attending</Text>
+            </View>
           </View>
           <Pressable
             onPress={() => props.nav.navigate("Event Details", { scheduleItem: props.event as ConferenceEvent })}
