@@ -31,19 +31,19 @@ export default function AnnouncementsStack() {
 function AnnouncementsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [isError, setIsError] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isError) return
+    if (!isError) return;
     showMessage({
       message: "Error",
       description: "Unable to retrieve latest announcements.",
       type: "danger",
     });
     setIsError((v: boolean) => {
-      return !v
-    })
-  }, [isError])
+      return !v;
+    });
+  }, [isError]);
 
   useEffect(() => {
     // Load announcement data when this component loads.
@@ -51,7 +51,7 @@ function AnnouncementsScreen() {
       setAnnouncements((await getStoredJSON("announcements")) || []);
       const { data, error } = await getAnnouncements();
       if (error) {
-        setIsError(true)
+        setIsError(true);
         return;
       }
       setAnnouncements(data);
@@ -64,7 +64,7 @@ function AnnouncementsScreen() {
     (async () => {
       const { data, error } = await delayFunc(getAnnouncements());
       if (error) {
-        setIsError(true)
+        setIsError(true);
         setRefreshing(false);
         return;
       }

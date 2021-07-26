@@ -59,19 +59,19 @@ function ScheduleScreen({ navigation }: any) {
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>([]);
   const calendarStrip = useRef<any>();
-  const [isError, setIsError] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isError) return
+    if (!isError) return;
     showMessage({
       message: "Error",
       description: "Unable to retrieve latest schedule information.",
       type: "danger",
     });
     setIsError((v: boolean) => {
-      return !v
-    })
-  }, [isError])
+      return !v;
+    });
+  }, [isError]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -79,7 +79,7 @@ function ScheduleScreen({ navigation }: any) {
     (async () => {
       const { data, error } = await delayFunc(getSchedule());
       if (error) {
-        setIsError(true)
+        setIsError(true);
         setRefreshing(false);
         return;
       }
@@ -95,7 +95,7 @@ function ScheduleScreen({ navigation }: any) {
       setSchedule((await getStoredJSON("schedule")) || null);
       const { data, error } = await getSchedule();
       if (error) {
-        setIsError(true)
+        setIsError(true);
         return;
       }
       setSchedule(data);

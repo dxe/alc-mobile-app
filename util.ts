@@ -42,7 +42,3 @@ export const getStoredJSON = async (key: string): Promise<any> => {
     console.error("error reading stored json data");
   }
 };
-
-export const useError = () => {
-
-}

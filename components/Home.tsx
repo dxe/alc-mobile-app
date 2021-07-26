@@ -41,19 +41,19 @@ function HomeScreen({ navigation }: any) {
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
-  const [isError, setIsError] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isError) return
+    if (!isError) return;
     showMessage({
       message: "Error",
       description: "Unable to retrieve latest schedule information.",
       type: "danger",
     });
     setIsError((v: boolean) => {
-      return !v
-    })
-  }, [isError])
+      return !v;
+    });
+  }, [isError]);
 
   // When the component initially loads, load the schedule data & update the cache.
   useEffect(() => {
@@ -61,7 +61,7 @@ function HomeScreen({ navigation }: any) {
       setSchedule((await getStoredJSON("schedule")) || null);
       const { data, error } = await getSchedule();
       if (error) {
-        setIsError(true)
+        setIsError(true);
         return;
       }
       setSchedule(data);
@@ -75,8 +75,8 @@ function HomeScreen({ navigation }: any) {
     (async () => {
       const { data, error } = await delayFunc(getSchedule());
       if (error) {
-        setIsError(true)
-        setRefreshing(false)
+        setIsError(true);
+        setRefreshing(false);
         return;
       }
       setSchedule(data);
@@ -87,11 +87,7 @@ function HomeScreen({ navigation }: any) {
 
   // Update displayed current & next events.
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(moment().utc());
-
-      //console.log(`Current time: ${currentTime.toISOString()}`); // TODO: remove after debugging
-
+    const updateFeaturedEvents = () => {
       if (!schedule) return;
 
       // Find the events that are happening next.
@@ -121,7 +117,15 @@ function HomeScreen({ navigation }: any) {
             return moment(x.start_time).utc(true).add(x.length, "minute").isAfter(currentTime);
           })
       );
+    };
+    updateFeaturedEvents();
+
+    const interval = setInterval(() => {
+      setCurrentTime(moment().utc());
+      //console.log(`Current time: ${currentTime.toISOString()}`); // TODO: remove after debugging
+      updateFeaturedEvents();
     }, 1000);
+
     return () => clearInterval(interval);
   }, [currentTime, schedule]);
 
