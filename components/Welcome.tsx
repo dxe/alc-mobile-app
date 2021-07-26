@@ -1,8 +1,7 @@
 import { ScrollView, View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { showErrorMessage, storeJSON } from "../util";
-import { CONFERENCE_ID } from "../api/api";
+import { getDeviceID, showErrorMessage } from "../util";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Button, Overlay } from "react-native-elements";
 import { UserContext } from "../UserContext";
@@ -32,7 +31,16 @@ export default function WelcomeStack() {
   );
 }
 
-export function WelcomeScreen({ navigation }: any) {
+const register = (callback: any) => {
+  (async () => {
+    // TODO: register for push notifications
+    // TODO: submit form
+    const deviceID = await getDeviceID();
+    callback(deviceID);
+  })();
+};
+
+export function WelcomeScreen({ navigation, route }: any) {
   const [error, setError] = useState<string>("");
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
 
@@ -42,21 +50,10 @@ export function WelcomeScreen({ navigation }: any) {
     setError("");
   }, [error]);
 
-  const registerAnon = (setUserDeviceID: any, setRegisteredConferenceID: any) => {
-    (async () => {
-      // TODO: register for push notifications
-      // TODO: store device id
-      await storeJSON("registered_conference_id", CONFERENCE_ID);
-      await storeJSON("user_device_id", "abc123"); // TODO: write a util function to get device id
-      setUserDeviceID("abc123"); // TODO: write a util function to get device id
-      setRegisteredConferenceID(CONFERENCE_ID);
-    })();
-  };
-
   return (
-    // TODO: design this screen
     <UserContext.Consumer>
-      {({ setUserDeviceID, setRegisteredConferenceID }) => (
+      {({ onUserRegistered }) => (
+        // TODO: design this screen
         <ScrollView
           style={[globalStyles.scrollView, { backgroundColor: colors.primary }]}
           contentContainerStyle={globalStyles.scrollViewContentContainer}
@@ -80,7 +77,7 @@ export function WelcomeScreen({ navigation }: any) {
           <View>
             <Text>Welcome to ALC 2021!</Text>
             <Button onPress={() => navigation.navigate("SignUp")} title="Sign up" />
-            <Button onPress={() => registerAnon(setUserDeviceID, setRegisteredConferenceID)} title="Stay anonymous" />
+            <Button onPress={() => register(onUserRegistered)} title="Stay anonymous" />
           </View>
         </ScrollView>
       )}
@@ -88,7 +85,7 @@ export function WelcomeScreen({ navigation }: any) {
   );
 }
 
-export function SignUpScreen({ navigation }: any) {
+export function SignUpScreen({ navigation, route }: any) {
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -97,24 +94,17 @@ export function SignUpScreen({ navigation }: any) {
     setError("");
   }, [error]);
 
-  const register = () => {
-    (async () => {
-      // TODO: do the same sort of things as w/ the anon function
-      // TODO: submit form
-      // TODO: register for push notifications
-      // TODO: store device id
-      await storeJSON("registered_conference_id", CONFERENCE_ID);
-      await storeJSON("user_device_id", "abc123"); // TODO: write a util function to get device id
-    })();
-  };
-
   return (
-    // TODO: design this screen
-    <ScrollView style={[globalStyles.scrollView]} contentContainerStyle={globalStyles.scrollViewContentContainer}>
-      <View>
-        <Text>Provide your name and email.</Text>
-        <Button onPress={register} title="Sign up" />
-      </View>
-    </ScrollView>
+    <UserContext.Consumer>
+      {({ onUserRegistered }) => (
+        // TODO: design this screen
+        <ScrollView style={[globalStyles.scrollView]} contentContainerStyle={globalStyles.scrollViewContentContainer}>
+          <View>
+            <Text>Provide your name and email.</Text>
+            <Button onPress={() => register(onUserRegistered)} title="Sign up" />
+          </View>
+        </ScrollView>
+      )}
+    </UserContext.Consumer>
   );
 }

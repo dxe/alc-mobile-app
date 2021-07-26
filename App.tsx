@@ -9,7 +9,7 @@ import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
 import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
-import { getStoredJSON } from "./util";
+import {getStoredJSON, storeJSON} from "./util";
 import WelcomeStack from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
@@ -19,7 +19,6 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [registeredConferenceID, setRegisteredConferenceID] = useState<number>(0);
   const [ready, setReady] = useState<boolean>(false);
-  const [userDeviceID, setUserDeviceID] = useState<string>("");
 
   StatusBar.setBarStyle("light-content", true);
 
@@ -27,24 +26,22 @@ export default function App() {
     (async () => {
       const id = await getStoredJSON("registered_conference_id");
       setRegisteredConferenceID(id ? id : 0);
-      const deviceID = await getStoredJSON("user_device_id");
-      setUserDeviceID(deviceID ? deviceID : "");
       setReady(true);
     })();
   }, []);
 
-  const contextValue = {
-    userDeviceID: userDeviceID,
-    setUserDeviceID: setUserDeviceID,
-    registeredConferenceID: registeredConferenceID,
-    setRegisteredConferenceID: setRegisteredConferenceID,
+  const userRegistered = (deviceID: string) => {
+    console.log(`user registered with ${deviceID}!`);
+    storeJSON("device_id", deviceID)
+    storeJSON("registered_conference_id", CONFERENCE_ID)
+    setRegisteredConferenceID(CONFERENCE_ID)
   };
 
   return (
     ready && (
       <NavigationContainer>
         {registeredConferenceID != CONFERENCE_ID ? (
-          <UserContext.Provider value={contextValue}>
+          <UserContext.Provider value={{ onUserRegistered: userRegistered }}>
             <WelcomeStack />
           </UserContext.Provider>
         ) : (

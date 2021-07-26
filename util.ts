@@ -1,6 +1,7 @@
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage } from "react-native-flash-message";
+import * as Application from "expo-application";
 
 export const ONE_HOUR_MS = 1000 * 60 * 60;
 
@@ -52,4 +53,8 @@ export const showErrorMessage = (message: string) => {
     description: message,
     type: "danger",
   });
+};
+
+export const getDeviceID = async () => {
+  return Application.androidId ? Promise.resolve(Application.androidId) : await Application.getIosIdForVendorAsync();
 };
