@@ -1,4 +1,5 @@
-import { APIResponse, CONFERENCE_ID, post } from "./api";
+import { CONFERENCE_ID, callAPIUsingCache } from "./api";
+import { Dispatch } from "react";
 
 export interface Announcement {
   id: number;
@@ -8,12 +9,19 @@ export interface Announcement {
   message: string;
 }
 
-export const getAnnouncements = async function (): Promise<APIResponse> {
+export const getAnnouncements = function (
+  onSuccess: Dispatch<Announcement[]>,
+  onError: Dispatch<string>
+): Promise<void> {
   const options = {
     path: "/announcement/list",
     body: {
       conference_id: CONFERENCE_ID,
     },
+    onSuccess: onSuccess,
+    onError: onError,
+    errorMessage: "Unable to retrieve latest announcements.",
+    fallback: [],
   };
-  return post(options);
+  return callAPIUsingCache(options);
 };

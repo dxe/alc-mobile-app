@@ -1,4 +1,5 @@
-import { APIResponse, CONFERENCE_ID, post } from "./api";
+import { CONFERENCE_ID, callAPIUsingCache } from "./api";
+import { Dispatch } from "react";
 
 export interface Schedule {
   events: ConferenceEvent[];
@@ -38,13 +39,17 @@ export interface Location {
   place_id: string;
 }
 
-export const getSchedule = async function (): Promise<APIResponse> {
+export const getSchedule = function (onSuccess: Dispatch<Schedule>, onError: Dispatch<string>): Promise<void> {
   const options = {
     path: "/event/list",
     body: {
       conference_id: CONFERENCE_ID,
       user_id: null, // TODO: add user_id as a function parameter
     },
+    onSuccess: onSuccess,
+    onError: onError,
+    errorMessage: "Unable to retrieve latest schedule.",
+    fallback: null,
   };
-  return post(options);
+  return callAPIUsingCache(options);
 };

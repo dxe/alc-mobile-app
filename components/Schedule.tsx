@@ -2,14 +2,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { delayFunc, getStoredJSON, storeJSON, utcToLocal } from "../util";
+import { waitFunc, utcToLocal, showErrorMessage } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
 import { Schedule, ConferenceEvent, getSchedule } from "../api/schedule";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ScheduleEvent } from "./ScheduleEvent";
-import { showMessage } from "react-native-flash-message";
 
 const Stack = createStackNavigator();
 
@@ -59,49 +58,25 @@ function ScheduleScreen({ navigation }: any) {
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>([]);
   const calendarStrip = useRef<any>();
-  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!isError) return;
-    showMessage({
-      message: "Error",
-      description: "Unable to retrieve latest schedule information.",
-      type: "danger",
-    });
-    setIsError((v: boolean) => {
-      return !v;
-    });
-  }, [isError]);
+    if (error === "") return;
+    showErrorMessage(error);
+    setError("");
+  }, [error]);
+
+  useEffect(() => {
+    getSchedule(setSchedule, setError);
+  }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
-
     (async () => {
-      const { data, error } = await delayFunc(getSchedule());
-      if (error) {
-        setIsError(true);
-        setRefreshing(false);
-        return;
-      }
-      setSchedule(data);
-      await storeJSON("schedule", data);
+      await waitFunc(getSchedule(setSchedule, setError));
       setRefreshing(false);
     })();
   };
-
-  // When the component initially loads, load the schedule data & update the cache.
-  useEffect(() => {
-    (async () => {
-      setSchedule((await getStoredJSON("schedule")) || null);
-      const { data, error } = await getSchedule();
-      if (error) {
-        setIsError(true);
-        return;
-      }
-      setSchedule(data);
-      await storeJSON("schedule", data);
-    })();
-  }, []);
 
   // Filter the schedule by date.
   const onDateSelected = (date: moment.Moment) => {

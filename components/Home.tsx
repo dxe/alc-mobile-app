@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable } from "react-native";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
-import { delayFunc, getStoredJSON, storeJSON, wait } from "../util";
+import { waitFunc, showErrorMessage } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent, getSchedule, Schedule } from "../api/schedule";
-import { showMessage } from "react-native-flash-message";
 import { TimeAgo } from "./common/TimeAgo";
 import moment from "moment";
 
@@ -41,46 +40,22 @@ function HomeScreen({ navigation }: any) {
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!isError) return;
-    showMessage({
-      message: "Error",
-      description: "Unable to retrieve latest schedule information.",
-      type: "danger",
-    });
-    setIsError((v: boolean) => {
-      return !v;
-    });
-  }, [isError]);
+    if (error === "") return;
+    showErrorMessage(error);
+    setError("");
+  }, [error]);
 
-  // When the component initially loads, load the schedule data & update the cache.
   useEffect(() => {
-    (async () => {
-      setSchedule((await getStoredJSON("schedule")) || null);
-      const { data, error } = await getSchedule();
-      if (error) {
-        setIsError(true);
-        return;
-      }
-      setSchedule(data);
-      await storeJSON("schedule", data);
-    })();
+    getSchedule(setSchedule, setError);
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
-
     (async () => {
-      const { data, error } = await delayFunc(getSchedule());
-      if (error) {
-        setIsError(true);
-        setRefreshing(false);
-        return;
-      }
-      setSchedule(data);
-      await storeJSON("schedule", data);
+      await waitFunc(getSchedule(setSchedule, setError));
       setRefreshing(false);
     })();
   };

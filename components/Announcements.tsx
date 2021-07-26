@@ -3,13 +3,9 @@ import { ScrollView, RefreshControl, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { getAnnouncements, Announcement } from "../api/announcement";
-import { delayFunc, getStoredJSON, storeJSON } from "../util";
-import { showMessage } from "react-native-flash-message";
+import { waitFunc, showErrorMessage } from "../util";
 import { TimeAgo } from "./common/TimeAgo";
-dayjs.extend(relativeTime);
 
 const Stack = createStackNavigator();
 
@@ -31,46 +27,23 @@ export default function AnnouncementsStack() {
 function AnnouncementsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!isError) return;
-    showMessage({
-      message: "Error",
-      description: "Unable to retrieve latest announcements.",
-      type: "danger",
-    });
-    setIsError((v: boolean) => {
-      return !v;
-    });
-  }, [isError]);
+    if (error === "") return;
+    showErrorMessage(error);
+    setError("");
+  }, [error]);
 
   useEffect(() => {
-    // Load announcement data when this component loads.
-    (async () => {
-      setAnnouncements((await getStoredJSON("announcements")) || []);
-      const { data, error } = await getAnnouncements();
-      if (error) {
-        setIsError(true);
-        return;
-      }
-      setAnnouncements(data);
-      await storeJSON("announcements", data);
-    })();
+    getAnnouncements(setAnnouncements, setError);
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
     (async () => {
-      const { data, error } = await delayFunc(getAnnouncements());
-      if (error) {
-        setIsError(true);
-        setRefreshing(false);
-        return;
-      }
-      setAnnouncements(data);
+      await waitFunc(getAnnouncements(setAnnouncements, setError));
       setRefreshing(false);
-      await storeJSON("announcements", data);
     })();
   };
 

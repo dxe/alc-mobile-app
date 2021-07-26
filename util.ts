@@ -1,5 +1,6 @@
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { showMessage } from "react-native-flash-message";
 
 export const wait = (timeout: number): Promise<void> => {
   return new Promise((resolve) => {
@@ -9,9 +10,9 @@ export const wait = (timeout: number): Promise<void> => {
 
 const DEFAULT_TIMEOUT = 750;
 
-// delayFunc wraps an async function and causes it to take at least a certain amount of time to resolve.
+// waitFunc wraps an async function and causes it to take at least a certain amount of time to resolve.
 // This is used to improve the UX in case something loads so quickly that the user thinks nothing happened.
-export const delayFunc = async (fn: Promise<any>, timeout: number = DEFAULT_TIMEOUT): Promise<any> => {
+export const waitFunc = async (fn: Promise<any>, timeout: number = DEFAULT_TIMEOUT): Promise<any> => {
   const [value] = await Promise.all([fn, wait(timeout)]);
   return value;
 };
@@ -41,4 +42,12 @@ export const getStoredJSON = async (key: string): Promise<any> => {
   } catch (e) {
     console.error("error reading stored json data");
   }
+};
+
+export const showErrorMessage = (message: string) => {
+  showMessage({
+    message: "Error",
+    description: message,
+    type: "danger",
+  });
 };

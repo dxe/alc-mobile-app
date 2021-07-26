@@ -1,4 +1,5 @@
-import { APIResponse, post } from "./api";
+import { callAPIUsingCache } from "./api";
+import { Dispatch } from "react";
 
 export interface Info {
   id: number;
@@ -8,10 +9,14 @@ export interface Info {
   content: string;
 }
 
-export const getInfo = async function (): Promise<APIResponse> {
+export const getInfo = function (onSuccess: Dispatch<Info[]>, onError: Dispatch<string>): Promise<void> {
   const options = {
     path: "/info/list",
     body: {},
+    onSuccess: onSuccess,
+    onError: onError,
+    errorMessage: "Unable to retrieve latest information.",
+    fallback: [],
   };
-  return post(options);
+  return callAPIUsingCache(options);
 };

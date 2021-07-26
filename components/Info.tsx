@@ -5,8 +5,7 @@ import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { getInfo, Info } from "../api/info";
-import { delayFunc, getStoredJSON, storeJSON } from "../util";
-import { showMessage } from "react-native-flash-message";
+import { showErrorMessage, waitFunc } from "../util";
 
 const Stack = createStackNavigator();
 
@@ -35,46 +34,23 @@ export default function InfoStack() {
 function InfoScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [info, setInfo] = React.useState<Info[]>([]);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!isError) return;
-    showMessage({
-      message: "Error",
-      description: "Unable to retrieve latest information.",
-      type: "danger",
-    });
-    setIsError((v: boolean) => {
-      return !v;
-    });
-  }, [isError]);
+    if (error === "") return;
+    showErrorMessage(error);
+    setError("");
+  }, [error]);
 
   useEffect(() => {
-    (async () => {
-      setInfo((await getStoredJSON("info")) || []);
-      const { data, error } = await getInfo();
-      if (error) {
-        setIsError(true);
-        return;
-      }
-      setInfo(data);
-      await storeJSON("info", data);
-    })();
+    getInfo(setInfo, setError);
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
-
     (async () => {
-      const { data, error } = await delayFunc(getInfo());
-      if (error) {
-        setIsError(true);
-        setRefreshing(false);
-        return;
-      }
-      setInfo(data);
+      await waitFunc(getInfo(setInfo, setError));
       setRefreshing(false);
-      await storeJSON("info", data);
     })();
   };
 
