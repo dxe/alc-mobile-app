@@ -2,6 +2,8 @@ import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage } from "react-native-flash-message";
 
+export const ONE_HOUR_MS = 1000 * 60 * 60;
+
 export const wait = (timeout: number): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(resolve, timeout);

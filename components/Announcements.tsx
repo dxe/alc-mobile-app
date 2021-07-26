@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import { getAnnouncements, Announcement } from "../api/announcement";
-import { waitFunc, showErrorMessage } from "../util";
+import { waitFunc, showErrorMessage, ONE_HOUR_MS } from "../util";
 import { TimeAgo } from "./common/TimeAgo";
+import { getInfo } from "../api/info";
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,11 @@ function AnnouncementsScreen() {
 
   useEffect(() => {
     getAnnouncements(setAnnouncements, setError);
+    // Fetch new data hourly if app is left running.
+    const interval = setInterval(() => {
+      getAnnouncements(setAnnouncements, setError);
+    }, ONE_HOUR_MS);
+    return () => clearInterval(interval);
   }, []);
 
   const onRefresh = () => {

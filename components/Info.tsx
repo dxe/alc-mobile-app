@@ -5,7 +5,8 @@ import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { getInfo, Info } from "../api/info";
-import { showErrorMessage, waitFunc } from "../util";
+import { ONE_HOUR_MS, showErrorMessage, waitFunc } from "../util";
+import { getSchedule } from "../api/schedule";
 
 const Stack = createStackNavigator();
 
@@ -44,6 +45,11 @@ function InfoScreen({ navigation }: any) {
 
   useEffect(() => {
     getInfo(setInfo, setError);
+    // Fetch new data hourly if app is left running.
+    const interval = setInterval(() => {
+      getInfo(setInfo, setError);
+    }, ONE_HOUR_MS);
+    return () => clearInterval(interval);
   }, []);
 
   const onRefresh = () => {

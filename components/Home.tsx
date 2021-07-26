@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable } from "react-native";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
-import { waitFunc, showErrorMessage } from "../util";
+import { waitFunc, showErrorMessage, ONE_HOUR_MS } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent, getSchedule, Schedule } from "../api/schedule";
@@ -50,6 +50,11 @@ function HomeScreen({ navigation }: any) {
 
   useEffect(() => {
     getSchedule(setSchedule, setError);
+    // Fetch new data hourly if app is left running.
+    const interval = setInterval(() => {
+      getSchedule(setSchedule, setError);
+    }, ONE_HOUR_MS);
+    return () => clearInterval(interval);
   }, []);
 
   const onRefresh = () => {

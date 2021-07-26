@@ -2,13 +2,14 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { waitFunc, utcToLocal, showErrorMessage } from "../util";
+import { waitFunc, utcToLocal, showErrorMessage, ONE_HOUR_MS } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
 import { Schedule, ConferenceEvent, getSchedule } from "../api/schedule";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ScheduleEvent } from "./ScheduleEvent";
+import { getInfo } from "../api/info";
 
 const Stack = createStackNavigator();
 
@@ -68,6 +69,11 @@ function ScheduleScreen({ navigation }: any) {
 
   useEffect(() => {
     getSchedule(setSchedule, setError);
+    // Fetch new data hourly if app is left running.
+    const interval = setInterval(() => {
+      getSchedule(setSchedule, setError);
+    }, ONE_HOUR_MS);
+    return () => clearInterval(interval);
   }, []);
 
   const onRefresh = () => {
