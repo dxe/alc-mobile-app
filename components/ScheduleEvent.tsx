@@ -1,10 +1,10 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { utcToLocal } from "../util";
 import { ListItem } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
 import FeatherIcon from "react-native-vector-icons/Feather";
-import { ConferenceEvent } from "../api/schedule";
+import { ConferenceEvent, Schedule } from "../api/schedule";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { NavigationProp } from "@react-navigation/native";
 
@@ -39,12 +39,21 @@ export function ScheduleEvent(props: Props) {
             <ListItem.Subtitle>
               <FeatherIcon name="map-pin" size={16} /> <Text style={{ fontSize: 16 }}>{props.event.location.name}</Text>
             </ListItem.Subtitle>
-            <View style={styles.rsvpStatus}>
-              <Text style={styles.rsvpStatusText}>Attending</Text>
+            <View
+              style={[
+                styles.rsvpStatus,
+                { backgroundColor: props.event.attending ? colors.lightgreen : colors.lightred },
+              ]}
+            >
+              <Text style={styles.rsvpStatusText}>{props.event.attending ? "Attending" : "Not attending"}</Text>
             </View>
           </View>
           <Pressable
-            onPress={() => props.nav.navigate("Event Details", { scheduleItem: props.event as ConferenceEvent })}
+            onPress={() =>
+              props.nav.navigate("Event Details", {
+                scheduleItem: props.event as ConferenceEvent,
+              })
+            }
           >
             <View
               style={{
@@ -67,7 +76,6 @@ const styles = StyleSheet.create({
   startTime: { textAlign: "center", backgroundColor: colors.white, fontSize: 15, paddingTop: 3 },
   endTime: { textAlign: "center", backgroundColor: colors.white, color: colors.grey, fontSize: 15 },
   rsvpStatus: {
-    backgroundColor: colors.lightgreen,
     padding: 10,
     marginTop: 10,
     borderRadius: 100,

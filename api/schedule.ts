@@ -1,5 +1,6 @@
 import { CONFERENCE_ID, postAPI } from "./api";
 import { Dispatch } from "react";
+import { getStoredJSON } from "../util";
 
 export interface Schedule {
   events: ConferenceEvent[];
@@ -46,28 +47,31 @@ export interface RSVP {
 }
 
 export const getSchedule = function (onSuccess: Dispatch<Schedule>, onError: Dispatch<string>): Promise<void> {
-  const options = {
-    path: "/event/list",
-    body: {
-      conference_id: CONFERENCE_ID,
-      user_id: null, // TODO: add user_id as a function parameter
-    },
-    onSuccess: onSuccess,
-    onError: onError,
-    errorMessage: "Unable to retrieve latest schedule.",
-    fallback: null,
-    useCache: true,
-  };
-  return postAPI(options);
+  return (async () => {
+    const deviceID = await getStoredJSON("device_id");
+    const options = {
+      path: "/event/list",
+      body: {
+        conference_id: CONFERENCE_ID,
+        device_id: deviceID,
+      },
+      onSuccess: onSuccess,
+      onError: onError,
+      errorMessage: "Unable to retrieve latest schedule.",
+      fallback: null,
+      useCache: true,
+    };
+    return postAPI(options);
+  })();
 };
 
-export const rsvp = function (data: RSVP, onSuccess: Dispatch<Schedule>, onError: Dispatch<string>): Promise<void> {
+export const rsvp = function (data: RSVP, onSuccess: any, onError: any): Promise<void> {
   const options = {
     path: "/event/rsvp",
     body: data,
     onSuccess: onSuccess,
     onError: onError,
-    errorMessage: "Unable to RSVP.",
+    errorMessage: "Failed to RSVP.",
     useCache: false,
   };
   return postAPI(options);

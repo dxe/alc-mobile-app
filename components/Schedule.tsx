@@ -9,7 +9,6 @@ import { ListItem } from "react-native-elements";
 import { Schedule, ConferenceEvent, getSchedule } from "../api/schedule";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ScheduleEvent } from "./ScheduleEvent";
-import { getInfo } from "../api/info";
 
 const Stack = createStackNavigator();
 

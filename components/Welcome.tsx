@@ -35,8 +35,9 @@ export default function WelcomeStack() {
 }
 
 export function WelcomeScreen({ navigation, route }: any) {
-  const [error, setError] = useState<string>("");
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     if (error === "") return;
@@ -46,6 +47,7 @@ export function WelcomeScreen({ navigation, route }: any) {
 
   const registerAnon = (callback: any) => {
     (async () => {
+      setSubmitting(true);
       try {
         const deviceID = await getDeviceID();
         await addUser(
@@ -66,6 +68,7 @@ export function WelcomeScreen({ navigation, route }: any) {
         setError("Failed to get device ID.");
       }
     })();
+    setSubmitting(false);
   };
 
   return (
@@ -95,7 +98,7 @@ export function WelcomeScreen({ navigation, route }: any) {
           <View>
             <Text>Welcome to ALC 2021!</Text>
             <Button onPress={() => navigation.navigate("SignUp")} title="Sign up" />
-            <Button onPress={() => registerAnon(onUserRegistered)} title="Stay anonymous" />
+            <Button onPress={() => registerAnon(onUserRegistered)} title="Stay anonymous" disabled={submitting} />
           </View>
         </ScrollView>
       )}
@@ -105,6 +108,7 @@ export function WelcomeScreen({ navigation, route }: any) {
 
 export function SignUpScreen({ navigation, route }: any) {
   const [error, setError] = useState<string>("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     if (error === "") return;
@@ -113,6 +117,7 @@ export function SignUpScreen({ navigation, route }: any) {
   }, [error]);
 
   const register = (callback: any) => {
+    setSubmitting(true);
     (async () => {
       try {
         const deviceID = await getDeviceID();
@@ -133,6 +138,7 @@ export function SignUpScreen({ navigation, route }: any) {
       } catch (e) {
         setError("Failed to get device ID.");
       }
+      setSubmitting(false);
     })();
   };
 
@@ -143,7 +149,7 @@ export function SignUpScreen({ navigation, route }: any) {
         <ScrollView style={[globalStyles.scrollView]} contentContainerStyle={globalStyles.scrollViewContentContainer}>
           <View>
             <Text>Provide your name and email.</Text>
-            <Button onPress={() => register(onUserRegistered)} title="Sign up" />
+            <Button onPress={() => register(onUserRegistered)} title="Sign up" disabled={submitting} />
           </View>
         </ScrollView>
       )}

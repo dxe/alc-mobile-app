@@ -6,7 +6,6 @@ import { ListItem, Icon } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { getInfo, Info } from "../api/info";
 import { ONE_HOUR_MS, showErrorMessage, waitFunc } from "../util";
-import { getSchedule } from "../api/schedule";
 
 const Stack = createStackNavigator();
 

@@ -1,15 +1,50 @@
-import { ConferenceEvent } from "../api/schedule";
+import { ConferenceEvent, rsvp, Schedule } from "../api/schedule";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
 import moment from "moment";
-import { utcToLocal } from "../util";
+import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-native-elements";
 
 export function ScheduleEventDetails({ route }: any) {
-  const { scheduleItem }: { scheduleItem: ConferenceEvent } = route.params;
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(route.params.scheduleItem);
+  const [error, setError] = useState<string>("");
+
+  const rsvpSuccess = () => {
+    setScheduleItem({
+      ...scheduleItem,
+      total_attendees: scheduleItem.attending ? scheduleItem.total_attendees - 1 : scheduleItem.total_attendees + 1,
+      attending: !scheduleItem.attending,
+    });
+    setSubmitting(false);
+    // TODO: update rsvp status in the Schedule component state & local storage cache
+  };
+
+  useEffect(() => {
+    if (error === "") return;
+    showErrorMessage(error);
+    setSubmitting(false);
+    setError("");
+  }, [error]);
+
+  const eventRSVP = () => {
+    (async () => {
+      setSubmitting(true);
+      const deviceID = await getStoredJSON("device_id");
+      await rsvp(
+        {
+          device_id: deviceID,
+          attending: !scheduleItem.attending,
+          event_id: scheduleItem.id,
+        },
+        rsvpSuccess,
+        setError
+      );
+    })();
+  };
 
   return (
     // TODO: improve the Event Details screen.
@@ -39,6 +74,7 @@ export function ScheduleEventDetails({ route }: any) {
         </MapView>
       </View>
       <Button
+        style={{ paddingTop: 5 }}
         onPress={() => {
           showLocation({
             latitude: scheduleItem.location.lat,
@@ -50,9 +86,15 @@ export function ScheduleEventDetails({ route }: any) {
         }}
         title="Get directions"
       />
-      <Text style={{ paddingTop: 10 }}>Attending: {scheduleItem.total_attendees}</Text>
-      <Text>RSVP BUTTON</Text>
-      <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 10 }}>Description</Text>
+      <Button
+        style={{ paddingTop: 20 }}
+        buttonStyle={{ backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen }}
+        onPress={eventRSVP}
+        title={scheduleItem.attending ? "Mark as not attending" : "RSVP"}
+        disabled={submitting}
+      />
+      <Text style={{ paddingTop: 10 }}>Total attendees RSVP'd: {scheduleItem.total_attendees}</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
     </ScrollView>
   );
