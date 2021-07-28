@@ -5,6 +5,9 @@ import { getDeviceID, showErrorMessage } from "../util";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Button, Overlay } from "react-native-elements";
 import { UserContext } from "../UserContext";
+import { addUser } from "../api/user";
+import { CONFERENCE_ID } from "../api/api";
+import * as Device from "expo-device";
 
 const Stack = createStackNavigator();
 
@@ -31,15 +34,6 @@ export default function WelcomeStack() {
   );
 }
 
-const register = (callback: any) => {
-  (async () => {
-    // TODO: register for push notifications
-    // TODO: submit form
-    const deviceID = await getDeviceID();
-    callback(deviceID);
-  })();
-};
-
 export function WelcomeScreen({ navigation, route }: any) {
   const [error, setError] = useState<string>("");
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
@@ -49,6 +43,30 @@ export function WelcomeScreen({ navigation, route }: any) {
     showErrorMessage(error);
     setError("");
   }, [error]);
+
+  const registerAnon = (callback: any) => {
+    (async () => {
+      try {
+        const deviceID = await getDeviceID();
+        await addUser(
+          {
+            conference_id: CONFERENCE_ID,
+            name: "",
+            email: "",
+            device_id: deviceID,
+            device_name: Device.modelName || "",
+            platform: Device.osName + " " + Device.osVersion,
+          },
+          () => {
+            callback(deviceID);
+          },
+          setError
+        );
+      } catch (e) {
+        setError("Failed to get device ID.");
+      }
+    })();
+  };
 
   return (
     <UserContext.Consumer>
@@ -77,7 +95,7 @@ export function WelcomeScreen({ navigation, route }: any) {
           <View>
             <Text>Welcome to ALC 2021!</Text>
             <Button onPress={() => navigation.navigate("SignUp")} title="Sign up" />
-            <Button onPress={() => register(onUserRegistered)} title="Stay anonymous" />
+            <Button onPress={() => registerAnon(onUserRegistered)} title="Stay anonymous" />
           </View>
         </ScrollView>
       )}
@@ -93,6 +111,30 @@ export function SignUpScreen({ navigation, route }: any) {
     showErrorMessage(error);
     setError("");
   }, [error]);
+
+  const register = (callback: any) => {
+    (async () => {
+      try {
+        const deviceID = await getDeviceID();
+        await addUser(
+          {
+            conference_id: CONFERENCE_ID,
+            name: "Test Name",
+            email: "email@test.com",
+            device_id: deviceID,
+            device_name: Device.modelName || "",
+            platform: Device.osName + " " + Device.osVersion,
+          },
+          () => {
+            callback(deviceID);
+          },
+          setError
+        );
+      } catch (e) {
+        setError("Failed to get device ID.");
+      }
+    })();
+  };
 
   return (
     <UserContext.Consumer>

@@ -1,4 +1,4 @@
-import { CONFERENCE_ID, callAPIUsingCache } from "./api";
+import { CONFERENCE_ID, postAPI } from "./api";
 import { Dispatch } from "react";
 
 export interface Schedule {
@@ -39,6 +39,12 @@ export interface Location {
   place_id: string;
 }
 
+export interface RSVP {
+  device_id: string;
+  event_id: number;
+  attending: boolean;
+}
+
 export const getSchedule = function (onSuccess: Dispatch<Schedule>, onError: Dispatch<string>): Promise<void> {
   const options = {
     path: "/event/list",
@@ -50,6 +56,19 @@ export const getSchedule = function (onSuccess: Dispatch<Schedule>, onError: Dis
     onError: onError,
     errorMessage: "Unable to retrieve latest schedule.",
     fallback: null,
+    useCache: true,
   };
-  return callAPIUsingCache(options);
+  return postAPI(options);
+};
+
+export const rsvp = function (data: RSVP, onSuccess: Dispatch<Schedule>, onError: Dispatch<string>): Promise<void> {
+  const options = {
+    path: "/event/rsvp",
+    body: data,
+    onSuccess: onSuccess,
+    onError: onError,
+    errorMessage: "Unable to RSVP.",
+    useCache: false,
+  };
+  return postAPI(options);
 };

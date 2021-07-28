@@ -1,4 +1,4 @@
-import { CONFERENCE_ID, callAPIUsingCache } from "./api";
+import { CONFERENCE_ID, postAPI } from "./api";
 import { Dispatch } from "react";
 
 export interface Announcement {
@@ -22,6 +22,7 @@ export const getAnnouncements = function (
     onError: onError,
     errorMessage: "Unable to retrieve latest announcements.",
     fallback: [],
+    useCache: true,
   };
-  return callAPIUsingCache(options);
+  return postAPI(options);
 };

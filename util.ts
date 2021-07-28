@@ -56,5 +56,12 @@ export const showErrorMessage = (message: string) => {
 };
 
 export const getDeviceID = async () => {
-  return Application.androidId ? Promise.resolve(Application.androidId) : await Application.getIosIdForVendorAsync();
+  if (Application.androidId) {
+    return Promise.resolve(Application.androidId);
+  }
+  const id = await Application.getIosIdForVendorAsync();
+  if (id) {
+    return Promise.resolve(id);
+  }
+  return Promise.reject();
 };

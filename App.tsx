@@ -9,10 +9,11 @@ import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
 import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
-import {getStoredJSON, storeJSON} from "./util";
+import { getStoredJSON, storeJSON } from "./util";
 import WelcomeStack from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
+import { addUser, registerPushNotifications } from "./api/user";
 
 const Tab = createBottomTabNavigator();
 
@@ -32,9 +33,20 @@ export default function App() {
 
   const userRegistered = (deviceID: string) => {
     console.log(`user registered with ${deviceID}!`);
-    storeJSON("device_id", deviceID)
-    storeJSON("registered_conference_id", CONFERENCE_ID)
-    setRegisteredConferenceID(CONFERENCE_ID)
+    storeJSON("device_id", deviceID);
+    storeJSON("registered_conference_id", CONFERENCE_ID);
+    setRegisteredConferenceID(CONFERENCE_ID);
+    // TODO: request to allow push notifications
+    (async () => {
+      await registerPushNotifications(
+        {
+          device_id: deviceID,
+          expo_push_token: "TODO-not-a-real-token-123", // TODO
+        },
+        () => console.log("Successfully registered for push notifications"),
+        () => console.log("Failed to register for push notifications.")
+      );
+    })();
   };
 
   return (

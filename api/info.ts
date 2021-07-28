@@ -1,4 +1,4 @@
-import { callAPIUsingCache } from "./api";
+import { postAPI } from "./api";
 import { Dispatch } from "react";
 
 export interface Info {
@@ -17,6 +17,7 @@ export const getInfo = function (onSuccess: Dispatch<Info[]>, onError: Dispatch<
     onError: onError,
     errorMessage: "Unable to retrieve latest information.",
     fallback: [],
+    useCache: true,
   };
-  return callAPIUsingCache(options);
+  return postAPI(options);
 };
