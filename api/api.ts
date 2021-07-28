@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getStoredJSON, storeJSON } from "../util";
-import { Dispatch, useCallback } from "react";
+import { getDeviceID, getStoredJSON, storeJSON, waitFunc } from "../util";
+import { useEffect, useState } from "react";
 
 export const CONFERENCE_ID = 1;
 export const BASE_URL = "https://alc-mobile-api.dxe.io/api";
@@ -10,34 +10,53 @@ interface APIOptions {
   path: string;
   // the request body
   body: {};
-  // a function to pass the response data to on success
-  onSuccess: any;
-  // a function to pass the error message to on failure
-  onError: Dispatch<any>;
-  // the error message to pass to onError
-  errorMessage: string;
-  // the data to pass to onSuccess if the cache is empty
-  fallback?: any;
-  // whether or not to use cache
-  useCache?: boolean;
+  // the initial data to use until data is successfully fetched or read from cache
+  initialValue?: any;
 }
 
 export const postAPI = async function (options: APIOptions): Promise<void> {
-  // First use the cached data if it exists
-  if (options.useCache) options.onSuccess((await getStoredJSON(options.path)) || options.fallback);
-
-  // Then try to fetch data from the server.
   try {
-    console.log(`posting: ${options.path}`); // TODO: remove after debugging
-    const res = await axios.post(BASE_URL + options.path, options.body);
-    // If success, use that data for state & cache it.
-    if (options.onSuccess) options.onSuccess(res.data);
-    if (options.useCache) await storeJSON(options.path, res.data);
+    const deviceID = await getDeviceID();
+    await axios.post(BASE_URL + options.path, { ...options.body, device_id: deviceID });
+    return Promise.resolve();
   } catch (err) {
     console.error(err);
-    // If error, use the error data for state.
-    options.onError(options.errorMessage);
+    return Promise.reject();
   }
+};
 
-  return Promise.resolve();
+// TODO: handle refreshing at intervals in here too? 1 hour?
+export const useAPI = (options: APIOptions) => {
+  const [data, setData] = useState(options.initialValue);
+  const [status, setStatus] = useState("initialized");
+
+  useEffect(() => {
+    if (!options.path) return;
+
+    if (status === "success" || status === "error") return;
+
+    (async () => {
+      const deviceID = await getDeviceID();
+      const cache = await getStoredJSON(options.path);
+      if (cache) setData(cache);
+
+      try {
+        // TODO: only use waitFunc if status is refreshing
+        const minTime = status === "refreshing" ? 500 : 0;
+        const res = await waitFunc(
+          axios.post(BASE_URL + options.path, { ...options.body, device_id: deviceID }),
+          minTime
+        );
+        setStatus("success");
+        console.log("fetched data from sever");
+        setData(res.data);
+        await storeJSON(options.path, res.data);
+      } catch (e) {
+        console.error(e);
+        setStatus("error");
+      }
+    })();
+  }, [options.path, status]);
+
+  return { data, status, setStatus };
 };

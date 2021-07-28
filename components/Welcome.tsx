@@ -5,7 +5,7 @@ import { getDeviceID, showErrorMessage } from "../util";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Button, Overlay } from "react-native-elements";
 import { UserContext } from "../UserContext";
-import { addUser } from "../api/user";
+import { postAddUser } from "../api/user";
 import { CONFERENCE_ID } from "../api/api";
 import * as Device from "expo-device";
 
@@ -50,25 +50,19 @@ export function WelcomeScreen({ navigation, route }: any) {
       setSubmitting(true);
       try {
         const deviceID = await getDeviceID();
-        await addUser(
-          {
-            conference_id: CONFERENCE_ID,
-            name: "",
-            email: "",
-            device_id: deviceID,
-            device_name: Device.modelName || "",
-            platform: Device.osName + " " + Device.osVersion,
-          },
-          () => {
-            callback(deviceID);
-          },
-          setError
-        );
+        await postAddUser({
+          conference_id: CONFERENCE_ID,
+          name: "",
+          email: "",
+          device_name: Device.modelName || "",
+          platform: Device.osName + " " + Device.osVersion,
+        });
+        callback(deviceID);
       } catch (e) {
-        setError("Failed to get device ID.");
+        setSubmitting(false);
+        setError("Registration failed.");
       }
     })();
-    setSubmitting(false);
   };
 
   return (
@@ -121,24 +115,19 @@ export function SignUpScreen({ navigation, route }: any) {
     (async () => {
       try {
         const deviceID = await getDeviceID();
-        await addUser(
-          {
-            conference_id: CONFERENCE_ID,
-            name: "Test Name",
-            email: "email@test.com",
-            device_id: deviceID,
-            device_name: Device.modelName || "",
-            platform: Device.osName + " " + Device.osVersion,
-          },
-          () => {
-            callback(deviceID);
-          },
-          setError
-        );
+        await postAddUser({
+          conference_id: CONFERENCE_ID,
+          name: "Test Name", // TODO: use form fields
+          email: "email@test.com", // TODO: use form fields
+          device_name: Device.modelName || "",
+          platform: Device.osName + " " + Device.osVersion,
+        });
+        callback(deviceID);
       } catch (e) {
-        setError("Failed to get device ID.");
+        setError("Registration failed.");
+      } finally {
+        setSubmitting(false);
       }
-      setSubmitting(false);
     })();
   };
 

@@ -13,7 +13,7 @@ import { getStoredJSON, storeJSON } from "./util";
 import WelcomeStack from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
-import { addUser, registerPushNotifications } from "./api/user";
+import { postRegisterPushNotifications } from "./api/user";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,14 +38,11 @@ export default function App() {
     setRegisteredConferenceID(CONFERENCE_ID);
     // TODO: request to allow push notifications
     (async () => {
-      await registerPushNotifications(
-        {
-          device_id: deviceID,
-          expo_push_token: "TODO-not-a-real-token-123", // TODO
-        },
-        () => console.log("Successfully registered for push notifications"),
-        () => console.log("Failed to register for push notifications.")
-      );
+      // TODO: if this fails, ask the user if they'd like to try again?
+      // or just tell them it failed & let them go into their settings to try again?
+      await postRegisterPushNotifications({
+        expo_push_token: "TODO-not-a-real-token-123", // TODO
+      });
     })();
   };
 

@@ -1,8 +1,8 @@
-import { ConferenceEvent, rsvp, Schedule } from "../api/schedule";
+import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
 import moment from "moment";
-import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
+import { showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useEffect, useState } from "react";
@@ -19,7 +19,6 @@ export function ScheduleEventDetails({ route }: any) {
       total_attendees: scheduleItem.attending ? scheduleItem.total_attendees - 1 : scheduleItem.total_attendees + 1,
       attending: !scheduleItem.attending,
     });
-    setSubmitting(false);
     // TODO: update rsvp status in the Schedule component state & local storage cache
   };
 
@@ -31,18 +30,19 @@ export function ScheduleEventDetails({ route }: any) {
   }, [error]);
 
   const eventRSVP = () => {
+    setSubmitting(true);
     (async () => {
-      setSubmitting(true);
-      const deviceID = await getStoredJSON("device_id");
-      await rsvp(
-        {
-          device_id: deviceID,
+      try {
+        await postRSVP({
           attending: !scheduleItem.attending,
           event_id: scheduleItem.id,
-        },
-        rsvpSuccess,
-        setError
-      );
+        });
+        rsvpSuccess();
+      } catch (e) {
+        setError("Failed to RSVP.");
+      } finally {
+        setSubmitting(false);
+      }
     })();
   };
 

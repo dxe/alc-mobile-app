@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable } from "react-native";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
-import { waitFunc, showErrorMessage, ONE_HOUR_MS } from "../util";
+import { showErrorMessage } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
-import { ConferenceEvent, getSchedule, Schedule } from "../api/schedule";
+import { ConferenceEvent, useSchedule } from "../api/schedule";
 import { TimeAgo } from "./common/TimeAgo";
 import moment from "moment";
 
@@ -35,64 +35,44 @@ export default function HomeStack() {
 }
 
 function HomeScreen({ navigation }: any) {
-  const [refreshing, setRefreshing] = React.useState(false);
+  const { data, status, setStatus } = useSchedule(null);
   const [currentTime, setCurrentTime] = useState<moment.Moment>(moment());
-  const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
-  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (error === "") return;
-    showErrorMessage(error);
-    setError("");
-  }, [error]);
-
-  useEffect(() => {
-    getSchedule(setSchedule, setError);
-    // Fetch new data hourly if app is left running.
-    const interval = setInterval(() => {
-      getSchedule(setSchedule, setError);
-    }, ONE_HOUR_MS);
-    return () => clearInterval(interval);
-  }, []);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    (async () => {
-      await waitFunc(getSchedule(setSchedule, setError));
-      setRefreshing(false);
-    })();
-  };
+    if (status != "error") return;
+    showErrorMessage("Failed to get latest schedule from server.");
+  }, [status]);
 
   // Update displayed current & next events.
   useEffect(() => {
     const updateFeaturedEvents = () => {
-      if (!schedule) return;
+      if (!data) return;
 
       // Find the events that are happening next.
-      const nextStartTime = schedule.events
-        .filter((x) => {
+      const nextStartTime = data.events
+        .filter((x: ConferenceEvent) => {
           return moment(x.start_time).utc(true).isAfter(moment());
         })
-        .sort((a, b) => {
+        .sort((a: ConferenceEvent, b: ConferenceEvent) => {
           return moment(a.start_time).utc(true).isAfter(moment(b.start_time).utc(true)) ? 1 : -1;
         })[0].start_time;
 
       setNextEvents(
-        schedule.events.filter((x) => {
+        data.events.filter((x: ConferenceEvent) => {
           return x.start_time === nextStartTime;
         })
       );
 
       // Find events happening now.
       setCurrentEvents(
-        schedule.events
-          .filter((x) => {
+        data.events
+          .filter((x: ConferenceEvent) => {
             // First find events whose start time is before now.
             return moment(x.start_time).utc(true).isBefore(moment().utc());
           })
-          .filter((x) => {
+          .filter((x: ConferenceEvent) => {
             // Then find events that have not yet ended.
             return moment(x.start_time).utc(true).add(x.length, "minute").isAfter(currentTime);
           })
@@ -107,14 +87,16 @@ function HomeScreen({ navigation }: any) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentTime, schedule]);
+  }, [currentTime, data]);
 
   return (
-    schedule && (
+    data && (
       <ScrollView
         style={globalStyles.scrollView}
         contentContainerStyle={globalStyles.scrollViewContentContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={status === "refreshing"} onRefresh={() => setStatus("refreshing")} />
+        }
       >
         {currentEvents && currentEvents.length > 0 && (
           <View>
@@ -167,16 +149,16 @@ function HomeScreen({ navigation }: any) {
         <Text style={styles.heading}>Key events</Text>
 
         <View style={styles.keyEventsView}>
-          {schedule.events
-            .filter((e) => {
+          {data.events
+            .filter((e: ConferenceEvent) => {
               return e.key_event;
             })
-            .map((e) => {
+            .map((e: ConferenceEvent) => {
               return (
                 <Card key={e.id} containerStyle={styles.keyEventCard}>
                   <Pressable
                     style={{ height: "100%" }}
-                    onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
+                    onPress={() => navigation.navigate("Event Details", { scheduleItem: e })}
                   >
                     <View style={styles.keyEventView}>
                       <View style={styles.keyEventInnerView}>

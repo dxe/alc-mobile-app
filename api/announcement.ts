@@ -1,5 +1,4 @@
-import { CONFERENCE_ID, postAPI } from "./api";
-import { Dispatch } from "react";
+import { CONFERENCE_ID, useAPI } from "./api";
 
 export interface Announcement {
   id: number;
@@ -9,20 +8,12 @@ export interface Announcement {
   message: string;
 }
 
-export const getAnnouncements = function (
-  onSuccess: Dispatch<Announcement[]>,
-  onError: Dispatch<string>
-): Promise<void> {
-  const options = {
+export const useAnnouncements = (initialValue: any) => {
+  return useAPI({
     path: "/announcement/list",
     body: {
       conference_id: CONFERENCE_ID,
     },
-    onSuccess: onSuccess,
-    onError: onError,
-    errorMessage: "Unable to retrieve latest announcements.",
-    fallback: [],
-    useCache: true,
-  };
-  return postAPI(options);
+    initialValue: initialValue,
+  });
 };

@@ -2,11 +2,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { waitFunc, utcToLocal, showErrorMessage, ONE_HOUR_MS } from "../util";
+import { utcToLocal, showErrorMessage } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
-import { Schedule, ConferenceEvent, getSchedule } from "../api/schedule";
+import { Schedule, ConferenceEvent, useSchedule } from "../api/schedule";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ScheduleEvent } from "./ScheduleEvent";
 
@@ -54,40 +54,20 @@ const sectionizeSchedule = (data: any[]) => {
 };
 
 function ScheduleScreen({ navigation }: any) {
-  const [refreshing, setRefreshing] = useState(false);
-  const [schedule, setSchedule] = useState<Schedule | null>(null);
+  const { data, status, setStatus } = useSchedule(null);
   const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>([]);
   const calendarStrip = useRef<any>();
-  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (error === "") return;
-    showErrorMessage(error);
-    setError("");
-  }, [error]);
-
-  useEffect(() => {
-    getSchedule(setSchedule, setError);
-    // Fetch new data hourly if app is left running.
-    const interval = setInterval(() => {
-      getSchedule(setSchedule, setError);
-    }, ONE_HOUR_MS);
-    return () => clearInterval(interval);
-  }, []);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    (async () => {
-      await waitFunc(getSchedule(setSchedule, setError));
-      setRefreshing(false);
-    })();
-  };
+    if (status != "error") return;
+    showErrorMessage("Failed to get latest schedule from server.");
+  }, [status]);
 
   // Filter the schedule by date.
   const onDateSelected = (date: moment.Moment) => {
-    if (!schedule) return;
+    if (!data) return;
     setFilteredSchedule(
-      schedule.events.filter((item: ConferenceEvent) => {
+      data.events.filter((item: ConferenceEvent) => {
         const localDate = moment(moment(item.start_time).utc(true).toDate()).local().format("YYYY-MM-DD");
         return localDate === date.format("YYYY-MM-DD");
       })
@@ -96,14 +76,14 @@ function ScheduleScreen({ navigation }: any) {
 
   // Whenever the schedule data is updated, filter it using the selected date.
   useEffect(() => {
-    if (!schedule) return;
+    if (!data) return;
     onDateSelected(calendarStrip.current.getSelectedDate());
-  }, [schedule]);
+  }, [data]);
 
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.calendarStripWrapper}>
-        {schedule && (
+        {data && (
           <CalendarStrip
             style={styles.calendarStrip}
             calendarHeaderStyle={styles.colorPrimary}
@@ -113,15 +93,13 @@ function ScheduleScreen({ navigation }: any) {
             highlightDateNumberStyle={styles.colorWhite}
             daySelectionAnimation={{ type: "background", highlightColor: colors.primary, duration: 100 }}
             scrollable={false}
-            startingDate={utcToLocal(schedule.conference.start_date)}
+            startingDate={utcToLocal(data.conference.start_date)}
             // useIsoWeekday starts the strip on the startingDate instead of on Sunday/Monday.
             useIsoWeekday={false}
-            minDate={utcToLocal(schedule.conference.start_date)}
-            maxDate={utcToLocal(schedule.conference.end_date)}
+            minDate={utcToLocal(data.conference.start_date)}
+            maxDate={utcToLocal(data.conference.end_date)}
             // TODO: ensure this handles time zones properly
-            selectedDate={
-              moment().isBefore(schedule.conference.start_date) ? moment(schedule.conference.start_date) : moment()
-            }
+            selectedDate={moment().isBefore(data.conference.start_date) ? moment(data.conference.start_date) : moment()}
             onDateSelected={onDateSelected}
             ref={calendarStrip}
           />
@@ -172,7 +150,9 @@ function ScheduleScreen({ navigation }: any) {
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.sectionHeader}>{utcToLocal(title).format("h:mm A")}</Text>
           )}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          refreshControl={
+            <RefreshControl refreshing={status === "refreshing"} onRefresh={() => setStatus("refreshing")} />
+          }
           style={[globalStyles.scrollView, { paddingHorizontal: 8 }]}
         />
       )}

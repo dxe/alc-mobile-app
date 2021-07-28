@@ -11,7 +11,7 @@ export const wait = (timeout: number): Promise<void> => {
   });
 };
 
-const DEFAULT_TIMEOUT = 750;
+const DEFAULT_TIMEOUT = 500;
 
 // waitFunc wraps an async function and causes it to take at least a certain amount of time to resolve.
 // This is used to improve the UX in case something loads so quickly that the user thinks nothing happened.
@@ -33,7 +33,7 @@ export const storeJSON = async (key: string, value: any) => {
     await AsyncStorage.setItem(key, jsonValue);
     console.log(`stored ${key} data`); // TODO: remove after debugging
   } catch (e) {
-    console.error("error storing json data");
+    console.error(`error storing json data for key ${key}`);
   }
 };
 
@@ -56,6 +56,9 @@ export const showErrorMessage = (message: string) => {
 };
 
 export const getDeviceID = async () => {
+  const storedDeviceID = await getStoredJSON("device_id");
+  if (storedDeviceID) return storedDeviceID;
+
   if (Application.androidId) {
     return Promise.resolve(Application.androidId);
   }

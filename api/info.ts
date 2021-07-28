@@ -1,5 +1,4 @@
-import { postAPI } from "./api";
-import { Dispatch } from "react";
+import { useAPI } from "./api";
 
 export interface Info {
   id: number;
@@ -9,15 +8,10 @@ export interface Info {
   content: string;
 }
 
-export const getInfo = function (onSuccess: Dispatch<Info[]>, onError: Dispatch<string>): Promise<void> {
-  const options = {
+export const useInfo = (initialValue: any) => {
+  return useAPI({
     path: "/info/list",
     body: {},
-    onSuccess: onSuccess,
-    onError: onError,
-    errorMessage: "Unable to retrieve latest information.",
-    fallback: [],
-    useCache: true,
-  };
-  return postAPI(options);
+    initialValue: initialValue,
+  });
 };

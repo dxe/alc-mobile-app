@@ -1,11 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl } from "react-native";
-import React, { useEffect, useState } from "react";
+import { ScrollView, RefreshControl, ActivityIndicator } from "react-native";
+import React, { useEffect } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import HTML from "react-native-render-html";
-import { getInfo, Info } from "../api/info";
-import { ONE_HOUR_MS, showErrorMessage, waitFunc } from "../util";
+import { Info, useInfo } from "../api/info";
+import { showErrorMessage } from "../util";
 
 const Stack = createStackNavigator();
 
@@ -32,58 +32,39 @@ export default function InfoStack() {
 }
 
 function InfoScreen({ navigation }: any) {
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [info, setInfo] = React.useState<Info[]>([]);
-  const [error, setError] = useState<string>("");
+  const { data, status, setStatus } = useInfo([]);
 
   useEffect(() => {
-    if (error === "") return;
-    showErrorMessage(error);
-    setError("");
-  }, [error]);
-
-  useEffect(() => {
-    getInfo(setInfo, setError);
-    // Fetch new data hourly if app is left running.
-    const interval = setInterval(() => {
-      getInfo(setInfo, setError);
-    }, ONE_HOUR_MS);
-    return () => clearInterval(interval);
-  }, []);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    (async () => {
-      await waitFunc(getInfo(setInfo, setError));
-      setRefreshing(false);
-    })();
-  };
+    if (status != "error") return;
+    showErrorMessage("Failed to get latest info from server.");
+  }, [status]);
 
   return (
     <ScrollView
       style={globalStyles.scrollView}
       contentContainerStyle={globalStyles.scrollViewContentContainer}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      refreshControl={<RefreshControl refreshing={status === "refreshing"} onRefresh={() => setStatus("refreshing")} />}
     >
-      {info.map((item, i) => (
-        <ListItem
-          key={i}
-          style={globalStyles.listItem}
-          onPress={() => navigation.navigate("Details", { infoItem: item })}
-        >
-          <Icon
-            raised
-            reverse
-            name={item.icon}
-            type="font-awesome"
-            color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
-          />
-          <ListItem.Content>
-            <ListItem.Title style={globalStyles.listItemTitle}>{item.title}</ListItem.Title>
-            <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
-          </ListItem.Content>
-        </ListItem>
-      ))}
+      {data &&
+        data.map((item: Info, i: number) => (
+          <ListItem
+            key={i}
+            style={globalStyles.listItem}
+            onPress={() => navigation.navigate("Details", { infoItem: item })}
+          >
+            <Icon
+              raised
+              reverse
+              name={item.icon}
+              type="font-awesome"
+              color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
+            />
+            <ListItem.Content>
+              <ListItem.Title style={globalStyles.listItemTitle}>{item.title}</ListItem.Title>
+              <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
+            </ListItem.Content>
+          </ListItem>
+        ))}
     </ScrollView>
   );
 }
