@@ -1,5 +1,5 @@
 import React, { Dispatch } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { utcToLocal } from "../util";
 import { ListItem } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
@@ -48,7 +48,7 @@ export function ScheduleEvent(props: Props) {
               <Text style={styles.rsvpStatusText}>{props.event.attending ? "Attending" : "Not attending"}</Text>
             </View>
           </View>
-          <Pressable
+          <TouchableOpacity
             onPress={() =>
               props.nav.navigate("Event Details", {
                 scheduleItem: props.event as ConferenceEvent,
@@ -65,7 +65,7 @@ export function ScheduleEvent(props: Props) {
             >
               <Ionicons name="caret-forward" size={30} />
             </View>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

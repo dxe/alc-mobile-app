@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RefreshControl, SectionList, StyleSheet, Text, View, Pressable } from "react-native";
+import {RefreshControl, SectionList, StyleSheet, Text, View, Pressable, TouchableOpacity} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { utcToLocal, showErrorMessage } from "../util";
@@ -114,7 +114,7 @@ function ScheduleScreen({ navigation }: any) {
             const itemsInSection = section.data.length - 1;
 
             return (
-              <Pressable
+              <TouchableOpacity
                 onPress={() => navigation.navigate("Event Details", { scheduleItem: item as ConferenceEvent })}
               >
                 <ListItem
@@ -144,7 +144,7 @@ function ScheduleScreen({ navigation }: any) {
                     {index === 0 && index !== section.data.length - 1 && <View style={styles.divider} />}
                   </ListItem.Content>
                 </ListItem>
-              </Pressable>
+              </TouchableOpacity>
             );
           }}
           renderSectionHeader={({ section: { title } }) => (

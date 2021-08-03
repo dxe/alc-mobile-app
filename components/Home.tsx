@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable } from "react-native";
+import {Text, View, ScrollView, RefreshControl, StyleSheet, Pressable, TouchableOpacity} from "react-native";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
 import { showErrorMessage } from "../util";
@@ -128,7 +128,7 @@ function HomeScreen({ navigation }: any) {
 
             {nextEvents.map((e: ConferenceEvent) => {
               return (
-                <Pressable
+                <TouchableOpacity
                   key={e.id}
                   onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
                 >
@@ -140,7 +140,7 @@ function HomeScreen({ navigation }: any) {
                       <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Starts in " />
                     }
                   />
-                </Pressable>
+                </TouchableOpacity>
               );
             })}
           </View>
@@ -156,7 +156,7 @@ function HomeScreen({ navigation }: any) {
             .map((e: ConferenceEvent) => {
               return (
                 <Card key={e.id} containerStyle={styles.keyEventCard}>
-                  <Pressable
+                  <TouchableOpacity
                     style={{ height: "100%" }}
                     onPress={() => navigation.navigate("Event Details", { scheduleItem: e })}
                   >
@@ -165,7 +165,7 @@ function HomeScreen({ navigation }: any) {
                         <Text style={styles.keyEventText}>{e.name}</Text>
                       </View>
                     </View>
-                  </Pressable>
+                  </TouchableOpacity>
                 </Card>
               );
             })}
