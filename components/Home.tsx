@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import {Text, View, ScrollView, RefreshControl, StyleSheet, Pressable, TouchableOpacity} from "react-native";
+import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
 import { showErrorMessage } from "../util";

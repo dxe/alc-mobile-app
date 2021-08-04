@@ -1,5 +1,5 @@
 import React, { Dispatch } from "react";
-import {Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { utcToLocal } from "../util";
 import { ListItem } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";

@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import {RefreshControl, SectionList, StyleSheet, Text, View, Pressable, TouchableOpacity} from "react-native";
+import { RefreshControl, SectionList, StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { utcToLocal, showErrorMessage } from "../util";
