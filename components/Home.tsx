@@ -1,10 +1,19 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  RefreshControl,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
 import { showErrorMessage } from "../util";
-import { TripleTextCard } from "./common/TripleTextCard";
+import { FALLBACK_IMAGE, TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent, useSchedule } from "../api/schedule";
 import { TimeAgo } from "./common/TimeAgo";
@@ -156,10 +165,12 @@ function HomeScreen({ navigation }: any) {
             .map((e: ConferenceEvent) => {
               return (
                 <Card key={e.id} containerStyle={styles.keyEventCard}>
-                  <TouchableOpacity
-                    style={{ height: "100%" }}
-                    onPress={() => navigation.navigate("Event Details", { scheduleItem: e })}
-                  >
+                  <TouchableOpacity onPress={() => navigation.navigate("Event Details", { scheduleItem: e })}>
+                    <ImageBackground
+                      style={styles.imageBackground}
+                      imageStyle={styles.image}
+                      source={{ uri: e.image_url || FALLBACK_IMAGE }}
+                    />
                     <View style={styles.keyEventView}>
                       <View style={styles.keyEventInnerView}>
                         <Text style={styles.keyEventText}>{e.name}</Text>
@@ -196,11 +207,23 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     marginBottom: 8,
-    backgroundColor: colors.primary,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
+  },
+  imageBackground: {
+    width: "100%",
+    height: "100%",
+    padding: 0,
+  },
+  image: {
+    resizeMode: "cover",
+    width: "100%",
+    height: "100%",
+    padding: 0,
+    margin: 0,
+    borderRadius: 15,
   },
   keyEventView: {
     position: "absolute",
@@ -209,7 +232,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 15,
-    backgroundColor: "rgba(0,0,0,0.45)",
+    backgroundColor: "rgba(42,34,157,0.8)",
   },
   keyEventInnerView: {
     position: "absolute",

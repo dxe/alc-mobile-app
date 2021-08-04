@@ -41,7 +41,6 @@ export const useAPI = (options: APIOptions) => {
       if (cache) setData(cache);
 
       try {
-        // TODO: only use waitFunc if status is refreshing
         const minTime = status === "refreshing" ? 500 : 0;
         const res = await waitFunc(
           axios.post(BASE_URL + options.path, { ...options.body, device_id: deviceID }),

@@ -38,9 +38,7 @@ function AnnouncementsScreen() {
       contentContainerStyle={globalStyles.scrollViewContentContainer}
       refreshControl={<RefreshControl refreshing={status === "refreshing"} onRefresh={() => setStatus("refreshing")} />}
     >
-      {!data ? (
-        <Text>Hello</Text>
-      ) : (
+      {data &&
         data.map((a: Announcement, i: number) => (
           <ListItem key={i} style={globalStyles.listItem}>
             <Icon
@@ -58,8 +56,7 @@ function AnnouncementsScreen() {
               </ListItem.Subtitle>
             </ListItem.Content>
           </ListItem>
-        ))
-      )}
+        ))}
     </ScrollView>
   );
 }

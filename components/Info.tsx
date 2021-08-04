@@ -1,11 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, ActivityIndicator } from "react-native";
+import { ScrollView, RefreshControl, View } from "react-native";
 import React, { useEffect } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { Info, useInfo } from "../api/info";
 import { showErrorMessage } from "../util";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Stack = createStackNavigator();
 
@@ -63,6 +64,7 @@ function InfoScreen({ navigation }: any) {
               <ListItem.Title style={globalStyles.listItemTitle}>{item.title}</ListItem.Title>
               <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
             </ListItem.Content>
+            <Ionicons name="caret-forward" size={30} />
           </ListItem>
         ))}
     </ScrollView>

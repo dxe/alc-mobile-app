@@ -3,7 +3,7 @@ import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 
 // TODO: Consider storing the fallback image locally in case someone has no Internet connection.
-const FALLBACK_IMAGE = "https://alc-img.s3.us-west-2.amazonaws.com/home-march.jpg.1626905834..jpg";
+export const FALLBACK_IMAGE = "https://alc-img.s3.us-west-2.amazonaws.com/home-march.jpg.1626905834..jpg";
 
 interface Props {
   imageSource: string | null;
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
-    shadowRadius: 5,
+    shadowRadius: 3,
   },
   imageBackground: {
     width: "100%",
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 15,
-    backgroundColor: "rgba(0,0,0,0.45)",
+    backgroundColor: "rgba(39,148,59,0.8)",
   },
   topView: {
     position: "absolute",
