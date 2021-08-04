@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,6 +14,9 @@ import WelcomeStack from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
 import { postRegisterPushNotifications } from "./api/user";
+
+// TODO: useful for debugging, should be set to false in prod build of app
+const ALWAYS_SHOW_WELCOME_SCREEN = false;
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +52,7 @@ export default function App() {
   return (
     ready && (
       <NavigationContainer>
-        {registeredConferenceID != CONFERENCE_ID ? (
+        {registeredConferenceID != CONFERENCE_ID || ALWAYS_SHOW_WELCOME_SCREEN ? (
           <UserContext.Provider value={{ onUserRegistered: userRegistered }}>
             <WelcomeStack />
           </UserContext.Provider>

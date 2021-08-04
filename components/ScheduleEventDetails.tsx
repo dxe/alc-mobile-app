@@ -50,7 +50,7 @@ export function ScheduleEventDetails({ route }: any) {
     // TODO: improve the Event Details screen.
     <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
       <Text style={{ fontWeight: "bold", fontSize: 26, paddingTop: 16 }}>{scheduleItem.name}</Text>
-      <Text style={{ paddingTop: 5 }}>{moment(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
+      <Text style={{ paddingTop: 5 }}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
       <Text>
         {utcToLocal(scheduleItem.start_time).format("h:mm A")} -&nbsp;
         {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
@@ -74,7 +74,8 @@ export function ScheduleEventDetails({ route }: any) {
         </MapView>
       </View>
       <Button
-        style={{ paddingTop: 5 }}
+        titleStyle={{ color: colors.primary, fontWeight: "bold" }}
+        buttonStyle={[globalStyles.buttonWhite, { marginTop: 5 }]}
         onPress={() => {
           showLocation({
             latitude: scheduleItem.location.lat,
@@ -87,10 +88,13 @@ export function ScheduleEventDetails({ route }: any) {
         title="Get directions"
       />
       <Button
-        style={{ paddingTop: 20 }}
-        buttonStyle={{ backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen }}
+        titleStyle={{ color: colors.white, fontWeight: "bold" }}
+        buttonStyle={[
+          globalStyles.buttonPrimary,
+          { backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen },
+        ]}
         onPress={eventRSVP}
-        title={scheduleItem.attending ? "Mark as not attending" : "RSVP"}
+        title={scheduleItem.attending ? "Cancel RSVP" : "RSVP"}
         disabled={submitting}
       />
       <Text style={{ paddingTop: 10 }}>Total attendees RSVP'd: {scheduleItem.total_attendees}</Text>

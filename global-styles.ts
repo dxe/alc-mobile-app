@@ -32,6 +32,24 @@ export const globalStyles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 6,
   },
+  buttonPrimary: {
+    borderRadius: 30,
+    height: 50,
+    width: 200,
+    backgroundColor: colors.primary,
+    borderColor: colors.white,
+    borderWidth: 2,
+    alignSelf: "center",
+  },
+  buttonWhite: {
+    borderRadius: 30,
+    height: 50,
+    width: 200,
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
+    borderWidth: 2,
+    alignSelf: "center",
+  },
 });
 
 export const screenHeaderOptions: StackNavigationOptions = {
