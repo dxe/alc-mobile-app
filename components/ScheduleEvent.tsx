@@ -42,6 +42,7 @@ export function ScheduleEvent(props: Props) {
           attending: !rsvp,
           event_id: props.event.id,
         });
+        setRSVP(!rsvp);
       } catch (e) {
         setError("Failed to RSVP.");
       } finally {
