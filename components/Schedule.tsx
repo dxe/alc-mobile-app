@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RefreshControl, SectionList, StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
+import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { utcToLocal, showErrorMessage } from "../util";
@@ -114,37 +114,33 @@ function ScheduleScreen({ navigation }: any) {
             const itemsInSection = section.data.length - 1;
 
             return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Event Details", { scheduleItem: item as ConferenceEvent })}
+              <ListItem
+                containerStyle={{ backgroundColor: "transparent", paddingVertical: 5 }}
+                key={item.id}
+                // TODO: move this styling into a stylesheet if it will work w/ the variables?
+                style={[
+                  {
+                    borderStyle: "solid",
+                    paddingBottom: 0,
+                    marginBottom: index === itemsInSection ? 5 : 0,
+                    overflow: "hidden",
+                    borderColor: colors.lightgrey,
+                    borderLeftWidth: 2,
+                    borderRightWidth: 2,
+                    borderTopWidth: index === 0 ? 2 : 0,
+                    borderBottomWidth: index === itemsInSection ? 2 : 0,
+                    borderTopLeftRadius: index === 0 ? 15 : 0,
+                    borderBottomLeftRadius: index === itemsInSection ? 15 : 0,
+                    borderTopRightRadius: index === 0 ? 15 : 0,
+                    borderBottomRightRadius: index === itemsInSection ? 15 : 0,
+                  },
+                ]}
               >
-                <ListItem
-                  containerStyle={{ backgroundColor: "transparent", paddingVertical: 5 }}
-                  key={item.id}
-                  // TODO: move this styling into a stylesheet if it will work w/ the variables?
-                  style={[
-                    {
-                      borderStyle: "solid",
-                      paddingBottom: 0,
-                      marginBottom: index === itemsInSection ? 5 : 0,
-                      overflow: "hidden",
-                      borderColor: colors.lightgrey,
-                      borderLeftWidth: 2,
-                      borderRightWidth: 2,
-                      borderTopWidth: index === 0 ? 2 : 0,
-                      borderBottomWidth: index === itemsInSection ? 2 : 0,
-                      borderTopLeftRadius: index === 0 ? 15 : 0,
-                      borderBottomLeftRadius: index === itemsInSection ? 15 : 0,
-                      borderTopRightRadius: index === 0 ? 15 : 0,
-                      borderBottomRightRadius: index === itemsInSection ? 15 : 0,
-                    },
-                  ]}
-                >
-                  <ListItem.Content>
-                    <ScheduleEvent event={item} nav={navigation} />
-                    {index === 0 && index !== section.data.length - 1 && <View style={styles.divider} />}
-                  </ListItem.Content>
-                </ListItem>
-              </TouchableOpacity>
+                <ListItem.Content>
+                  <ScheduleEvent event={item} nav={navigation} />
+                  {index === 0 && index !== section.data.length - 1 && <View style={styles.divider} />}
+                </ListItem.Content>
+              </ListItem>
             );
           }}
           renderSectionHeader={({ section: { title } }) => (

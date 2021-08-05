@@ -35,7 +35,7 @@ export const globalStyles = StyleSheet.create({
   buttonPrimary: {
     borderRadius: 30,
     height: 50,
-    width: 200,
+    width: 150,
     backgroundColor: colors.primary,
     borderColor: colors.white,
     borderWidth: 2,
@@ -44,7 +44,7 @@ export const globalStyles = StyleSheet.create({
   buttonWhite: {
     borderRadius: 30,
     height: 50,
-    width: 200,
+    width: 150,
     backgroundColor: colors.white,
     borderColor: colors.primary,
     borderWidth: 2,

@@ -1,7 +1,6 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
-import moment from "moment";
 import { showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
@@ -19,7 +18,8 @@ export function ScheduleEventDetails({ route }: any) {
       total_attendees: scheduleItem.attending ? scheduleItem.total_attendees - 1 : scheduleItem.total_attendees + 1,
       attending: !scheduleItem.attending,
     });
-    // TODO: update rsvp status in the Schedule component state & local storage cache
+    // Update state in the parent component.
+    route.params.setRSVP(!scheduleItem.attending);
   };
 
   useEffect(() => {
@@ -73,33 +73,37 @@ export function ScheduleEventDetails({ route }: any) {
           />
         </MapView>
       </View>
-      <Button
-        titleStyle={{ color: colors.primary, fontWeight: "bold" }}
-        buttonStyle={[globalStyles.buttonWhite, { marginTop: 5 }]}
-        onPress={() => {
-          showLocation({
-            latitude: scheduleItem.location.lat,
-            longitude: scheduleItem.location.lng,
-            title: scheduleItem.location.name,
-            googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
-            googlePlaceId: scheduleItem.location.place_id,
-          });
-        }}
-        title="Get directions"
-      />
-      <Button
-        titleStyle={{ color: colors.white, fontWeight: "bold" }}
-        buttonStyle={[
-          globalStyles.buttonPrimary,
-          { backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen },
-        ]}
-        onPress={eventRSVP}
-        title={scheduleItem.attending ? "Cancel RSVP" : "RSVP"}
-        disabled={submitting}
-      />
-      <Text style={{ paddingTop: 10 }}>Total attendees RSVP'd: {scheduleItem.total_attendees}</Text>
+      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly", marginTop: 5 }}>
+        <Button
+          titleStyle={{ color: colors.primary, fontWeight: "bold" }}
+          buttonStyle={[globalStyles.buttonWhite]}
+          onPress={() => {
+            showLocation({
+              latitude: scheduleItem.location.lat,
+              longitude: scheduleItem.location.lng,
+              title: scheduleItem.location.name,
+              googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
+              googlePlaceId: scheduleItem.location.place_id,
+            });
+          }}
+          title="Get directions"
+        />
+        <Button
+          titleStyle={{ color: colors.white, fontWeight: "bold" }}
+          buttonStyle={[
+            globalStyles.buttonPrimary,
+            { backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen, flex: 1 },
+          ]}
+          onPress={eventRSVP}
+          title={scheduleItem.attending ? "Cancel RSVP" : "RSVP"}
+          disabled={submitting}
+        />
+      </View>
       <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
+      {/*TODO: show list of rsvps that updates immediately when RSVP button is pressed*/}
+      <Text>{scheduleItem.total_attendees} attendees</Text>
     </ScrollView>
   );
 }

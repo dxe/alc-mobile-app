@@ -118,18 +118,18 @@ export function WelcomeScreen({ navigation, route }: any) {
             <View style={{ padding: 15, alignItems: "center", flex: 1, justifyContent: "flex-end" }}>
               <Button
                 titleStyle={{ color: colors.primary, fontWeight: "bold" }}
-                buttonStyle={globalStyles.buttonWhite}
+                buttonStyle={[globalStyles.buttonWhite, { width: 200 }]}
                 onPress={() => navigation.navigate("SignUp")}
                 title="Sign up"
               />
               <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-                <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }}></View>
+                <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }} />
                 <Text style={{ flex: 1, color: colors.white, fontWeight: "bold", textAlign: "center" }}>OR</Text>
-                <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }}></View>
+                <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }} />
               </View>
               <Button
                 titleStyle={{ color: colors.white, fontWeight: "bold" }}
-                buttonStyle={globalStyles.buttonPrimary}
+                buttonStyle={[globalStyles.buttonPrimary, { width: 200 }]}
                 onPress={() => registerAnon(onUserRegistered)}
                 title="Stay anonymous"
                 disabled={submitting}
@@ -137,7 +137,6 @@ export function WelcomeScreen({ navigation, route }: any) {
             </View>
           </View>
         </View>
-        // </ImageBackground>
       )}
     </UserContext.Consumer>
   );

@@ -1,10 +1,10 @@
-import React, { Dispatch } from "react";
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { utcToLocal } from "../util";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { showErrorMessage, utcToLocal } from "../util";
 import { ListItem } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
 import FeatherIcon from "react-native-vector-icons/Feather";
-import { ConferenceEvent, Schedule } from "../api/schedule";
+import { ConferenceEvent, postRSVP } from "../api/schedule";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { NavigationProp } from "@react-navigation/native";
 
@@ -14,8 +14,52 @@ interface Props {
 }
 
 export function ScheduleEvent(props: Props) {
+  // TODO: probably should put the whole event in state instead of just the rsvp status
+  // so then we can easily update the attendee list & attendee count as well.
+  // Be sure to also change the useEffect below that watches the props.event.attending
+  // to just watch props.event instead & update the state accordingly.
+  const [rsvp, setRSVP] = useState(props.event.attending);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    if (error === "") return;
+    showErrorMessage(error);
+    setSubmitting(false);
+    setError("");
+  }, [error]);
+
+  // Whenever we get a new RSVP status from the server, update the RSVP status in state.
+  useEffect(() => {
+    setRSVP(props.event.attending);
+  }, [props.event.attending]);
+
+  const eventRSVP = () => {
+    setSubmitting(true);
+    (async () => {
+      try {
+        await postRSVP({
+          attending: !rsvp,
+          event_id: props.event.id,
+        });
+      } catch (e) {
+        setError("Failed to RSVP.");
+      } finally {
+        setSubmitting(false);
+      }
+    })();
+  };
+
   return (
-    <View style={{ flex: 1, flexDirection: "row" }}>
+    <TouchableOpacity
+      onPress={() =>
+        props.nav.navigate("Event Details", {
+          scheduleItem: { ...props.event, attending: rsvp } as ConferenceEvent,
+          setRSVP: setRSVP,
+        })
+      }
+      style={{ flex: 1, flexDirection: "row" }}
+    >
       <View style={{ paddingRight: 10 }}>
         <Text style={styles.startTime}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
         <Text style={styles.endTime}>|</Text>
@@ -39,22 +83,15 @@ export function ScheduleEvent(props: Props) {
             <ListItem.Subtitle>
               <FeatherIcon name="map-pin" size={16} /> <Text style={{ fontSize: 16 }}>{props.event.location.name}</Text>
             </ListItem.Subtitle>
-            <View
-              style={[
-                styles.rsvpStatus,
-                { backgroundColor: props.event.attending ? colors.lightgreen : colors.lightred },
-              ]}
+            <TouchableOpacity
+              onPress={eventRSVP}
+              disabled={submitting}
+              style={[styles.rsvpStatus, { backgroundColor: rsvp ? colors.lightgreen : colors.lightred }]}
             >
-              <Text style={styles.rsvpStatusText}>{props.event.attending ? "Attending" : "Not attending"}</Text>
-            </View>
+              <Text style={styles.rsvpStatusText}>{rsvp ? "Attending" : "Not attending"}</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() =>
-              props.nav.navigate("Event Details", {
-                scheduleItem: props.event as ConferenceEvent,
-              })
-            }
-          >
+          <View>
             <View
               style={{
                 flex: 1,
@@ -65,10 +102,10 @@ export function ScheduleEvent(props: Props) {
             >
               <Ionicons name="caret-forward" size={30} />
             </View>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

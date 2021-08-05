@@ -34,6 +34,7 @@ export default function App() {
     })();
   }, []);
 
+  // TODO: store user's name in local storage too so we can use it when they RSVP?
   const userRegistered = (deviceID: string) => {
     console.log(`user registered with ${deviceID}!`);
     storeJSON("device_id", deviceID);
