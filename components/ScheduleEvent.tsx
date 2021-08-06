@@ -27,9 +27,8 @@ export function ScheduleEvent(props: Props) {
     setError("");
   }, [error]);
 
+  // Update this component's state whenever the prop gets updated (via Context).
   useEffect(() => {
-    console.log("props.event updated!");
-    console.log(props.event);
     setScheduleItem(props.event);
   }, [props.event]);
 
