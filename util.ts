@@ -56,7 +56,8 @@ export const showErrorMessage = (message: string) => {
 };
 
 export const getDeviceID = async () => {
-  const storedDeviceID = await getStoredJSON("device_id");
+  const storedUser = await getStoredJSON("user");
+  const storedDeviceID = storedUser?.deviceID;
   if (storedDeviceID) return storedDeviceID;
 
   if (Application.androidId) {

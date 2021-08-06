@@ -16,7 +16,7 @@ import { UserContext } from "./UserContext";
 import { postRegisterPushNotifications } from "./api/user";
 
 // TODO: useful for debugging, should be set to false in prod build of app
-const ALWAYS_SHOW_WELCOME_SCREEN = true;
+const ALWAYS_SHOW_WELCOME_SCREEN = false;
 
 const Tab = createBottomTabNavigator();
 
@@ -28,17 +28,21 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      const id = await getStoredJSON("registered_conference_id");
+      const user = await getStoredJSON("user");
+      const id = user?.conference;
       setRegisteredConferenceID(id ? id : 0);
       setReady(true);
     })();
   }, []);
 
   // TODO: store user's name in local storage too so we can use it when they RSVP?
-  const userRegistered = (deviceID: string) => {
-    console.log(`user registered with ${deviceID}!`);
-    storeJSON("device_id", deviceID);
-    storeJSON("registered_conference_id", CONFERENCE_ID);
+  const userRegistered = (deviceID: string, userName: string) => {
+    console.log(`user (${userName}) registered with ${deviceID}!`);
+    storeJSON("user", {
+      deviceID: deviceID,
+      name: userName,
+      conference: CONFERENCE_ID,
+    });
     setRegisteredConferenceID(CONFERENCE_ID);
     // TODO: request to allow push notifications
     (async () => {

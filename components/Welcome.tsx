@@ -58,7 +58,7 @@ export function WelcomeScreen({ navigation, route }: any) {
           device_name: Device.modelName || "",
           platform: Device.osName + " " + Device.osVersion,
         });
-        callback(deviceID);
+        callback(deviceID, "");
       } catch (e) {
         setSubmitting(false);
         setError("Registration failed.");
@@ -201,7 +201,7 @@ export function SignUpScreen({ navigation, route }: any) {
           platform: Device.osName + " " + Device.osVersion,
         });
         setSubmitting(false);
-        callback(deviceID);
+        callback(deviceID, formData.name.trim());
       } catch (e) {
         setSubmitting(false);
         setError("Registration failed.");
