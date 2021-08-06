@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, TextInput, StyleSheet, Linking, Image, KeyboardAvoidingView } from "react-native";
+import { View, Text, TextInput, StyleSheet, Linking, Image, KeyboardAvoidingView } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { getDeviceID, showErrorMessage } from "../util";
@@ -35,7 +35,7 @@ export default function WelcomeStack() {
   );
 }
 
-export function WelcomeScreen({ navigation, route }: any) {
+export function WelcomeScreen({ navigation }: any) {
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);

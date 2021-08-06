@@ -4,31 +4,17 @@ import { colors, globalStyles } from "../global-styles";
 import { showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-native-elements";
+import { ScheduleContext } from "../ScheduleContext";
 
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(route.params.scheduleItem);
   const [error, setError] = useState<string>("");
+  const { setData } = useContext(ScheduleContext);
 
-  const rsvpSuccess = () => {
-    setScheduleItem({
-      ...scheduleItem,
-      total_attendees: scheduleItem.attending ? scheduleItem.total_attendees - 1 : scheduleItem.total_attendees + 1,
-      attending: !scheduleItem.attending,
-    });
-    // Update state in the parent component.
-    route.params.setRSVP(!scheduleItem.attending);
-  };
-
-  useEffect(() => {
-    if (error === "") return;
-    showErrorMessage(error);
-    setSubmitting(false);
-    setError("");
-  }, [error]);
-
+  // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
     setSubmitting(true);
     (async () => {
@@ -37,7 +23,24 @@ export function ScheduleEventDetails({ route }: any) {
           attending: !scheduleItem.attending,
           event_id: scheduleItem.id,
         });
-        rsvpSuccess();
+        // update rsvp status in context
+        setData((prev: any) => {
+          return {
+            ...prev,
+            events: prev.events.map((event: any) => {
+              if (event.id === scheduleItem.id) {
+                console.log(`setting ATTENDING to ${!scheduleItem.attending}`);
+                // TODO: update the attendees array too
+                return { ...event, attending: !scheduleItem.attending };
+              }
+              return event;
+            }),
+          };
+        });
+        // update state in this component
+        setScheduleItem((prevState) => {
+          return { ...prevState, attending: !prevState.attending };
+        });
       } catch (e) {
         setError("Failed to RSVP.");
       } finally {
@@ -45,6 +48,13 @@ export function ScheduleEventDetails({ route }: any) {
       }
     })();
   };
+
+  useEffect(() => {
+    if (error === "") return;
+    showErrorMessage(error);
+    setSubmitting(false);
+    setError("");
+  }, [error]);
 
   return (
     // TODO: improve the Event Details screen.
@@ -88,34 +98,24 @@ export function ScheduleEventDetails({ route }: any) {
           }}
           title="Get directions"
         />
-        {/*Note that we are currently not showing the RSVP button if the user got to the */}
-        {/*  Event Details screen from the Home screen. This is because there is no easy*/}
-        {/*  way currently to update the RSVP status in the state of the Schedule component.*/}
-        {route.params.setRSVP && (
-          <Button
-            titleStyle={{ color: colors.white, fontWeight: "bold" }}
-            buttonStyle={[
-              globalStyles.buttonPrimary,
-              { backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen, flex: 1 },
-            ]}
-            onPress={eventRSVP}
-            title={scheduleItem.attending ? "Cancel RSVP" : "RSVP"}
-            disabled={submitting}
-          />
-        )}
+        <Button
+          titleStyle={{ color: colors.white, fontWeight: "bold" }}
+          buttonStyle={[
+            globalStyles.buttonPrimary,
+            { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.lightred, flex: 1 },
+          ]}
+          onPress={eventRSVP}
+          title={scheduleItem.attending ? "Attending" : "Not Attending"}
+          disabled={submitting}
+        />
       </View>
       <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
-      {/*Note that we are currently not showing the attendee list if the user got to the */}
-      {/*  Event Details screen from the Home screen. This is because there is no easy*/}
-      {/*  way currently to update the attendee list in the state of the Schedule component.*/}
-      {route.params.setRSVP && (
-        <View>
-          <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
-          {/*TODO: show list of rsvps that updates immediately when RSVP button is pressed*/}
-          <Text>{scheduleItem.total_attendees} attendees</Text>
-        </View>
-      )}
+      <View>
+        <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
+        {/*TODO: show list of rsvps that updates immediately when RSVP button is pressed*/}
+        <Text>{scheduleItem.total_attendees} attendees</Text>
+      </View>
     </ScrollView>
   );
 }

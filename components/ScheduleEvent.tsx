@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { showErrorMessage, utcToLocal } from "../util";
 import { ListItem } from "react-native-elements";
@@ -7,6 +7,7 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { NavigationProp } from "@react-navigation/native";
+import { ScheduleContext } from "../ScheduleContext";
 
 interface Props {
   event: ConferenceEvent;
@@ -14,13 +15,10 @@ interface Props {
 }
 
 export function ScheduleEvent(props: Props) {
-  // TODO: probably should put the whole event in state instead of just the rsvp status
-  // so then we can easily update the attendee list & attendee count as well.
-  // Be sure to also change the useEffect below that watches the props.event.attending
-  // to just watch props.event instead & update the state accordingly.
-  const [rsvp, setRSVP] = useState(props.event.attending);
+  const [scheduleItem, setScheduleItem] = useState(props.event);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const { setData } = useContext(ScheduleContext);
 
   useEffect(() => {
     if (error === "") return;
@@ -29,20 +27,39 @@ export function ScheduleEvent(props: Props) {
     setError("");
   }, [error]);
 
-  // Whenever we get a new RSVP status from the server, update the RSVP status in state.
   useEffect(() => {
-    setRSVP(props.event.attending);
-  }, [props.event.attending]);
+    console.log("props.event updated!");
+    console.log(props.event);
+    setScheduleItem(props.event);
+  }, [props.event]);
 
+  // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
     setSubmitting(true);
     (async () => {
       try {
         await postRSVP({
-          attending: !rsvp,
-          event_id: props.event.id,
+          attending: !scheduleItem.attending,
+          event_id: scheduleItem.id,
         });
-        setRSVP(!rsvp);
+        // update rsvp status in context
+        setData((prev: any) => {
+          return {
+            ...prev,
+            events: prev.events.map((event: any) => {
+              if (event.id === scheduleItem.id) {
+                console.log(`setting ATTENDING to ${!scheduleItem.attending}`);
+                // TODO: update the attendees array too
+                return { ...event, attending: !scheduleItem.attending };
+              }
+              return event;
+            }),
+          };
+        });
+        // update state in this component
+        setScheduleItem((prevState) => {
+          return { ...prevState, attending: !prevState.attending };
+        });
       } catch (e) {
         setError("Failed to RSVP.");
       } finally {
@@ -55,8 +72,7 @@ export function ScheduleEvent(props: Props) {
     <TouchableOpacity
       onPress={() =>
         props.nav.navigate("Event Details", {
-          scheduleItem: { ...props.event, attending: rsvp } as ConferenceEvent,
-          setRSVP: setRSVP,
+          scheduleItem: scheduleItem as ConferenceEvent,
         })
       }
       style={{ flex: 1, flexDirection: "row" }}
@@ -87,9 +103,12 @@ export function ScheduleEvent(props: Props) {
             <TouchableOpacity
               onPress={eventRSVP}
               disabled={submitting}
-              style={[styles.rsvpStatus, { backgroundColor: rsvp ? colors.lightgreen : colors.lightred }]}
+              style={[
+                styles.rsvpStatus,
+                { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.lightred },
+              ]}
             >
-              <Text style={styles.rsvpStatusText}>{rsvp ? "Attending" : "Not attending"}</Text>
+              <Text style={styles.rsvpStatusText}>{scheduleItem.attending ? "Attending" : "Not attending"}</Text>
             </TouchableOpacity>
           </View>
           <View>

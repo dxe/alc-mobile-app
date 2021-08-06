@@ -57,5 +57,5 @@ export const useAPI = (options: APIOptions) => {
     })();
   }, [options.path, status]);
 
-  return { data, status, setStatus };
+  return { data, setData, status, setStatus };
 };

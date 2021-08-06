@@ -25,7 +25,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [registeredConferenceID, setRegisteredConferenceID] = useState<number>(0);
   const [ready, setReady] = useState<boolean>(false);
-  const { data, status, setStatus } = useSchedule(null);
+  const { data, setData, status, setStatus } = useSchedule(null);
 
   StatusBar.setBarStyle("light-content", true);
 
@@ -65,7 +65,7 @@ export default function App() {
             <WelcomeStack />
           </UserContext.Provider>
         ) : (
-          <ScheduleContext.Provider value={{ data: data, status: status, setStatus: setStatus }}>
+          <ScheduleContext.Provider value={{ data: data, status: status, setData: setData, setStatus: setStatus }}>
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
