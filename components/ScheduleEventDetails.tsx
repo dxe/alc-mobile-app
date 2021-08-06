@@ -88,22 +88,34 @@ export function ScheduleEventDetails({ route }: any) {
           }}
           title="Get directions"
         />
-        <Button
-          titleStyle={{ color: colors.white, fontWeight: "bold" }}
-          buttonStyle={[
-            globalStyles.buttonPrimary,
-            { backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen, flex: 1 },
-          ]}
-          onPress={eventRSVP}
-          title={scheduleItem.attending ? "Cancel RSVP" : "RSVP"}
-          disabled={submitting}
-        />
+        {/*Note that we are currently not showing the RSVP button if the user got to the */}
+        {/*  Event Details screen from the Home screen. This is because there is no easy*/}
+        {/*  way currently to update the RSVP status in the state of the Schedule component.*/}
+        {route.params.setRSVP && (
+          <Button
+            titleStyle={{ color: colors.white, fontWeight: "bold" }}
+            buttonStyle={[
+              globalStyles.buttonPrimary,
+              { backgroundColor: scheduleItem.attending ? colors.lightred : colors.lightgreen, flex: 1 },
+            ]}
+            onPress={eventRSVP}
+            title={scheduleItem.attending ? "Cancel RSVP" : "RSVP"}
+            disabled={submitting}
+          />
+        )}
       </View>
       <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
-      <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
-      {/*TODO: show list of rsvps that updates immediately when RSVP button is pressed*/}
-      <Text>{scheduleItem.total_attendees} attendees</Text>
+      {/*Note that we are currently not showing the attendee list if the user got to the */}
+      {/*  Event Details screen from the Home screen. This is because there is no easy*/}
+      {/*  way currently to update the attendee list in the state of the Schedule component.*/}
+      {route.params.setRSVP && (
+        <View>
+          <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
+          {/*TODO: show list of rsvps that updates immediately when RSVP button is pressed*/}
+          <Text>{scheduleItem.total_attendees} attendees</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }

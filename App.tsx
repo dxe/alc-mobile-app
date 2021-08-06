@@ -16,7 +16,7 @@ import { UserContext } from "./UserContext";
 import { postRegisterPushNotifications } from "./api/user";
 
 // TODO: useful for debugging, should be set to false in prod build of app
-const ALWAYS_SHOW_WELCOME_SCREEN = false;
+const ALWAYS_SHOW_WELCOME_SCREEN = true;
 
 const Tab = createBottomTabNavigator();
 
