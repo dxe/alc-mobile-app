@@ -1,5 +1,5 @@
 import { ScrollView, View, Text, TextInput, StyleSheet, Linking, Image, KeyboardAvoidingView } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { getDeviceID, showErrorMessage } from "../util";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -39,6 +39,7 @@ export function WelcomeScreen({ navigation, route }: any) {
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const { onUserRegistered } = useContext(UserContext);
 
   useEffect(() => {
     if (error === "") return;
@@ -67,78 +68,74 @@ export function WelcomeScreen({ navigation, route }: any) {
   };
 
   return (
-    <UserContext.Consumer>
-      {({ onUserRegistered }) => (
-        <View style={{ flex: 1 }}>
-          <Video
-            style={{ height: "100%", width: "100%", position: "absolute", top: 0, left: 0 }}
-            source={require("../assets/welcome-video.mp4")}
-            useNativeControls={false}
-            resizeMode="cover"
-            isLooping
-            status={{ shouldPlay: true, isMuted: true }}
-          />
-          <Overlay
-            isVisible={overlayVisible}
-            onBackdropPress={() => setOverlayVisible(false)}
-            overlayStyle={{ padding: 20, margin: 20 }}
+    <View style={{ flex: 1 }}>
+      <Video
+        style={{ height: "100%", width: "100%", position: "absolute", top: 0, left: 0 }}
+        source={require("../assets/welcome-video.mp4")}
+        useNativeControls={false}
+        resizeMode="cover"
+        isLooping
+        status={{ shouldPlay: true, isMuted: true }}
+      />
+      <Overlay
+        isVisible={overlayVisible}
+        onBackdropPress={() => setOverlayVisible(false)}
+        overlayStyle={{ padding: 20, margin: 20 }}
+      >
+        <Text style={{ fontWeight: "bold", marginBottom: 10, fontSize: 20 }}>Hello from the Organizers!</Text>
+        <Text style={{ marginBottom: 10 }}>
+          Welcome to the Animal Liberation Conference! You can use this app to keep track of the schedule, receive
+          important announcements, and more!
+        </Text>
+        <Text style={{ marginBottom: 20 }}>
+          We encourage you to sign up to make it easier to network with other activists. If you choose to sign up, your
+          name will be visible to all users of the app.
+        </Text>
+        <Button
+          titleStyle={{ color: colors.white, fontWeight: "bold" }}
+          buttonStyle={globalStyles.buttonPrimary}
+          title="Got it!"
+          onPress={() => setOverlayVisible(false)}
+        />
+      </Overlay>
+      <View style={{ backgroundColor: "rgba(73,24,135,0.6)", flex: 1 }}>
+        <View style={{ padding: 15, alignItems: "center", flex: 1, justifyContent: "flex-end" }}>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: 60,
+              fontWeight: "bold",
+              textShadowColor: "blue",
+              textShadowOffset: { width: -1, height: 4 },
+              textShadowRadius: 1,
+              shadowOpacity: 1,
+            }}
           >
-            <Text style={{ fontWeight: "bold", marginBottom: 10, fontSize: 20 }}>Hello from the Organizers!</Text>
-            <Text style={{ marginBottom: 10 }}>
-              Welcome to the Animal Liberation Conference! You can use this app to keep track of the schedule, receive
-              important announcements, and more!
-            </Text>
-            <Text style={{ marginBottom: 20 }}>
-              We encourage you to sign up to make it easier to network with other activists. If you choose to sign up,
-              your name will be visible to all users of the app.
-            </Text>
-            <Button
-              titleStyle={{ color: colors.white, fontWeight: "bold" }}
-              buttonStyle={globalStyles.buttonPrimary}
-              title="Got it!"
-              onPress={() => setOverlayVisible(false)}
-            />
-          </Overlay>
-          <View style={{ backgroundColor: "rgba(73,24,135,0.6)", flex: 1 }}>
-            <View style={{ padding: 15, alignItems: "center", flex: 1, justifyContent: "flex-end" }}>
-              <Text
-                style={{
-                  color: colors.white,
-                  fontSize: 60,
-                  fontWeight: "bold",
-                  textShadowColor: "blue",
-                  textShadowOffset: { width: -1, height: 4 },
-                  textShadowRadius: 1,
-                  shadowOpacity: 1,
-                }}
-              >
-                Animal Liberation Conference
-              </Text>
-            </View>
-            <View style={{ padding: 15, alignItems: "center", flex: 1, justifyContent: "flex-end" }}>
-              <Button
-                titleStyle={{ color: colors.primary, fontWeight: "bold" }}
-                buttonStyle={[globalStyles.buttonWhite, { width: 200 }]}
-                onPress={() => navigation.navigate("SignUp")}
-                title="Sign up"
-              />
-              <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-                <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }} />
-                <Text style={{ flex: 1, color: colors.white, fontWeight: "bold", textAlign: "center" }}>OR</Text>
-                <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }} />
-              </View>
-              <Button
-                titleStyle={{ color: colors.white, fontWeight: "bold" }}
-                buttonStyle={[globalStyles.buttonPrimary, { width: 200 }]}
-                onPress={() => registerAnon(onUserRegistered)}
-                title="Stay anonymous"
-                disabled={submitting}
-              />
-            </View>
-          </View>
+            Animal Liberation Conference
+          </Text>
         </View>
-      )}
-    </UserContext.Consumer>
+        <View style={{ padding: 15, alignItems: "center", flex: 1, justifyContent: "flex-end" }}>
+          <Button
+            titleStyle={{ color: colors.primary, fontWeight: "bold" }}
+            buttonStyle={[globalStyles.buttonWhite, { width: 200 }]}
+            onPress={() => navigation.navigate("SignUp")}
+            title="Sign up"
+          />
+          <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
+            <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }} />
+            <Text style={{ flex: 1, color: colors.white, fontWeight: "bold", textAlign: "center" }}>OR</Text>
+            <View style={{ flex: 2, borderBottomWidth: 2, borderBottomColor: colors.white }} />
+          </View>
+          <Button
+            titleStyle={{ color: colors.white, fontWeight: "bold" }}
+            buttonStyle={[globalStyles.buttonPrimary, { width: 200 }]}
+            onPress={() => registerAnon(onUserRegistered)}
+            title="Stay anonymous"
+            disabled={submitting}
+          />
+        </View>
+      </View>
+    </View>
   );
 }
 

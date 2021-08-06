@@ -1,14 +1,15 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { utcToLocal, showErrorMessage } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
-import { Schedule, ConferenceEvent, useSchedule } from "../api/schedule";
+import { Schedule, ConferenceEvent } from "../api/schedule";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ScheduleEvent } from "./ScheduleEvent";
+import { ScheduleContext } from "../ScheduleContext";
 
 const Stack = createStackNavigator();
 
@@ -54,9 +55,9 @@ const sectionizeSchedule = (data: any[]) => {
 };
 
 function ScheduleScreen({ navigation }: any) {
-  const { data, status, setStatus } = useSchedule(null);
   const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>([]);
   const calendarStrip = useRef<any>();
+  const { data, status, setStatus } = useContext(ScheduleContext);
 
   useEffect(() => {
     if (status != "error") return;

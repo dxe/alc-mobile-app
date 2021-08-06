@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -10,14 +10,15 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
+import { screenHeaderOptions, globalStyles } from "../global-styles";
 import { Card } from "react-native-elements";
 import { showErrorMessage } from "../util";
 import { FALLBACK_IMAGE, TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
-import { ConferenceEvent, useSchedule } from "../api/schedule";
+import { ConferenceEvent } from "../api/schedule";
 import { TimeAgo } from "./common/TimeAgo";
 import moment from "moment";
+import { ScheduleContext } from "../ScheduleContext";
 
 const Stack = createStackNavigator();
 
@@ -44,10 +45,10 @@ export default function HomeStack() {
 }
 
 function HomeScreen({ navigation }: any) {
-  const { data, status, setStatus } = useSchedule(null);
   const [currentTime, setCurrentTime] = useState<moment.Moment>(moment());
   const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
+  const { data, status, setStatus } = useContext(ScheduleContext);
 
   useEffect(() => {
     if (status != "error") return;

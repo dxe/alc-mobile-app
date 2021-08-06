@@ -14,6 +14,8 @@ import WelcomeStack from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
 import { postRegisterPushNotifications } from "./api/user";
+import { useSchedule } from "./api/schedule";
+import { ScheduleContext } from "./ScheduleContext";
 
 // TODO: useful for debugging, should be set to false in prod build of app
 const ALWAYS_SHOW_WELCOME_SCREEN = false;
@@ -23,6 +25,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [registeredConferenceID, setRegisteredConferenceID] = useState<number>(0);
   const [ready, setReady] = useState<boolean>(false);
+  const { data, status, setStatus } = useSchedule(null);
 
   StatusBar.setBarStyle("light-content", true);
 
@@ -62,38 +65,40 @@ export default function App() {
             <WelcomeStack />
           </UserContext.Provider>
         ) : (
-          <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
+          <ScheduleContext.Provider value={{ data: data, status: status, setStatus: setStatus }}>
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
 
-                switch (route.name) {
-                  case "Home":
-                    iconName = "home-outline";
-                    break;
-                  case "Schedule":
-                    iconName = "calendar-outline";
-                    break;
-                  case "Announcements":
-                    iconName = "notifications-outline";
-                    break;
-                  default:
-                    iconName = "information-circle-outline";
-                }
+                  switch (route.name) {
+                    case "Home":
+                      iconName = "home-outline";
+                      break;
+                    case "Schedule":
+                      iconName = "calendar-outline";
+                      break;
+                    case "Announcements":
+                      iconName = "notifications-outline";
+                      break;
+                    default:
+                      iconName = "information-circle-outline";
+                  }
 
-                return <Ionicons name={iconName} size={size} color={color} />;
-              },
-            })}
-            tabBarOptions={{
-              activeTintColor: colors.primary,
-              inactiveTintColor: colors.grey,
-            }}
-          >
-            <Tab.Screen name="Home" component={HomeStack} />
-            <Tab.Screen name="Schedule" component={ScheduleStack} />
-            <Tab.Screen name="Announcements" component={AnnouncementsStack} />
-            <Tab.Screen name="Info" component={InfoStack} />
-          </Tab.Navigator>
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                },
+              })}
+              tabBarOptions={{
+                activeTintColor: colors.primary,
+                inactiveTintColor: colors.grey,
+              }}
+            >
+              <Tab.Screen name="Home" component={HomeStack} />
+              <Tab.Screen name="Schedule" component={ScheduleStack} />
+              <Tab.Screen name="Announcements" component={AnnouncementsStack} />
+              <Tab.Screen name="Info" component={InfoStack} />
+            </Tab.Navigator>
+          </ScheduleContext.Provider>
         )}
         <FlashMessage position="top" />
       </NavigationContainer>
