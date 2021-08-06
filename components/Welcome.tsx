@@ -227,6 +227,9 @@ export function SignUpScreen({ navigation, route }: any) {
                 value={formData.name}
                 placeholder="Your name"
                 autoCapitalize={"words"}
+                keyboardType={"ascii-capable"}
+                autoCompleteType={"name"}
+                autoCorrect={false}
               />
               <Text style={{ paddingHorizontal: 10 }}>Email</Text>
               <TextInput
@@ -236,6 +239,9 @@ export function SignUpScreen({ navigation, route }: any) {
                 placeholder="Your email address"
                 autoCapitalize={"none"}
                 returnKeyLabel={"OK"}
+                keyboardType={"email-address"}
+                autoCompleteType={"email"}
+                autoCorrect={false}
               />
               <Text style={{ paddingHorizontal: 10 }}>
                 Please read the{" "}
