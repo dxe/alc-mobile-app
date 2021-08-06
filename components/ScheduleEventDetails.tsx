@@ -99,13 +99,13 @@ export function ScheduleEventDetails({ route }: any) {
           title="Get directions"
         />
         <Button
-          titleStyle={{ color: colors.white, fontWeight: "bold" }}
+          titleStyle={{ color: colors.white, fontWeight: "bold", fontSize: scheduleItem.attending ? 14 : 20 }}
           buttonStyle={[
             globalStyles.buttonPrimary,
-            { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.lightred, flex: 1 },
+            { backgroundColor: !scheduleItem.attending ? colors.lightgreen : colors.lightred, flex: 1 },
           ]}
           onPress={eventRSVP}
-          title={scheduleItem.attending ? "Attending" : "Not Attending"}
+          title={scheduleItem.attending ? "Mark as not going" : "RSVP"}
           disabled={submitting}
         />
       </View>

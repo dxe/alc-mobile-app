@@ -37,8 +37,12 @@ export const useAPI = (options: APIOptions) => {
 
     (async () => {
       const deviceID = await getDeviceID();
+
+      // Only use the cache if the component has just been initialized,
+      // since the data in state could have changed since then. (For example,
+      // if someone RSVP'd to an event.)
       const cache = await getStoredJSON(options.path);
-      if (cache) setData(cache);
+      if (cache && data === options.initialValue) setData(cache);
 
       try {
         const minTime = status === "refreshing" ? 500 : 0;

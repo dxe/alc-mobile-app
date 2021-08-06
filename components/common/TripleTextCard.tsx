@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 15,
-    backgroundColor: "rgba(39,148,59,0.8)",
+    backgroundColor: "rgba(42,34,157,0.8)",
   },
   topView: {
     position: "absolute",
