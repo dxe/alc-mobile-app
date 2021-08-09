@@ -96,47 +96,48 @@ export function ScheduleEventDetails({ route }: any) {
             />
           </MapView>
         </View>
-        <View style={{ padding: 5, paddingLeft: 10 }}>
-          <Text style={{ fontWeight: "bold" }}>{scheduleItem.location.name}</Text>
-          <Text>{scheduleItem.location.address + ", " + scheduleItem.location.city}</Text>
-          <TouchableOpacity
-            style={{ paddingTop: 5 }}
-            onPress={() => {
-              showLocation({
-                latitude: scheduleItem.location.lat,
-                longitude: scheduleItem.location.lng,
-                title: scheduleItem.location.name,
-                googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
-                googlePlaceId: scheduleItem.location.place_id,
-              });
-            }}
-          >
-            <Text style={{ color: colors.primary, fontWeight: "bold" }}>Get directions</Text>
-          </TouchableOpacity>
+        <View style={{ padding: 5, paddingLeft: 10, flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+          <View>
+            <Text style={{ fontWeight: "bold" }}>{scheduleItem.location.name}</Text>
+            <Text>{scheduleItem.location.address + ", " + scheduleItem.location.city}</Text>
+            <TouchableOpacity
+              style={{ paddingTop: 5 }}
+              onPress={() => {
+                showLocation({
+                  latitude: scheduleItem.location.lat,
+                  longitude: scheduleItem.location.lng,
+                  title: scheduleItem.location.name,
+                  googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
+                  googlePlaceId: scheduleItem.location.place_id,
+                });
+              }}
+            >
+              <Text style={{ color: colors.primary, fontWeight: "bold" }}>Get directions</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ alignSelf: "center" }}>
+            <Button
+              titleStyle={{ color: colors.white, fontWeight: "bold", fontSize: 16 }}
+              buttonStyle={[
+                globalStyles.buttonPrimary,
+                { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.lightred, flex: 1 },
+              ]}
+              onPress={eventRSVP}
+              title={scheduleItem.attending ? "Attending" : "Not attending"}
+              disabled={submitting}
+            />
+          </View>
         </View>
       </View>
 
       {scheduleItem.attendees !== null && scheduleItem.attendees.length > 0 && (
-        <View style={{ display: "flex", flexDirection: "row" }}>
+        <View style={{ display: "flex", flexDirection: "row", marginBottom: 10 }}>
           <Ionicons name="checkmark-circle" size={30} />
           <Text style={{ alignSelf: "center", paddingLeft: 5 }}>
             {scheduleItem.total_attendees} confirmed attendees
           </Text>
         </View>
       )}
-
-      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
-        <Button
-          titleStyle={{ color: colors.white, fontWeight: "bold", fontSize: scheduleItem.attending ? 14 : 20 }}
-          buttonStyle={[
-            globalStyles.buttonPrimary,
-            { backgroundColor: !scheduleItem.attending ? colors.lightgreen : colors.lightred, flex: 1 },
-          ]}
-          onPress={eventRSVP}
-          title={scheduleItem.attending ? "Mark as not going" : "RSVP"}
-          disabled={submitting}
-        />
-      </View>
 
       <Text style={{ fontWeight: "bold", fontSize: 18 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
