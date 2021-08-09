@@ -1,5 +1,5 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
 import { showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
@@ -7,6 +7,7 @@ import { showLocation } from "react-native-map-link";
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-native-elements";
 import { ScheduleContext } from "../ScheduleContext";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -115,6 +116,15 @@ export function ScheduleEventDetails({ route }: any) {
         </View>
       </View>
 
+      {scheduleItem.attendees !== null && scheduleItem.attendees.length > 0 && (
+        <View style={{ display: "flex", flexDirection: "row" }}>
+          <Ionicons name="checkmark-circle" size={30} />
+          <Text style={{ alignSelf: "center", paddingLeft: 5 }}>
+            {scheduleItem.total_attendees} confirmed attendees
+          </Text>
+        </View>
+      )}
+
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
         <Button
           titleStyle={{ color: colors.white, fontWeight: "bold", fontSize: scheduleItem.attending ? 14 : 20 }}
@@ -130,10 +140,23 @@ export function ScheduleEventDetails({ route }: any) {
 
       <Text style={{ fontWeight: "bold", fontSize: 18 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
-      <View>
-        <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
-        <Text>{scheduleItem.total_attendees} attendees</Text>
-      </View>
+      {scheduleItem.attendees !== null && scheduleItem.attendees.filter((attendee) => attendee.name !== "").length > 0 && (
+        <View>
+          <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
+          {/*TODO: update immediately when RSVP button is pressed*/}
+          {scheduleItem.attendees !== null &&
+            scheduleItem.attendees
+              .filter((attendee) => attendee.name !== "")
+              .map((attendee, index) => (
+                <View key={index}>
+                  <Text>{attendee.name}</Text>
+                </View>
+              ))}
+          {scheduleItem.attendees.filter((attendee) => attendee.name === "").length > 0 && (
+            <Text>+{scheduleItem.attendees.filter((attendee) => attendee.name === "").length} others</Text>
+          )}
+        </View>
+      )}
     </ScrollView>
   );
 }
