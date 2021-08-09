@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getDeviceID, getStoredJSON, storeJSON, waitFunc } from "../util";
+import { getDeviceID, getStoredJSON, ONE_HOUR_MS, storeJSON, waitFunc } from "../util";
 import { useEffect, useState } from "react";
 
 export const CONFERENCE_ID = 1;
@@ -30,6 +30,7 @@ export const useAPI = (options: APIOptions) => {
   const [data, setData] = useState(options.initialValue);
   const [status, setStatus] = useState("initialized");
 
+  // Fetch data initially or on refresh.
   useEffect(() => {
     if (!options.path) return;
 
@@ -60,6 +61,15 @@ export const useAPI = (options: APIOptions) => {
       }
     })();
   }, [options.path, status]);
+
+  // Try to automatically refresh every hour to prevent stale data.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStatus("refreshing");
+    }, ONE_HOUR_MS);
+
+    return () => clearInterval(interval);
+  }, [options.path]);
 
   return { data, setData, status, setStatus };
 };
