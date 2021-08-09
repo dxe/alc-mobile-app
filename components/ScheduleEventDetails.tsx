@@ -167,7 +167,7 @@ export function ScheduleEventDetails({ route }: any) {
         scheduleItem.attendees.length > 0 &&
         scheduleItem.attendees.filter((attendee) => attendee.name !== "").length > 0 && (
           <View>
-            <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
+            <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>Going</Text>
             {/*TODO: update immediately when RSVP button is pressed*/}
             {scheduleItem.attendees !== null &&
               scheduleItem.attendees

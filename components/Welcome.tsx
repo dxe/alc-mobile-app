@@ -1,9 +1,9 @@
-import { View, Text, TextInput, StyleSheet, Linking, Image, KeyboardAvoidingView } from "react-native";
+import {View, Text, TextInput, StyleSheet, Linking, Image, KeyboardAvoidingView, Dimensions} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { getDeviceID, showErrorMessage } from "../util";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Button, Overlay, CheckBox } from "react-native-elements";
+import { Button, CheckBox } from "react-native-elements";
 import { UserContext } from "../UserContext";
 import { postAddUser } from "../api/user";
 import { CONFERENCE_ID } from "../api/api";
@@ -36,7 +36,6 @@ export default function WelcomeStack() {
 }
 
 export function WelcomeScreen({ navigation }: any) {
-  const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { onUserRegistered } = useContext(UserContext);
@@ -77,27 +76,6 @@ export function WelcomeScreen({ navigation }: any) {
         isLooping
         status={{ shouldPlay: true, isMuted: true }}
       />
-      <Overlay
-        isVisible={overlayVisible}
-        onBackdropPress={() => setOverlayVisible(false)}
-        overlayStyle={{ padding: 20, margin: 20 }}
-      >
-        <Text style={{ fontWeight: "bold", marginBottom: 10, fontSize: 20 }}>Hello from the Organizers!</Text>
-        <Text style={{ marginBottom: 10 }}>
-          Welcome to the Animal Liberation Conference! You can use this app to keep track of the schedule, receive
-          important announcements, and more!
-        </Text>
-        <Text style={{ marginBottom: 20 }}>
-          We encourage you to sign up to make it easier to network with other activists. If you choose to sign up, your
-          name will be visible to all users of the app.
-        </Text>
-        <Button
-          titleStyle={{ color: colors.white, fontWeight: "bold" }}
-          buttonStyle={globalStyles.buttonPrimary}
-          title="Got it!"
-          onPress={() => setOverlayVisible(false)}
-        />
-      </Overlay>
       <View style={{ backgroundColor: "rgba(73,24,135,0.6)", flex: 1 }}>
         <View style={{ padding: 15, alignItems: "center", flex: 1, justifyContent: "flex-end" }}>
           <Text
@@ -212,7 +190,7 @@ export function SignUpScreen({ navigation, route }: any) {
         // TODO: design this screen
         <KeyboardAvoidingView style={{ alignItems: "center", backgroundColor: colors.white }} behavior={"position"}>
           <View style={[globalStyles.scrollView, globalStyles.scrollViewContentContainer, { flex: 1, width: "100%" }]}>
-            <View style={{ width: 300 }}>
+            <View style={{ width: Dimensions.get('screen').width - 20 }}>
               <Image
                 source={require("../assets/logo-circle-black.png")}
                 style={{ height: 200, width: 205, resizeMode: "stretch", alignSelf: "center", marginVertical: 10 }}
@@ -250,7 +228,7 @@ export function SignUpScreen({ navigation, route }: any) {
                 >
                   Privacy Policy
                 </Text>
-                .
+                . By signing up, your name will be visible to other users of the app.
               </Text>
               <CheckBox
                 center
