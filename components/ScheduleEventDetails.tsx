@@ -12,11 +12,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(route.params.scheduleItem);
-  console.log(scheduleItem);
   const [error, setError] = useState<string>("");
   const { setData } = useContext(ScheduleContext);
-  scheduleItem.attendees = [];
-  // scheduleItem.attendees[0].name = "Example Name";
 
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
