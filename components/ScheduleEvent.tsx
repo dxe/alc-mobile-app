@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { showErrorMessage, utcToLocal } from "../util";
+import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import { ListItem } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
 import FeatherIcon from "react-native-vector-icons/Feather";
@@ -41,6 +41,7 @@ export function ScheduleEvent(props: Props) {
           attending: !scheduleItem.attending,
           event_id: scheduleItem.id,
         });
+        const user = await getStoredJSON("user");
         // update rsvp status in context
         setData((prev: any) => {
           return {
@@ -48,16 +49,37 @@ export function ScheduleEvent(props: Props) {
             events: prev.events.map((event: any) => {
               if (event.id === scheduleItem.id) {
                 console.log(`setting ATTENDING to ${!scheduleItem.attending}`);
-                // TODO: update the attendees array too
-                return { ...event, attending: !scheduleItem.attending };
+                const attendeeIndex = scheduleItem.attendees.findIndex((x) => x.name === user.name);
+                const attendees = !scheduleItem.attending
+                  ? [{ name: user.name }].concat(scheduleItem.attendees)
+                  : scheduleItem.attendees.filter((x, i) => i !== attendeeIndex);
+                const totalAttendees = !scheduleItem.attending
+                  ? scheduleItem.total_attendees + 1
+                  : scheduleItem.total_attendees - 1;
+                return {
+                  ...event,
+                  attending: !scheduleItem.attending,
+                  attendees: attendees,
+                  total_attendees: totalAttendees,
+                };
               }
               return event;
             }),
           };
         });
         // update state in this component
-        setScheduleItem((prevState) => {
-          return { ...prevState, attending: !prevState.attending };
+        setScheduleItem((prevState: ConferenceEvent) => {
+          const attendeeIndex = prevState.attendees.findIndex((x) => x.name === user.name);
+          const attendees = !prevState.attending
+            ? [{ name: user.name }].concat(prevState.attendees)
+            : prevState.attendees.filter((x, i) => i !== attendeeIndex);
+          const totalAttendees = !prevState.attending ? prevState.total_attendees + 1 : prevState.total_attendees - 1;
+          return {
+            ...prevState,
+            attending: !prevState.attending,
+            attendees: attendees,
+            total_attendees: totalAttendees,
+          };
         });
       } catch (e) {
         setError("Failed to RSVP.");

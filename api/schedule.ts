@@ -13,7 +13,7 @@ export interface Conference {
 }
 
 export interface ConferenceEvent {
-  attendees: Attendee[] | null;
+  attendees: Attendee[];
   attending: boolean;
   description: string;
   id: number;

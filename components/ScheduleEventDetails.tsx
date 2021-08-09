@@ -1,7 +1,7 @@
-import { ConferenceEvent, postRSVP } from "../api/schedule";
+import { Attendee, ConferenceEvent, postRSVP } from "../api/schedule";
 import { Dimensions, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
-import { showErrorMessage, utcToLocal } from "../util";
+import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useEffect, useState } from "react";
@@ -24,6 +24,7 @@ export function ScheduleEventDetails({ route }: any) {
           attending: !scheduleItem.attending,
           event_id: scheduleItem.id,
         });
+        const user = await getStoredJSON("user");
         // update rsvp status in context
         setData((prev: any) => {
           return {
@@ -31,16 +32,37 @@ export function ScheduleEventDetails({ route }: any) {
             events: prev.events.map((event: any) => {
               if (event.id === scheduleItem.id) {
                 console.log(`setting ATTENDING to ${!scheduleItem.attending}`);
-                // TODO: update the attendees array too
-                return { ...event, attending: !scheduleItem.attending };
+                const attendeeIndex = scheduleItem.attendees.findIndex((x) => x.name === user.name);
+                const attendees = !scheduleItem.attending
+                  ? [{ name: user.name }].concat(scheduleItem.attendees)
+                  : scheduleItem.attendees.filter((x, i) => i !== attendeeIndex);
+                const totalAttendees = !scheduleItem.attending
+                  ? scheduleItem.total_attendees + 1
+                  : scheduleItem.total_attendees - 1;
+                return {
+                  ...event,
+                  attending: !scheduleItem.attending,
+                  attendees: attendees,
+                  total_attendees: totalAttendees,
+                };
               }
               return event;
             }),
           };
         });
         // update state in this component
-        setScheduleItem((prevState) => {
-          return { ...prevState, attending: !prevState.attending };
+        setScheduleItem((prevState: ConferenceEvent) => {
+          const attendeeIndex = prevState.attendees.findIndex((x) => x.name === user.name);
+          const attendees = !prevState.attending
+            ? [{ name: user.name }].concat(prevState.attendees)
+            : prevState.attendees.filter((x, i) => i !== attendeeIndex);
+          const totalAttendees = !prevState.attending ? prevState.total_attendees + 1 : prevState.total_attendees - 1;
+          return {
+            ...prevState,
+            attending: !prevState.attending,
+            attendees: attendees,
+            total_attendees: totalAttendees,
+          };
         });
       } catch (e) {
         setError("Failed to RSVP.");
@@ -130,7 +152,7 @@ export function ScheduleEventDetails({ route }: any) {
         </View>
       </View>
 
-      {scheduleItem.attendees !== null && scheduleItem.attendees.length > 0 && (
+      {scheduleItem.attendees && scheduleItem.attendees.length > 0 && (
         <View style={{ display: "flex", flexDirection: "row", marginBottom: 10 }}>
           <Ionicons name="checkmark-circle" size={30} />
           <Text style={{ alignSelf: "center", paddingLeft: 5 }}>
@@ -141,23 +163,25 @@ export function ScheduleEventDetails({ route }: any) {
 
       <Text style={{ fontWeight: "bold", fontSize: 18 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
-      {scheduleItem.attendees !== null && scheduleItem.attendees.filter((attendee) => attendee.name !== "").length > 0 && (
-        <View>
-          <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
-          {/*TODO: update immediately when RSVP button is pressed*/}
-          {scheduleItem.attendees !== null &&
-            scheduleItem.attendees
-              .filter((attendee) => attendee.name !== "")
-              .map((attendee, index) => (
-                <View key={index}>
-                  <Text>{attendee.name}</Text>
-                </View>
-              ))}
-          {scheduleItem.attendees.filter((attendee) => attendee.name === "").length > 0 && (
-            <Text>+{scheduleItem.attendees.filter((attendee) => attendee.name === "").length} others</Text>
-          )}
-        </View>
-      )}
+      {scheduleItem.attendees &&
+        scheduleItem.attendees.length > 0 &&
+        scheduleItem.attendees.filter((attendee) => attendee.name !== "").length > 0 && (
+          <View>
+            <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
+            {/*TODO: update immediately when RSVP button is pressed*/}
+            {scheduleItem.attendees !== null &&
+              scheduleItem.attendees
+                .filter((attendee) => attendee.name !== "")
+                .map((attendee, index) => (
+                  <View key={index}>
+                    <Text>{attendee.name}</Text>
+                  </View>
+                ))}
+            {scheduleItem.attendees.filter((attendee) => attendee.name === "").length > 0 && (
+              <Text>+{scheduleItem.attendees.filter((attendee) => attendee.name === "").length} others</Text>
+            )}
+          </View>
+        )}
     </ScrollView>
   );
 }
