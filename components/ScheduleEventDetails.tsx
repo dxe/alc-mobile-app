@@ -137,6 +137,7 @@ export function ScheduleEventDetails({ route }: any) {
               ))
           }
           {
+            scheduleItem.attendees.filter((attendee) => attendee.name === "").length > 0 &&
             <Text>+{scheduleItem.attendees.filter((attendee) => attendee.name === "").length} others</Text>
           }
         </View>
