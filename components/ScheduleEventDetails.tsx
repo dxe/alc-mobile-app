@@ -1,5 +1,5 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
-import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
 import { showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
@@ -65,39 +65,57 @@ export function ScheduleEventDetails({ route }: any) {
         {utcToLocal(scheduleItem.start_time).format("h:mm A")} -&nbsp;
         {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
       </Text>
-      <View style={{ paddingTop: 12 }}>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: scheduleItem.location.lat,
-            longitude: scheduleItem.location.lng,
-            latitudeDelta: 0.00922,
-            longitudeDelta: 0.00421,
-          }}
-        >
-          <Marker
-            key={scheduleItem.id}
-            coordinate={{ latitude: scheduleItem.location.lat, longitude: scheduleItem.location.lng }}
-            title={scheduleItem.location.name}
-            description={scheduleItem.location.address + ", " + scheduleItem.location.city}
-          />
-        </MapView>
-      </View>
-      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly", marginTop: 5 }}>
-        <Button
-          titleStyle={{ color: colors.primary, fontWeight: "bold" }}
-          buttonStyle={[globalStyles.buttonWhite]}
-          onPress={() => {
-            showLocation({
+      <View
+        style={{
+          marginVertical: 12,
+          backgroundColor: colors.white,
+          borderWidth: 0,
+          borderRadius: 10,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 0.3,
+          shadowRadius: 7,
+        }}
+      >
+        <View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: "hidden" }}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
               latitude: scheduleItem.location.lat,
               longitude: scheduleItem.location.lng,
-              title: scheduleItem.location.name,
-              googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
-              googlePlaceId: scheduleItem.location.place_id,
-            });
-          }}
-          title="Get directions"
-        />
+              latitudeDelta: 0.00922,
+              longitudeDelta: 0.00421,
+            }}
+          >
+            <Marker
+              key={scheduleItem.id}
+              coordinate={{ latitude: scheduleItem.location.lat, longitude: scheduleItem.location.lng }}
+              title={scheduleItem.location.name}
+              description={scheduleItem.location.address + ", " + scheduleItem.location.city}
+            />
+          </MapView>
+        </View>
+        <View style={{ padding: 5, paddingLeft: 10 }}>
+          <Text style={{ fontWeight: "bold" }}>{scheduleItem.location.name}</Text>
+          <Text>{scheduleItem.location.address + ", " + scheduleItem.location.city}</Text>
+          <TouchableOpacity
+            style={{ paddingTop: 5 }}
+            onPress={() => {
+              showLocation({
+                latitude: scheduleItem.location.lat,
+                longitude: scheduleItem.location.lng,
+                title: scheduleItem.location.name,
+                googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
+                googlePlaceId: scheduleItem.location.place_id,
+              });
+            }}
+          >
+            <Text style={{ color: colors.primary, fontWeight: "bold" }}>Get directions</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
         <Button
           titleStyle={{ color: colors.white, fontWeight: "bold", fontSize: scheduleItem.attending ? 14 : 20 }}
           buttonStyle={[
@@ -109,11 +127,11 @@ export function ScheduleEventDetails({ route }: any) {
           disabled={submitting}
         />
       </View>
-      <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>Description</Text>
+
+      <Text style={{ fontWeight: "bold", fontSize: 18 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
       <View>
         <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>RSVP List</Text>
-        {/*TODO: show list of rsvps that updates immediately when RSVP button is pressed*/}
         <Text>{scheduleItem.total_attendees} attendees</Text>
       </View>
     </ScrollView>
@@ -122,7 +140,7 @@ export function ScheduleEventDetails({ route }: any) {
 
 const styles = StyleSheet.create({
   map: {
-    width: Dimensions.get("window").width - 20,
-    height: 200,
+    width: "100%",
+    height: 150,
   },
 });
