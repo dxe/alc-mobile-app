@@ -48,7 +48,6 @@ export function ScheduleEvent(props: Props) {
             ...prev,
             events: prev.events.map((event: any) => {
               if (event.id === scheduleItem.id) {
-                console.log(`setting ATTENDING to ${!scheduleItem.attending}`);
                 const attendeeIndex = scheduleItem.attendees.findIndex((x) => x.name === user.name);
                 const attendees = !scheduleItem.attending
                   ? [{ name: user.name }].concat(scheduleItem.attendees)

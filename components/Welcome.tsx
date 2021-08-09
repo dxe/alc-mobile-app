@@ -1,4 +1,4 @@
-import {View, Text, TextInput, StyleSheet, Linking, Image, KeyboardAvoidingView, Dimensions} from "react-native";
+import { View, Text, TextInput, StyleSheet, Linking, Image, KeyboardAvoidingView, Dimensions } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { getDeviceID, showErrorMessage } from "../util";
@@ -188,63 +188,68 @@ export function SignUpScreen({ navigation, route }: any) {
     <UserContext.Consumer>
       {({ onUserRegistered }) => (
         // TODO: design this screen
-        <KeyboardAvoidingView style={{ alignItems: "center", backgroundColor: colors.white }} behavior={"position"}>
-          <View style={[globalStyles.scrollView, globalStyles.scrollViewContentContainer, { flex: 1, width: "100%" }]}>
-            <View style={{ width: Dimensions.get('screen').width - 20 }}>
-              <Image
-                source={require("../assets/logo-circle-black.png")}
-                style={{ height: 200, width: 205, resizeMode: "stretch", alignSelf: "center", marginVertical: 10 }}
-              />
-              <Text style={{ paddingHorizontal: 10 }}>Name</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={(value) => setFormData({ ...formData, name: value })}
-                value={formData.name}
-                placeholder="Your name"
-                autoCapitalize={"words"}
-                keyboardType={"ascii-capable"}
-                autoCompleteType={"name"}
-                autoCorrect={false}
-              />
-              <Text style={{ paddingHorizontal: 10 }}>Email</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={(value) => setFormData({ ...formData, email: value })}
-                value={formData.email}
-                placeholder="Your email address"
-                autoCapitalize={"none"}
-                returnKeyLabel={"OK"}
-                keyboardType={"email-address"}
-                autoCompleteType={"email"}
-                autoCorrect={false}
-              />
-              <Text style={{ paddingHorizontal: 10 }}>
-                Please read the{" "}
-                <Text
-                  style={{ color: colors.primary, fontWeight: "bold" }}
-                  onPress={() => {
-                    Linking.openURL("https://www.legacy.directactioneverywhere.com/alc-app-privacy-policy");
-                  }}
-                >
-                  Privacy Policy
-                </Text>
-                . By signing up, your name will be visible to other users of the app.
-              </Text>
-              <CheckBox
-                center
-                title="Agree to Privacy Policy"
-                checked={formData.terms}
-                onPress={() => setFormData({ ...formData, terms: !formData.terms })}
-              />
-              <Button
-                titleStyle={{ color: colors.white, fontWeight: "bold" }}
-                buttonStyle={[globalStyles.buttonPrimary, { margin: 8 }]}
-                onPress={() => submitRegistration(onUserRegistered)}
-                title="Sign up"
-                disabled={submitting}
-              />
-            </View>
-          </View>
+        <KeyboardAvoidingView
+          style={{
+            flex: 1,
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            backgroundColor: colors.white,
+          }}
+          behavior={"position"}
+        >
+          <Image
+            source={require("../assets/logo-circle-black.png")}
+            style={{ height: 200, width: 205, resizeMode: "stretch", alignSelf: "center", marginVertical: 10 }}
+          />
+          <Text style={{ paddingHorizontal: 10 }}>Name</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setFormData({ ...formData, name: value })}
+            value={formData.name}
+            placeholder="Your name"
+            autoCapitalize={"words"}
+            keyboardType={"ascii-capable"}
+            autoCompleteType={"name"}
+            autoCorrect={false}
+          />
+          <Text style={{ paddingHorizontal: 10 }}>Email</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setFormData({ ...formData, email: value })}
+            value={formData.email}
+            placeholder="Your email address"
+            autoCapitalize={"none"}
+            returnKeyLabel={"OK"}
+            keyboardType={"email-address"}
+            autoCompleteType={"email"}
+            autoCorrect={false}
+          />
+          <Text style={{ paddingHorizontal: 10 }}>
+            Please read the{" "}
+            <Text
+              style={{ color: colors.primary, fontWeight: "bold" }}
+              onPress={() => {
+                Linking.openURL("https://www.legacy.directactioneverywhere.com/alc-app-privacy-policy");
+              }}
+            >
+              Privacy Policy
+            </Text>
+            . By signing up, your name will be visible to other users of the app.
+          </Text>
+          <CheckBox
+            center
+            title="Agree to Privacy Policy"
+            checked={formData.terms}
+            onPress={() => setFormData({ ...formData, terms: !formData.terms })}
+          />
+          <Button
+            titleStyle={{ color: colors.white, fontWeight: "bold" }}
+            buttonStyle={[globalStyles.buttonPrimary, { margin: 8 }]}
+            onPress={() => submitRegistration(onUserRegistered)}
+            title="Sign up"
+            disabled={submitting}
+          />
         </KeyboardAvoidingView>
       )}
     </UserContext.Consumer>
