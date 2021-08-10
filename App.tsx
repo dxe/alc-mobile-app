@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StatusBar } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeStack from "./components/Home";
@@ -9,16 +9,26 @@ import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
 import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
-import { getStoredJSON, storeJSON } from "./util";
+import { getStoredJSON, registerForPushNotificationsAsync, storeJSON } from "./util";
 import WelcomeStack from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
 import { postRegisterPushNotifications } from "./api/user";
 import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
+import * as Notifications from "expo-notifications";
 
 // TODO: useful for debugging, should be set to false in prod build of app
 const ALWAYS_SHOW_WELCOME_SCREEN = false;
+
+// How to handle notifications when app is in foreground.
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const Tab = createBottomTabNavigator();
 
@@ -26,6 +36,9 @@ export default function App() {
   const [registeredConferenceID, setRegisteredConferenceID] = useState<number>(0);
   const [ready, setReady] = useState<boolean>(false);
   const { data, setData, status, setStatus } = useSchedule(null);
+  const [notification, setNotification] = useState(null);
+  const navigationRef = useRef<NavigationContainerRef>(null);
+  const [initialRoute, setInitialRoute] = useState("Home");
 
   StatusBar.setBarStyle("light-content", true);
 
@@ -36,9 +49,28 @@ export default function App() {
       setRegisteredConferenceID(id ? id : 0);
       setReady(true);
     })();
+
+    // Fires when a notification is received when app is in foreground.
+    Notifications.addNotificationReceivedListener(_handleNotification);
+
+    // Fires when a notification is tapped (whether or not app is open).
+    Notifications.addNotificationResponseReceivedListener(_handleNotificationResponse);
   }, []);
 
-  // TODO: store user's name in local storage too so we can use it when they RSVP?
+  const _handleNotification = (notification: any) => {
+    setNotification(notification);
+  };
+
+  const _handleNotificationResponse = (response: any) => {
+    console.log(`Notification tapped: ${response}`);
+    // TODO: test to ensure this works once app is built
+    if (navigationRef.current) {
+      navigationRef.current.navigate("Announcements");
+    } else {
+      setInitialRoute("Announcements");
+    }
+  };
+
   const userRegistered = (deviceID: string, userName: string) => {
     console.log(`user (${userName}) registered with ${deviceID}!`);
     storeJSON("user", {
@@ -47,19 +79,23 @@ export default function App() {
       conference: CONFERENCE_ID,
     });
     setRegisteredConferenceID(CONFERENCE_ID);
-    // TODO: request to allow push notifications
     (async () => {
-      // TODO: if this fails, ask the user if they'd like to try again?
-      // or just tell them it failed & let them go into their settings to try again?
-      await postRegisterPushNotifications({
-        expo_push_token: "TODO-not-a-real-token-123", // TODO
-      });
+      try {
+        const pushToken = await registerForPushNotificationsAsync();
+        await postRegisterPushNotifications({
+          expo_push_token: pushToken,
+        });
+      } catch (e) {
+        console.warn("Failed to register for push notifications!");
+        // TODO: ask the user if they'd like to try again?
+        // or just tell them it failed & let them go into their settings to try again?
+      }
     })();
   };
 
   return (
     ready && (
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         {registeredConferenceID != CONFERENCE_ID || ALWAYS_SHOW_WELCOME_SCREEN ? (
           <UserContext.Provider value={{ onUserRegistered: userRegistered }}>
             <WelcomeStack />
@@ -92,6 +128,7 @@ export default function App() {
                 activeTintColor: colors.primary,
                 inactiveTintColor: colors.grey,
               }}
+              initialRouteName={initialRoute}
             >
               <Tab.Screen name="Home" component={HomeStack} />
               <Tab.Screen name="Schedule" component={ScheduleStack} />

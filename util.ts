@@ -2,6 +2,9 @@ import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage } from "react-native-flash-message";
 import * as Application from "expo-application";
+import { Platform } from "react-native";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 
 export const ONE_HOUR_MS = 1000 * 60 * 60;
 
@@ -68,4 +71,39 @@ export const getDeviceID = async () => {
     return Promise.resolve(id);
   }
   return Promise.reject();
+};
+
+// This function was adapted from: https://docs.expo.dev/push-notifications/push-notifications-setup/
+export const registerForPushNotificationsAsync = async (): Promise<string> => {
+  if (!Constants.isDevice) {
+    alert("Must use physical device for push notifications!");
+    return Promise.reject();
+  }
+
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+
+  if (finalStatus !== "granted") {
+    alert("Failed to get token for push notifications!");
+    return Promise.reject();
+  }
+
+  const token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log(`Got token: ${token}`);
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return Promise.resolve(token);
 };

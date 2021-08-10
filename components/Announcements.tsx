@@ -6,6 +6,7 @@ import { ListItem, Icon, Text } from "react-native-elements";
 import { Announcement, useAnnouncements } from "../api/announcement";
 import { showErrorMessage } from "../util";
 import { TimeAgo } from "./common/TimeAgo";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
@@ -24,8 +25,15 @@ export default function AnnouncementsStack() {
   );
 }
 
-function AnnouncementsScreen() {
+function AnnouncementsScreen({ navigation }: any) {
   const { data, status, setStatus } = useAnnouncements([]);
+
+  // Refresh the screen whenever it is focused.
+  useFocusEffect(
+    React.useCallback(() => {
+      setStatus("refreshing");
+    }, [])
+  );
 
   useEffect(() => {
     if (status != "error") return;
