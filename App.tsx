@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StatusBar } from "react-native";
+import {StatusBar, Text, View} from "react-native";
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -17,6 +17,7 @@ import { postRegisterPushNotifications } from "./api/user";
 import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
 import * as Notifications from "expo-notifications";
+import { FAB } from 'react-native-elements';
 
 // TODO: useful for debugging, should be set to false in prod build of app
 const ALWAYS_SHOW_WELCOME_SCREEN = false;
@@ -135,6 +136,10 @@ export default function App() {
               <Tab.Screen name="Announcements" component={AnnouncementsStack} />
               <Tab.Screen name="Info" component={InfoStack} />
             </Tab.Navigator>
+            {/*TODO: remove this button after testing*/}
+            <View style={{position: "absolute", bottom: 100, flex: 1, alignSelf: "center"}}>
+              <FAB color={colors.lightred} titleStyle={{fontSize: 16}} onPress={() => setRegisteredConferenceID(0)} title={"Reset app"} />
+            </View>
           </ScheduleContext.Provider>
         )}
         <FlashMessage position="top" />
