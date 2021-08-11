@@ -19,10 +19,7 @@
     "ios": {
       "bundleIdentifier": "com.dxe.mobile",
       "buildNumber": "5.0.0",
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Allow your location to be used to find nearby venues"
-      }
+      "supportsTablet": true
     },
     "android": {
       "package": "com.dxe.mobile",
