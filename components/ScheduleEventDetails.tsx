@@ -97,6 +97,7 @@ export function ScheduleEventDetails({ route }: any) {
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.3,
           shadowRadius: 7,
+          elevation: 5,
         }}
       >
         <View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: "hidden" }}>
