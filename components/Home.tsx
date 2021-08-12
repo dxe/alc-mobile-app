@@ -65,14 +65,14 @@ function HomeScreen({ navigation }: any) {
         .filter((x: ConferenceEvent) => {
           return moment(x.start_time).utc(true).isAfter(moment());
         })
-        .sort((a: ConferenceEvent, b: ConferenceEvent) => {
-          return moment(a.start_time).utc(true).isAfter(moment(b.start_time).utc(true)) ? 1 : -1;
-        })[0].start_time;
+        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))[0].start_time;
 
       setNextEvents(
-        data.events.filter((x: ConferenceEvent) => {
-          return x.start_time === nextStartTime;
-        })
+        data.events
+          .filter((x: ConferenceEvent) => {
+            return x.start_time === nextStartTime;
+          })
+          .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
       );
 
       // Find events happening now.
@@ -86,6 +86,7 @@ function HomeScreen({ navigation }: any) {
             // Then find events that have not yet ended.
             return moment(x.start_time).utc(true).add(x.length, "minute").isAfter(currentTime);
           })
+          .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
       );
     };
     updateFeaturedEvents();
@@ -166,6 +167,7 @@ function HomeScreen({ navigation }: any) {
             .filter((e: ConferenceEvent) => {
               return e.key_event;
             })
+            .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
             .map((e: ConferenceEvent) => {
               return (
                 <Card key={e.id} containerStyle={styles.keyEventCard}>

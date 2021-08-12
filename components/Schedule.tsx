@@ -68,10 +68,12 @@ function ScheduleScreen({ navigation }: any) {
   const onDateSelected = (date: moment.Moment) => {
     if (!data) return;
     setFilteredSchedule(
-      data.events.filter((item: ConferenceEvent) => {
-        const localDate = moment(moment(item.start_time).utc(true).toDate()).local().format("YYYY-MM-DD");
-        return localDate === date.format("YYYY-MM-DD");
-      })
+      data.events
+        .filter((item: ConferenceEvent) => {
+          const localDate = moment(moment(item.start_time).utc(true).toDate()).local().format("YYYY-MM-DD");
+          return localDate === date.format("YYYY-MM-DD");
+        })
+        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
     );
   };
 
