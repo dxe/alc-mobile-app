@@ -32,6 +32,8 @@ export const useAPI = (options: APIOptions) => {
 
   // Fetch data initially or on refresh.
   useEffect(() => {
+    console.log(`STATUS: ${status}`);
+
     if (!options.path) return;
 
     if (status === "success" || status === "error") return;

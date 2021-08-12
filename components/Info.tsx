@@ -44,7 +44,12 @@ function InfoScreen({ navigation }: any) {
     <ScrollView
       style={globalStyles.scrollView}
       contentContainerStyle={globalStyles.scrollViewContentContainer}
-      refreshControl={<RefreshControl refreshing={status === "refreshing"} onRefresh={() => setStatus("refreshing")} />}
+      refreshControl={
+        <RefreshControl
+          refreshing={status === "refreshing" || status === "initialized"}
+          onRefresh={() => setStatus("refreshing")}
+        />
+      }
     >
       {data &&
         data.map((item: Info, i: number) => (

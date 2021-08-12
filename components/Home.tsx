@@ -105,7 +105,10 @@ function HomeScreen({ navigation }: any) {
         style={globalStyles.scrollView}
         contentContainerStyle={globalStyles.scrollViewContentContainer}
         refreshControl={
-          <RefreshControl refreshing={status === "refreshing"} onRefresh={() => setStatus("refreshing")} />
+          <RefreshControl
+            refreshing={status === "refreshing" || status === "initialized"}
+            onRefresh={() => setStatus("refreshing")}
+          />
         }
       >
         {currentEvents && currentEvents.length > 0 && (

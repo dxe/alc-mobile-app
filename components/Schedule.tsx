@@ -148,7 +148,10 @@ function ScheduleScreen({ navigation }: any) {
             <Text style={styles.sectionHeader}>{utcToLocal(title).format("h:mm A")}</Text>
           )}
           refreshControl={
-            <RefreshControl refreshing={status === "refreshing"} onRefresh={() => setStatus("refreshing")} />
+            <RefreshControl
+              refreshing={status === "refreshing" || status === "initialized"}
+              onRefresh={() => setStatus("refreshing")}
+            />
           }
           style={[globalStyles.scrollView, { paddingHorizontal: 8 }]}
         />
