@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getDeviceID, getStoredJSON, ONE_HOUR_MS, storeJSON, waitFunc } from "../util";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { AppState } from "react-native";
 
 export const CONFERENCE_ID = 1;
 export const BASE_URL = "https://alc-mobile-api.dxe.io/api";
@@ -29,6 +30,7 @@ export const postAPI = async function (options: APIOptions): Promise<void> {
 export const useAPI = (options: APIOptions) => {
   const [data, setData] = useState(options.initialValue);
   const [status, setStatus] = useState("initialized");
+  const appState = useRef(AppState.currentState);
 
   // Fetch data initially or on refresh.
   useEffect(() => {
@@ -65,6 +67,7 @@ export const useAPI = (options: APIOptions) => {
   }, [options.path, status]);
 
   // Try to automatically refresh every hour to prevent stale data.
+  // This is pointless b/c the interval will pause when app is backgrounded.
   useEffect(() => {
     const interval = setInterval(() => {
       setStatus("refreshing");
@@ -72,6 +75,26 @@ export const useAPI = (options: APIOptions) => {
 
     return () => clearInterval(interval);
   }, [options.path]);
+
+  // Monitor the AppState (foreground, background, inactive).
+  useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener("change", _handleAppStateChange);
+    };
+  }, []);
+
+  // When AppState moves to foreground, refresh the data.
+  // This will prevent stale data if users keep the app in the
+  // background but never fully close it.
+  const _handleAppStateChange = (nextAppState: any) => {
+    if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+      // AppState has change to the foreground.
+      setStatus("refreshing");
+    }
+    appState.current = nextAppState;
+  };
 
   return { data, setData, status, setStatus };
 };
