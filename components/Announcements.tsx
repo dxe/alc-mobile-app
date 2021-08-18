@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, StyleSheet, View, FlatList, ViewComponent } from "react-native";
+import { RefreshControl, View, FlatList } from "react-native";
 import React, { useEffect } from "react";
-import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
-import { ListItem, Icon, Text, Card } from "react-native-elements";
+import { screenHeaderOptions, globalStyles, figmaColors, figmaStyles } from "../global-styles";
+import { Icon, Text, Card } from "react-native-elements";
 import { Announcement, useAnnouncements } from "../api/announcement";
 import { showErrorMessage } from "../util";
 import { TimeAgo } from "./common/TimeAgo";
@@ -42,25 +42,28 @@ function AnnouncementsScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[globalStyles.scrollView, globalStyles.scrollViewContentContainer]}
+      style={[{ backgroundColor: figmaColors.white }]}
+      contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16 }]}
       refreshControl={
         <RefreshControl
           refreshing={status === "refreshing" || status === "initialized"}
           onRefresh={() => setStatus("refreshing")}
         />
       }
-      data={data}
+      data={data.sort((a: Announcement, b: Announcement) => b.send_time.localeCompare(a.send_time))}
       keyExtractor={(item) => item.id + item.title}
       renderItem={({ item }) => (
         <Card
           containerStyle={[
             {
               flex: 1,
-              borderRadius: 10,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: figmaColors.midGrey,
+              marginVertical: 16,
               marginHorizontal: 0,
-              marginVertical: 10,
-              borderWidth: 2,
-              borderColor: colors.lightgrey,
+              padding: 12,
+              paddingLeft: 6,
             },
             globalStyles.shadow,
           ]}
@@ -71,14 +74,14 @@ function AnnouncementsScreen({ navigation }: any) {
               reverse
               name={item.icon}
               type="font-awesome-5"
-              color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
-              containerStyle={{ marginRight: 15 }}
+              color={item.icon === "exclamation-triangle" ? figmaColors.orange : figmaColors.black}
+              containerStyle={{ marginRight: 12 }}
               solid={true}
             />
             <View style={{ flex: 1 }}>
-              <Text style={globalStyles.listItemTitle}>{item.title}</Text>
-              <Text>{item.message}</Text>
-              <Text style={styles.timestamp}>
+              <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
+              <Text style={[figmaStyles.textMediumRegular, { marginBottom: 4 }]}>{item.message}</Text>
+              <Text style={figmaStyles.textSmallRegular}>
                 <TimeAgo time={item.send_time} />
               </Text>
             </View>
@@ -88,10 +91,3 @@ function AnnouncementsScreen({ navigation }: any) {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  timestamp: {
-    fontSize: 12,
-    paddingTop: 7,
-  },
-});

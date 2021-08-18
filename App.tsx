@@ -6,7 +6,7 @@ import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import { colors } from "./global-styles";
+import { colors, figmaColors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import { getStoredJSON, registerForPushNotificationsAsync, storeJSON } from "./util";
 import WelcomeStack from "./components/Welcome";
@@ -17,6 +17,7 @@ import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
 import * as Notifications from "expo-notifications";
 import { FAB, Icon } from "react-native-elements";
+import { useFonts } from "expo-font";
 
 // How to handle notifications when app is in foreground.
 Notifications.setNotificationHandler({
@@ -36,6 +37,11 @@ export default function App() {
   const [notification, setNotification] = useState(null);
   const navigationRef = useRef<NavigationContainerRef>(null);
   const [initialRoute, setInitialRoute] = useState("Home");
+  let [fontsLoaded] = useFonts({
+    "Inter-400": require("./assets/fonts/Inter-Regular.ttf"),
+    "Inter-500": require("./assets/fonts/Inter-Medium.ttf"),
+    "Inter-600": require("./assets/fonts/Inter-SemiBold.ttf"),
+  });
 
   StatusBar.setBarStyle("light-content", true);
 
@@ -91,7 +97,8 @@ export default function App() {
   };
 
   return (
-    ready && (
+    ready &&
+    fontsLoaded && (
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <NavigationContainer ref={navigationRef}>
           {registeredConferenceID != CONFERENCE_ID ? (
@@ -123,8 +130,8 @@ export default function App() {
                   },
                 })}
                 tabBarOptions={{
-                  activeTintColor: colors.white,
-                  inactiveTintColor: colors.lightgrey,
+                  activeTintColor: figmaColors.neonBlue,
+                  inactiveTintColor: figmaColors.midGrey,
                   style: { backgroundColor: "black", opacity: 0.9, borderTopWidth: 0 },
                 }}
                 initialRouteName={initialRoute}

@@ -2,8 +2,64 @@ import { StyleSheet } from "react-native";
 import { StackNavigationOptions, HeaderStyleInterpolators } from "@react-navigation/stack";
 import React from "react";
 
+export const figmaColors = {
+  white: "#FFFFFF",
+  darkGrey: "#323538",
+  midGrey: "#C4C4C4",
+  black: "#000000",
+  purple: "#3738AE",
+  orange: "#FF5E37",
+  neonPink: "#F891FC",
+  neonBlue: "#A9F7F3",
+};
+
+export const figmaStyles = StyleSheet.create({
+  h1: {
+    fontFamily: "Inter-600",
+    fontSize: 20,
+    lineHeight: 24,
+    color: figmaColors.white,
+  },
+  h2: {
+    fontFamily: "Inter-600",
+    fontSize: 20,
+    lineHeight: 24,
+    color: figmaColors.neonPink,
+  },
+  textSmallMedium: {
+    fontFamily: "Inter-500",
+    fontSize: 12,
+    lineHeight: 14.5,
+    color: figmaColors.darkGrey,
+  },
+  textSmallRegular: {
+    fontFamily: "Inter-400",
+    fontSize: 12,
+    lineHeight: 18,
+    color: figmaColors.darkGrey,
+  },
+  textLargeSemiBold: {
+    fontFamily: "Inter-600",
+    fontSize: 18,
+    lineHeight: 24,
+    color: figmaColors.black,
+  },
+  textSmallSemiBold: {
+    fontFamily: "Inter-600",
+    fontSize: 12,
+    lineHeight: 15,
+    color: figmaColors.black,
+  },
+  textMediumRegular: {
+    fontFamily: "Inter-400",
+    fontSize: 14,
+    lineHeight: 19,
+    color: figmaColors.darkGrey,
+  },
+});
+
 export const colors = {
-  primary: "#29229C",
+  primary: "#3738AE",
   hotpink: "#F476FB",
   lightblue: "#9BF7EF",
   white: "#FFF",
@@ -18,16 +74,7 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   scrollViewContentContainer: {
-    padding: 8,
-  },
-  // TODO: remove these styles after no longer using ListItem elements
-  listItem: {
-    borderStyle: "solid",
-    borderWidth: 2,
-    borderRadius: 15,
-    marginBottom: 5,
-    overflow: "hidden",
-    borderColor: colors.lightgrey,
+    padding: 12,
   },
   listItemTitle: {
     fontWeight: "bold",
@@ -62,14 +109,12 @@ export const globalStyles = StyleSheet.create({
 });
 
 export const screenHeaderOptions: StackNavigationOptions = {
-  headerTintColor: colors.white,
-  headerTitleStyle: {
-    fontWeight: "bold",
-    color: colors.white,
-  },
+  headerTintColor: figmaColors.neonPink,
+  headerTitleStyle: [figmaStyles.h2, { fontSize: 18 }],
+  headerBackTitleStyle: [figmaStyles.h2, { fontSize: 16 }],
   headerTransparent: false,
   headerStyle: {
-    backgroundColor: "black",
+    backgroundColor: figmaColors.black,
     opacity: 0.9,
     elevation: 0,
     shadowOpacity: 0,

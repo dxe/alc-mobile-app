@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
 import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable, TouchableOpacity } from "react-native";
-import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
+import { screenHeaderOptions, figmaStyles, figmaColors } from "../global-styles";
 import { showErrorMessage } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
@@ -107,23 +107,23 @@ function HomeScreen({ navigation }: any) {
   return (
     data && (
       <ScrollView
-        style={[globalStyles.scrollView, { backgroundColor: colors.primary }]}
-        contentContainerStyle={[globalStyles.scrollViewContentContainer]}
+        style={[{ backgroundColor: figmaColors.purple }]}
+        contentContainerStyle={[{ paddingVertical: 16, paddingHorizontal: 16 }]}
         refreshControl={
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}
             onRefresh={() => setStatus("refreshing")}
-            tintColor={colors.white}
+            tintColor={figmaColors.white}
           />
         }
       >
         {currentEvents && currentEvents.length > 0 && (
-          <View>
-            <Text style={styles.heading}>Happening Now</Text>
+          <View style={{ marginBottom: 28 }}>
+            <Text style={[figmaStyles.h1]}>Happening Now</Text>
 
             {currentEvents.map((e: ConferenceEvent) => {
               return (
-                <Pressable
+                <TouchableOpacity
                   key={e.id}
                   onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
                 >
@@ -134,15 +134,15 @@ function HomeScreen({ navigation }: any) {
                     middleText={e.name}
                     bottomText={e.location.name + ", " + e.location.city}
                   />
-                </Pressable>
+                </TouchableOpacity>
               );
             })}
           </View>
         )}
 
         {nextEvents && nextEvents.length > 0 && (
-          <View>
-            <Text style={styles.heading}>Coming Up Next</Text>
+          <View style={{ marginBottom: 28 }}>
+            <Text style={figmaStyles.h1}>Coming Up Next</Text>
 
             {nextEvents.map((e: ConferenceEvent) => {
               return (
@@ -164,8 +164,8 @@ function HomeScreen({ navigation }: any) {
         )}
 
         {keyEvents && keyEvents.length > 0 && (
-          <View>
-            <Text style={styles.heading}>Today's Main Events</Text>
+          <View style={{ marginBottom: 28 }}>
+            <Text style={figmaStyles.h1}>Today's Main Events</Text>
 
             {keyEvents.map((e: ConferenceEvent) => {
               return (
@@ -197,13 +197,3 @@ function HomeScreen({ navigation }: any) {
     )
   );
 }
-
-const styles = StyleSheet.create({
-  heading: {
-    fontSize: 26,
-    fontWeight: "bold",
-    paddingTop: 20,
-    paddingBottom: 7,
-    color: colors.white,
-  },
-});

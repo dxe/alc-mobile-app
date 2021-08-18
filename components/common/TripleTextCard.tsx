@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View } from "react-native";
 import { Card } from "react-native-elements";
-import { globalStyles } from "../../global-styles";
+import { figmaColors, figmaStyles, globalStyles } from "../../global-styles";
 
 interface Props {
   middleText: string;
@@ -15,25 +15,24 @@ export function TripleTextCard(props: Props) {
       containerStyle={[
         {
           flex: 1,
-          borderRadius: 10,
+          backgroundColor: figmaColors.white,
+          borderRadius: 8,
+          marginVertical: 16,
           marginHorizontal: 0,
-          marginVertical: 10,
+          padding: 12,
         },
         globalStyles.shadow,
       ]}
     >
       <View>
         <View>
-          {/*TODO: truncate text and put "..." if it's too long to fit on the cards*/}
-          <Text style={{ fontSize: 12, marginBottom: 8 }}>{props.topElement}</Text>
+          <Text style={[figmaStyles.textSmallMedium, { marginBottom: 8 }]}>{props.topElement}</Text>
         </View>
         <View>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 6 }}>{props.middleText}</Text>
-          <Text style={{ fontSize: 14 }}>{props.bottomText}</Text>
+          <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 2 }]}>{props.middleText}</Text>
+          <Text style={figmaStyles.textMediumRegular}>{props.bottomText}</Text>
         </View>
       </View>
     </Card>
   );
 }
-
-const styles = StyleSheet.create({});

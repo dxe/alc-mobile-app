@@ -78,21 +78,21 @@ export function ScheduleEventDetails({ route }: any) {
   }, [error]);
 
   return (
-    // TODO: improve the Event Details screen.
     <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
-      <Text style={{ fontWeight: "bold", fontSize: 26, paddingTop: 16 }}>{scheduleItem.name}</Text>
-      <Text style={{ paddingTop: 5 }}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
-      <Text>
+      <Text style={{ fontWeight: "bold", fontSize: 26, paddingTop: 10 }}>{scheduleItem.name}</Text>
+      <Text style={{ paddingTop: 10 }}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
+      <Text style={{ paddingTop: 2 }}>
         {utcToLocal(scheduleItem.start_time).format("h:mm A")} -&nbsp;
         {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
       </Text>
       <View
         style={[
           {
-            marginVertical: 12,
+            marginVertical: 18,
             backgroundColor: colors.white,
-            borderWidth: 0,
             borderRadius: 10,
+            borderWidth: 2,
+            borderColor: colors.lightgrey,
           },
           globalStyles.shadow,
         ]}

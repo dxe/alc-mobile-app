@@ -1,13 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
-import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { ListItem, Icon, Card, Text } from "react-native-elements";
+import { figmaColors, figmaStyles, globalStyles, screenHeaderOptions } from "../global-styles";
+import { Icon, Card, Text } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { Info, useInfo } from "../api/info";
 import { showErrorMessage } from "../util";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { TimeAgo } from "./common/TimeAgo";
 
 const Stack = createStackNavigator();
 
@@ -43,14 +41,15 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[globalStyles.scrollView, globalStyles.scrollViewContentContainer]}
+      style={[{ backgroundColor: figmaColors.white }]}
+      contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16 }]}
       refreshControl={
         <RefreshControl
           refreshing={status === "refreshing" || status === "initialized"}
           onRefresh={() => setStatus("refreshing")}
         />
       }
-      data={data}
+      data={data.sort((a: Info, b: Info) => a.display_order - b.display_order)}
       keyExtractor={(item) => item.id + item.title}
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate("Details", { infoItem: item })}>
@@ -58,11 +57,13 @@ function InfoScreen({ navigation }: any) {
             containerStyle={[
               {
                 flex: 1,
-                borderRadius: 10,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: figmaColors.midGrey,
+                marginVertical: 16,
                 marginHorizontal: 0,
-                marginVertical: 10,
-                borderWidth: 2,
-                borderColor: colors.lightgrey,
+                padding: 12,
+                paddingLeft: 6,
               },
               globalStyles.shadow,
             ]}
@@ -73,13 +74,13 @@ function InfoScreen({ navigation }: any) {
                 reverse
                 name={item.icon}
                 type="font-awesome-5"
-                color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
-                containerStyle={{ marginRight: 15 }}
+                color={item.icon === "exclamation-triangle" ? figmaColors.orange : figmaColors.purple}
+                containerStyle={{ marginRight: 12 }}
                 solid={true}
               />
               <View style={{ flex: 1 }}>
-                <Text style={globalStyles.listItemTitle}>{item.title}</Text>
-                <Text>{item.subtitle}</Text>
+                <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
+                <Text style={figmaStyles.textSmallRegular}>{item.subtitle}</Text>
               </View>
             </View>
           </Card>
@@ -99,8 +100,17 @@ function InfoDetails({ route, navigation }: any) {
   }, [navigation, infoItem]);
 
   return (
-    <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
-      <HTML source={{ html: infoItem.content }} />
+    <ScrollView
+      style={[{ backgroundColor: figmaColors.white }]}
+      contentContainerStyle={[{ paddingVertical: 18, paddingHorizontal: 16 }]}
+    >
+      <HTML
+        source={{ html: infoItem.content }}
+        baseFontStyle={{ fontFamily: "Inter-400", fontSize: 16, lineHeight: 24 }}
+        tagsStyles={{
+          strong: { fontFamily: "Inter-600" },
+        }}
+      />
     </ScrollView>
   );
 }

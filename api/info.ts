@@ -6,6 +6,7 @@ export interface Info {
   title: string;
   subtitle: string;
   content: string;
+  display_order: number;
 }
 
 export const useInfo = (initialValue: any) => {
