@@ -1,8 +1,5 @@
 import { StyleSheet } from "react-native";
-import {
-  StackNavigationOptions,
-  HeaderStyleInterpolators,
-} from "@react-navigation/stack";
+import { StackNavigationOptions, HeaderStyleInterpolators } from "@react-navigation/stack";
 import React from "react";
 
 export const colors = {

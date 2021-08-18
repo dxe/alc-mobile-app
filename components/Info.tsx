@@ -1,4 +1,4 @@
-import { createStackNavigator, useHeaderHeight } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl } from "react-native";
 import React, { useEffect } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
@@ -78,7 +78,6 @@ function InfoScreen({ navigation }: any) {
 
 function InfoDetails({ route, navigation }: any) {
   const { infoItem } = route.params;
-  const headerHeight = useHeaderHeight();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -87,12 +86,7 @@ function InfoDetails({ route, navigation }: any) {
   }, [navigation, infoItem]);
 
   return (
-    <ScrollView
-      style={globalStyles.scrollView}
-      contentContainerStyle={globalStyles.scrollViewContentContainer}
-      contentInset={{ top: headerHeight }}
-      contentOffset={{ x: 0, y: -headerHeight }}
-    >
+    <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
       <HTML source={{ html: infoItem.content }} />
     </ScrollView>
   );

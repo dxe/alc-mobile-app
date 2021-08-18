@@ -125,7 +125,7 @@ export default function App() {
                 tabBarOptions={{
                   activeTintColor: colors.white,
                   inactiveTintColor: colors.lightgrey,
-                  style: {backgroundColor: "black", opacity: 0.9, position: "absolute", borderTopWidth: 0},
+                  style: { backgroundColor: "black", opacity: 0.9, position: "absolute", borderTopWidth: 0 },
                 }}
                 initialRouteName={initialRoute}
               >
