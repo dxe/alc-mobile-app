@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import {ScrollView, RefreshControl, StyleSheet, View, FlatList, ViewComponent} from "react-native";
+import { ScrollView, RefreshControl, StyleSheet, View, FlatList, ViewComponent } from "react-native";
 import React, { useEffect } from "react";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
-import {ListItem, Icon, Text, Card} from "react-native-elements";
+import { ListItem, Icon, Text, Card } from "react-native-elements";
 import { Announcement, useAnnouncements } from "../api/announcement";
 import { showErrorMessage } from "../util";
 import { TimeAgo } from "./common/TimeAgo";
@@ -43,31 +43,36 @@ function AnnouncementsScreen({ navigation }: any) {
   return (
     <FlatList
       style={[globalStyles.scrollView, globalStyles.scrollViewContentContainer]}
-        refreshControl={
-          <RefreshControl
-            refreshing={status === "refreshing" || status === "initialized"}
-            onRefresh={() => setStatus("refreshing")}
-          />
-        }
+      refreshControl={
+        <RefreshControl
+          refreshing={status === "refreshing" || status === "initialized"}
+          onRefresh={() => setStatus("refreshing")}
+        />
+      }
       data={data}
-      keyExtractor={(item => item.id + item.title)}
-      renderItem={({item}) => (
-        <Card containerStyle={[{
-          flex: 1,
-          borderRadius: 10,
-          marginHorizontal: 0,
-          marginVertical: 10,
-          borderWidth: 2,
-          borderColor: colors.lightgrey,
-        }, globalStyles.shadow]}>
-          <View style={{flex: 1, flexDirection: "row"}}>
+      keyExtractor={(item) => item.id + item.title}
+      renderItem={({ item }) => (
+        <Card
+          containerStyle={[
+            {
+              flex: 1,
+              borderRadius: 10,
+              marginHorizontal: 0,
+              marginVertical: 10,
+              borderWidth: 2,
+              borderColor: colors.lightgrey,
+            },
+            globalStyles.shadow,
+          ]}
+        >
+          <View style={{ flex: 1, flexDirection: "row" }}>
             <Icon
               raised
               reverse
               name={item.icon}
               type="font-awesome-5"
               color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
-              containerStyle={{marginRight: 15}}
+              containerStyle={{ marginRight: 15 }}
             />
             <View>
               <Text style={globalStyles.listItemTitle}>{item.title}</Text>
@@ -80,7 +85,7 @@ function AnnouncementsScreen({ navigation }: any) {
         </Card>
       )}
     />
-   );
+  );
 }
 
 const styles = StyleSheet.create({
