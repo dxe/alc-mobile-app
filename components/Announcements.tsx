@@ -73,8 +73,9 @@ function AnnouncementsScreen({ navigation }: any) {
               type="font-awesome-5"
               color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
               containerStyle={{ marginRight: 15 }}
+              solid={true}
             />
-            <View>
+            <View style={{ flex: 1 }}>
               <Text style={globalStyles.listItemTitle}>{item.title}</Text>
               <Text>{item.message}</Text>
               <Text style={styles.timestamp}>

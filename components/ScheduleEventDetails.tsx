@@ -152,8 +152,10 @@ export function ScheduleEventDetails({ route }: any) {
               { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.primary, flex: 1 },
             ]}
             onPress={eventRSVP}
-            icon={scheduleItem.attending ? <Icon name="check" type="font-awesome-5" color="white" /> : undefined}
-            title={scheduleItem.attending ? "  Attending" : "RSVP"}
+            icon={
+              <Icon name={scheduleItem.attending ? "check" : "plus"} type="font-awesome-5" color="white" size={16} />
+            }
+            title={scheduleItem.attending ? "  Attending" : "  RSVP"}
             disabled={submitting}
           />
         </View>
