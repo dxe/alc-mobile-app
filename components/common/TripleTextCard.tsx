@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
+import {globalStyles} from "../../global-styles";
 
 interface Props {
   middleText: string;
@@ -11,15 +12,12 @@ interface Props {
 export function TripleTextCard(props: Props) {
   return (
     <Card
-      containerStyle={{
+      containerStyle={[{
         flex: 1,
         borderRadius: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 3,
-        elevation: 20,
-      }}
+        marginHorizontal: 0,
+        marginVertical: 10,
+      }, globalStyles.shadow]}
     >
       <View>
         <View>
@@ -36,51 +34,5 @@ export function TripleTextCard(props: Props) {
 }
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    flex: 1,
-    borderRadius: 15,
-    borderWidth: 0,
-    padding: 0,
-    margin: 0,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 20,
-  },
-  imageBackground: {
-    width: "100%",
-    height: "100%",
-    padding: 0,
-  },
-  image: {
-    resizeMode: "cover",
-    width: "100%",
-    height: "100%",
-    padding: 0,
-    margin: 0,
-    borderRadius: 15,
-  },
-  textWrapperView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    borderRadius: 15,
-    backgroundColor: "rgba(42,34,157,0.8)",
-  },
-  topView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    padding: 10,
-  },
-  bottomView: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    padding: 10,
-  },
+
 });

@@ -5,9 +5,8 @@ import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useEffect, useState } from "react";
-import { Button } from "react-native-elements";
+import {Button, Icon} from "react-native-elements";
 import { ScheduleContext } from "../ScheduleContext";
-import Ionicons from "react-native-vector-icons/Ionicons";
 
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -88,17 +87,12 @@ export function ScheduleEventDetails({ route }: any) {
         {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
       </Text>
       <View
-        style={{
+        style={[{
           marginVertical: 12,
           backgroundColor: colors.white,
           borderWidth: 0,
           borderRadius: 10,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.3,
-          shadowRadius: 7,
-          elevation: 5,
-        }}
+        }, globalStyles.shadow]}
       >
         <View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: "hidden" }}>
           <MapView
@@ -137,48 +131,50 @@ export function ScheduleEventDetails({ route }: any) {
               <Text style={{ color: colors.primary, fontWeight: "bold" }}>Get directions</Text>
             </TouchableOpacity>
           </View>
+
+        </View>
+      </View>
+
+        <View style={{ flex: 1, flexDirection: "row", marginBottom: 10 }}>
+          <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+            <Icon type="font-awesome-5" name="calendar-check" color={colors.primary} size={25} />
+            <Text style={{ alignSelf: "center", paddingLeft: 10 }}>
+              {scheduleItem.total_attendees} confirmed attendees
+            </Text>
+          </View>
           <View style={{ alignSelf: "center" }}>
             <Button
               titleStyle={{ color: colors.white, fontWeight: "bold", fontSize: 16 }}
               buttonStyle={[
                 globalStyles.buttonPrimary,
-                { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.lightred, flex: 1 },
+                { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.primary, flex: 1 },
               ]}
               onPress={eventRSVP}
-              title={scheduleItem.attending ? "Attending" : "Not attending"}
+              icon={scheduleItem.attending ? <Icon name="check"
+                                                   type="font-awesome-5" color="white" /> : undefined}
+              title={scheduleItem.attending ? "  Attending" : "RSVP"}
               disabled={submitting}
             />
           </View>
         </View>
-      </View>
 
-      {scheduleItem.attendees && scheduleItem.attendees.length > 0 && (
-        <View style={{ display: "flex", flexDirection: "row", marginBottom: 10 }}>
-          <Ionicons name="checkmark-circle" size={30} />
-          <Text style={{ alignSelf: "center", paddingLeft: 5 }}>
-            {scheduleItem.total_attendees} confirmed attendees
-          </Text>
-        </View>
-      )}
 
-      <Text style={{ fontWeight: "bold", fontSize: 18 }}>Description</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 18, paddingBottom: 5 }}>Description</Text>
       <Text>{scheduleItem.description}</Text>
       {scheduleItem.attendees &&
         scheduleItem.attendees.length > 0 &&
         scheduleItem.attendees.filter((attendee) => attendee.name !== "").length > 0 && (
           <View>
-            <Text style={{ fontWeight: "bold", fontSize: 18, paddingTop: 20 }}>Going</Text>
-            {/*TODO: update immediately when RSVP button is pressed*/}
-            {scheduleItem.attendees !== null &&
-              scheduleItem.attendees
-                .filter((attendee) => attendee.name !== "")
-                .map((attendee, index) => (
-                  <View key={index}>
-                    <Text>{attendee.name}</Text>
-                  </View>
-                ))}
+            <Text style={{ fontWeight: "bold", fontSize: 18, paddingBottom: 5 }}>Going</Text>
+            {scheduleItem.attendees
+              .filter((attendee) => attendee.name !== "")
+              .map((attendee, index) => (
+                <View key={index}>
+                  <Text>{attendee.name}</Text>
+                </View>
+              ))}
             {scheduleItem.attendees.filter((attendee) => attendee.name === "").length > 0 && (
-              <Text>+{scheduleItem.attendees.filter((attendee) => attendee.name === "").length} others</Text>
+              <Text>+ {scheduleItem.attendees.filter((attendee) => attendee.name === "").length} others</Text>
             )}
           </View>
         )}

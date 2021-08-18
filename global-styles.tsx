@@ -20,6 +20,7 @@ export const globalStyles = StyleSheet.create({
   scrollViewContentContainer: {
     padding: 8,
   },
+  // TODO: remove these styles after no longer using ListItem elements
   listItem: {
     borderStyle: "solid",
     borderWidth: 2,
@@ -31,6 +32,14 @@ export const globalStyles = StyleSheet.create({
   listItemTitle: {
     fontWeight: "bold",
     marginBottom: 6,
+    fontSize: 18,
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 5},
+    shadowOpacity: 0.25,
+    shadowRadius: 7,
+    elevation: 20,
   },
   buttonPrimary: {
     borderRadius: 30,

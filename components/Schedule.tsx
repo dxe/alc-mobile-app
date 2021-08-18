@@ -169,8 +169,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderColor: colors.lightgrey,
+    backgroundColor: colors.white,
   },
-  calendarStripWrapper: { paddingTop: 10 },
+  calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.white },
   sectionHeader: {
     textAlign: "center",
     backgroundColor: colors.white,
