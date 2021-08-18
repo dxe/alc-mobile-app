@@ -1,5 +1,5 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, View } from "react-native";
+import { createStackNavigator, useHeaderHeight } from "@react-navigation/stack";
+import { ScrollView, RefreshControl } from "react-native";
 import React, { useEffect } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { ListItem, Icon } from "react-native-elements";
@@ -18,7 +18,7 @@ export default function InfoStack() {
         component={InfoScreen}
         options={{
           ...screenHeaderOptions,
-          title: "Information",
+          title: "More",
         }}
       />
       <Stack.Screen
@@ -62,7 +62,7 @@ function InfoScreen({ navigation }: any) {
               raised
               reverse
               name={item.icon}
-              type="font-awesome"
+              type="font-awesome-5"
               color={item.icon === "exclamation-triangle" ? "red" : colors.primary}
             />
             <ListItem.Content>
@@ -78,6 +78,7 @@ function InfoScreen({ navigation }: any) {
 
 function InfoDetails({ route, navigation }: any) {
   const { infoItem } = route.params;
+  const headerHeight = useHeaderHeight();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -86,7 +87,12 @@ function InfoDetails({ route, navigation }: any) {
   }, [navigation, infoItem]);
 
   return (
-    <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
+    <ScrollView
+      style={globalStyles.scrollView}
+      contentContainerStyle={globalStyles.scrollViewContentContainer}
+      contentInset={{ top: headerHeight }}
+      contentOffset={{ x: 0, y: -headerHeight }}
+    >
       <HTML source={{ html: infoItem.content }} />
     </ScrollView>
   );

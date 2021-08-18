@@ -1,8 +1,14 @@
 import { StyleSheet } from "react-native";
-import { StackNavigationOptions } from "@react-navigation/stack";
+import {
+  StackNavigationOptions,
+  HeaderStyleInterpolators,
+} from "@react-navigation/stack";
+import React from "react";
 
 export const colors = {
-  primary: "#491887",
+  primary: "#29229C",
+  hotpink: "#F476FB",
+  lightblue: "#9BF7EF",
   white: "#FFF",
   grey: "#888",
   lightgrey: "#CCC",
@@ -11,9 +17,6 @@ export const colors = {
 };
 
 export const globalStyles = StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-  },
   scrollView: {
     backgroundColor: colors.white,
   },
@@ -53,9 +56,18 @@ export const globalStyles = StyleSheet.create({
 });
 
 export const screenHeaderOptions: StackNavigationOptions = {
-  headerStyle: globalStyles.header,
   headerTintColor: colors.white,
   headerTitleStyle: {
     fontWeight: "bold",
+    color: colors.white,
   },
+  headerTransparent: false,
+  headerStyle: {
+    backgroundColor: "black",
+    opacity: 0.9,
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+  },
+  headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
 };

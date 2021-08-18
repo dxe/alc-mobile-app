@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StatusBar, Text, View } from "react-native";
+import { StatusBar, View } from "react-native";
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
@@ -17,10 +16,7 @@ import { postRegisterPushNotifications } from "./api/user";
 import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
 import * as Notifications from "expo-notifications";
-import { FAB } from "react-native-elements";
-
-// TODO: useful for debugging, should be set to false in prod build of app
-const ALWAYS_SHOW_WELCOME_SCREEN = false;
+import { FAB, Icon } from "react-native-elements";
 
 // How to handle notifications when app is in foreground.
 Notifications.setNotificationHandler({
@@ -96,59 +92,62 @@ export default function App() {
 
   return (
     ready && (
-      <NavigationContainer ref={navigationRef}>
-        {registeredConferenceID != CONFERENCE_ID || ALWAYS_SHOW_WELCOME_SCREEN ? (
-          <UserContext.Provider value={{ onUserRegistered: userRegistered }}>
-            <WelcomeStack />
-          </UserContext.Provider>
-        ) : (
-          <ScheduleContext.Provider value={{ data: data, status: status, setData: setData, setStatus: setStatus }}>
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
+      <View style={{ flex: 1, backgroundColor: "white" }}>
+        <NavigationContainer ref={navigationRef}>
+          {registeredConferenceID != CONFERENCE_ID ? (
+            <UserContext.Provider value={{ onUserRegistered: userRegistered }}>
+              <WelcomeStack />
+            </UserContext.Provider>
+          ) : (
+            <ScheduleContext.Provider value={{ data: data, status: status, setData: setData, setStatus: setStatus }}>
+              <Tab.Navigator
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
 
-                  switch (route.name) {
-                    case "Home":
-                      iconName = "home-outline";
-                      break;
-                    case "Schedule":
-                      iconName = "calendar-outline";
-                      break;
-                    case "Announcements":
-                      iconName = "notifications-outline";
-                      break;
-                    default:
-                      iconName = "information-circle-outline";
-                  }
+                    switch (route.name) {
+                      case "Home":
+                        iconName = "home";
+                        break;
+                      case "Schedule":
+                        iconName = "calendar";
+                        break;
+                      case "Announcements":
+                        iconName = "bell";
+                        break;
+                      default:
+                        iconName = "ellipsis-h";
+                    }
 
-                  return <Ionicons name={iconName} size={size} color={color} />;
-                },
-              })}
-              tabBarOptions={{
-                activeTintColor: colors.primary,
-                inactiveTintColor: colors.grey,
-              }}
-              initialRouteName={initialRoute}
-            >
-              <Tab.Screen name="Home" component={HomeStack} />
-              <Tab.Screen name="Schedule" component={ScheduleStack} />
-              <Tab.Screen name="Announcements" component={AnnouncementsStack} />
-              <Tab.Screen name="Info" component={InfoStack} />
-            </Tab.Navigator>
-            {/*TODO: remove this button after testing*/}
-            <View style={{ position: "absolute", bottom: 100, flex: 1, alignSelf: "center" }}>
-              <FAB
-                color={colors.lightred}
-                titleStyle={{ fontSize: 16 }}
-                onPress={() => setRegisteredConferenceID(0)}
-                title={"Reset app"}
-              />
-            </View>
-          </ScheduleContext.Provider>
-        )}
-        <FlashMessage position="top" />
-      </NavigationContainer>
+                    return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
+                  },
+                })}
+                tabBarOptions={{
+                  activeTintColor: colors.white,
+                  inactiveTintColor: colors.lightgrey,
+                  style: {backgroundColor: "black", opacity: 0.9, position: "absolute", borderTopWidth: 0},
+                }}
+                initialRouteName={initialRoute}
+              >
+                <Tab.Screen name="Home" component={HomeStack} />
+                <Tab.Screen name="Schedule" component={ScheduleStack} />
+                <Tab.Screen name="Announcements" component={AnnouncementsStack} />
+                <Tab.Screen name="More" component={InfoStack} />
+              </Tab.Navigator>
+              {/*TODO: remove this button after testing*/}
+              <View style={{ position: "absolute", bottom: 100, flex: 1, alignSelf: "center" }}>
+                <FAB
+                  color={colors.lightred}
+                  titleStyle={{ fontSize: 16 }}
+                  onPress={() => setRegisteredConferenceID(0)}
+                  title={"Reset app"}
+                />
+              </View>
+            </ScheduleContext.Provider>
+          )}
+          <FlashMessage position="top" />
+        </NavigationContainer>
+      </View>
     )
   );
 }

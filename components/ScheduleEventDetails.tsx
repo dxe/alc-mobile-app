@@ -1,5 +1,5 @@
-import { Attendee, ConferenceEvent, postRSVP } from "../api/schedule";
-import { Dimensions, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ConferenceEvent, postRSVP } from "../api/schedule";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
@@ -8,12 +8,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-native-elements";
 import { ScheduleContext } from "../ScheduleContext";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useHeaderHeight } from "@react-navigation/stack";
 
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(route.params.scheduleItem);
   const [error, setError] = useState<string>("");
   const { setData } = useContext(ScheduleContext);
+  const headerHeight = useHeaderHeight();
 
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
@@ -80,7 +82,12 @@ export function ScheduleEventDetails({ route }: any) {
 
   return (
     // TODO: improve the Event Details screen.
-    <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
+    <ScrollView
+      style={globalStyles.scrollView}
+      contentContainerStyle={globalStyles.scrollViewContentContainer}
+      contentInset={{ top: headerHeight }}
+      contentOffset={{ x: 0, y: -headerHeight }}
+    >
       <Text style={{ fontWeight: "bold", fontSize: 26, paddingTop: 16 }}>{scheduleItem.name}</Text>
       <Text style={{ paddingTop: 5 }}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
       <Text>

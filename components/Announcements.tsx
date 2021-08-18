@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, StyleSheet } from "react-native";
+import { ScrollView, RefreshControl, StyleSheet, View } from "react-native";
 import React, { useEffect } from "react";
 import { colors, screenHeaderOptions, globalStyles } from "../global-styles";
 import { ListItem, Icon, Text } from "react-native-elements";
@@ -58,7 +58,7 @@ function AnnouncementsScreen({ navigation }: any) {
               raised
               reverse
               name={a.icon}
-              type="font-awesome"
+              type="font-awesome-5"
               color={a.icon === "exclamation-triangle" ? "red" : colors.primary}
             />
             <ListItem.Content>

@@ -10,15 +10,18 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { screenHeaderOptions, globalStyles } from "../global-styles";
+import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
 import { Card } from "react-native-elements";
 import { showErrorMessage } from "../util";
-import { FALLBACK_IMAGE, TripleTextCard } from "./common/TripleTextCard";
+import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent } from "../api/schedule";
 import { TimeAgo } from "./common/TimeAgo";
 import moment from "moment";
 import { ScheduleContext } from "../ScheduleContext";
+
+// TODO: Consider storing the fallback image locally in case someone has no Internet connection.
+const FALLBACK_IMAGE = "https://alc-img.s3.us-west-2.amazonaws.com/home-march.jpg.1626905834..jpg";
 
 const Stack = createStackNavigator();
 
@@ -103,18 +106,19 @@ function HomeScreen({ navigation }: any) {
   return (
     data && (
       <ScrollView
-        style={globalStyles.scrollView}
-        contentContainerStyle={globalStyles.scrollViewContentContainer}
+        style={[globalStyles.scrollView, { backgroundColor: colors.primary }]}
+        contentContainerStyle={[globalStyles.scrollViewContentContainer]}
         refreshControl={
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}
             onRefresh={() => setStatus("refreshing")}
+            tintColor={colors.white}
           />
         }
       >
         {currentEvents && currentEvents.length > 0 && (
           <View>
-            <Text style={styles.heading}>Happening now</Text>
+            <Text style={styles.heading}>Happening Now</Text>
 
             {currentEvents.map((e: ConferenceEvent) => {
               return (
@@ -123,12 +127,11 @@ function HomeScreen({ navigation }: any) {
                   onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
                 >
                   <TripleTextCard
-                    imageSource={e.image_url}
-                    topText={e.name}
-                    middleText={e.location.name + ", " + e.location.city}
-                    bottomElement={
+                    bottomText={e.location.name + ", " + e.location.city}
+                    topElement={
                       <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Started " />
                     }
+                    middleText={e.name}
                   />
                 </Pressable>
               );
@@ -138,7 +141,7 @@ function HomeScreen({ navigation }: any) {
 
         {nextEvents && nextEvents.length > 0 && (
           <View>
-            <Text style={styles.heading}>Coming up next</Text>
+            <Text style={styles.heading}>Coming Up Next</Text>
 
             {nextEvents.map((e: ConferenceEvent) => {
               return (
@@ -147,12 +150,11 @@ function HomeScreen({ navigation }: any) {
                   onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
                 >
                   <TripleTextCard
-                    imageSource={e.image_url}
-                    topText={e.name}
-                    middleText={e.location.name + ", " + e.location.city}
-                    bottomElement={
+                    topElement={
                       <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Starts in " />
                     }
+                    bottomText={e.location.name + ", " + e.location.city}
+                    middleText={e.name}
                   />
                 </TouchableOpacity>
               );
@@ -160,7 +162,7 @@ function HomeScreen({ navigation }: any) {
           </View>
         )}
 
-        <Text style={styles.heading}>Key events</Text>
+        <Text style={styles.heading}>Key Events</Text>
 
         <View style={styles.keyEventsView}>
           {data.events
@@ -196,10 +198,12 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 30,
     fontWeight: "bold",
-    paddingTop: 5,
-    paddingBottom: 15,
+    paddingTop: 10,
+    paddingBottom: 0,
+    color: colors.white,
   },
   keyEventsView: {
+    marginTop: 12,
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
