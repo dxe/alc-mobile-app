@@ -1,6 +1,6 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors, globalStyles } from "../global-styles";
+import { colors, figmaColors, figmaStyles, globalStyles } from "../global-styles";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
@@ -78,28 +78,55 @@ export function ScheduleEventDetails({ route }: any) {
   }, [error]);
 
   return (
-    <ScrollView style={globalStyles.scrollView} contentContainerStyle={globalStyles.scrollViewContentContainer}>
-      <Text style={{ fontWeight: "bold", fontSize: 26, paddingTop: 10 }}>{scheduleItem.name}</Text>
-      <Text style={{ paddingTop: 10 }}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
-      <Text style={{ paddingTop: 2 }}>
+    <ScrollView
+      style={[{ backgroundColor: figmaColors.white }]}
+      contentContainerStyle={[{ paddingVertical: 24, paddingHorizontal: 16 }]}
+    >
+      <Text style={[figmaStyles.h1, { color: figmaColors.black, marginBottom: 5 }]}>{scheduleItem.name}</Text>
+      <Text style={figmaStyles.textMediumMedium}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
+      <Text style={figmaStyles.textMediumMedium}>
         {utcToLocal(scheduleItem.start_time).format("h:mm A")} -&nbsp;
         {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
       </Text>
+
+      {/* Location section */}
       <View
         style={[
           {
-            marginVertical: 18,
-            backgroundColor: colors.white,
-            borderRadius: 10,
-            borderWidth: 2,
-            borderColor: colors.lightgrey,
+            marginTop: 15,
+            marginBottom: 24,
+            backgroundColor: figmaColors.white,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: figmaColors.midGrey,
           },
           globalStyles.shadow,
         ]}
       >
-        <View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, overflow: "hidden" }}>
+        {/* Map wrapper */}
+        <View
+          style={{
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            overflow: "hidden",
+            borderBottomWidth: 1,
+            borderColor: figmaColors.midGrey,
+          }}
+        >
           <MapView
             style={styles.map}
+            onPress={() =>
+              showLocation({
+                latitude: scheduleItem.location.lat,
+                longitude: scheduleItem.location.lng,
+                title: scheduleItem.location.name,
+                googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
+                googlePlaceId: scheduleItem.location.place_id,
+              })
+            }
+            mapType={"mutedStandard"}
+            zoomEnabled={false}
+            scrollEnabled={false}
             initialRegion={{
               latitude: scheduleItem.location.lat,
               longitude: scheduleItem.location.lng,
@@ -115,45 +142,65 @@ export function ScheduleEventDetails({ route }: any) {
             />
           </MapView>
         </View>
-        <View style={{ padding: 5, paddingLeft: 10, flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-          <View>
-            <Text style={{ fontWeight: "bold" }}>{scheduleItem.location.name}</Text>
-            <Text>{scheduleItem.location.address + ", " + scheduleItem.location.city}</Text>
-            <TouchableOpacity
-              style={{ paddingTop: 5 }}
-              onPress={() => {
-                showLocation({
-                  latitude: scheduleItem.location.lat,
-                  longitude: scheduleItem.location.lng,
-                  title: scheduleItem.location.name,
-                  googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
-                  googlePlaceId: scheduleItem.location.place_id,
-                });
-              }}
-            >
-              <Text style={{ color: colors.primary, fontWeight: "bold" }}>Get directions</Text>
-            </TouchableOpacity>
+        {/* Address & directions */}
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ flex: 1 }}>
+            <View style={{ borderBottomWidth: 1, borderColor: figmaColors.midGrey, padding: 8 }}>
+              <Text style={figmaStyles.textBodyMedium}>{scheduleItem.location.name}</Text>
+              <Text style={figmaStyles.textBody}>
+                {scheduleItem.location.address + ", " + scheduleItem.location.city}
+              </Text>
+            </View>
+            <View style={{ flex: 1, padding: 14 }}>
+              <TouchableOpacity
+                style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center" }}
+                onPress={() => {
+                  showLocation({
+                    latitude: scheduleItem.location.lat,
+                    longitude: scheduleItem.location.lng,
+                    title: scheduleItem.location.name,
+                    googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
+                    googlePlaceId: scheduleItem.location.place_id,
+                  });
+                }}
+              >
+                <Icon
+                  name={"directions"}
+                  type={"font-awesome-5"}
+                  style={{ marginRight: 7 }}
+                  color={figmaColors.purple}
+                />
+                <Text style={figmaStyles.textButton}>Get Directions</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
 
-      <View style={{ flex: 1, flexDirection: "row", marginBottom: 10 }}>
+      <View style={{ flex: 1, flexDirection: "row", marginBottom: 16 }}>
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <Icon type="font-awesome-5" name="calendar-check" color={colors.primary} size={25} />
-          <Text style={{ alignSelf: "center", paddingLeft: 10 }}>
+          <Text style={[figmaStyles.textMediumRegular, { alignSelf: "center", paddingLeft: 10 }]}>
             {scheduleItem.total_attendees} confirmed attendees
           </Text>
         </View>
         <View style={{ alignSelf: "center" }}>
           <Button
-            titleStyle={{ color: colors.white, fontWeight: "bold", fontSize: 16 }}
+            titleStyle={
+              scheduleItem.attending ? [figmaStyles.textButton, { color: figmaColors.white }] : figmaStyles.textButton
+            }
             buttonStyle={[
-              globalStyles.buttonPrimary,
-              { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.primary, flex: 1 },
+              scheduleItem.attending ? figmaStyles.buttonPurple : figmaStyles.buttonPurpleOutline,
+              { flex: 1 },
             ]}
             onPress={eventRSVP}
             icon={
-              <Icon name={scheduleItem.attending ? "check" : "plus"} type="font-awesome-5" color="white" size={16} />
+              <Icon
+                name={scheduleItem.attending ? "check" : "plus"}
+                type="font-awesome-5"
+                color={scheduleItem.attending ? figmaColors.white : figmaColors.purple}
+                size={16}
+              />
             }
             title={scheduleItem.attending ? "  Attending" : "  RSVP"}
             disabled={submitting}
@@ -161,18 +208,21 @@ export function ScheduleEventDetails({ route }: any) {
         </View>
       </View>
 
-      <Text style={{ fontWeight: "bold", fontSize: 18, paddingBottom: 5 }}>Description</Text>
-      <Text>{scheduleItem.description}</Text>
+      <View style={{ marginBottom: 16 }}>
+        <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 5 }]}>Description</Text>
+        <Text style={figmaStyles.textBody}>{scheduleItem.description}</Text>
+      </View>
+
       {scheduleItem.attendees &&
         scheduleItem.attendees.length > 0 &&
         scheduleItem.attendees.filter((attendee) => attendee.name !== "").length > 0 && (
           <View>
-            <Text style={{ fontWeight: "bold", fontSize: 18, paddingBottom: 5 }}>Going</Text>
+            <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 5 }]}>Going</Text>
             {scheduleItem.attendees
               .filter((attendee) => attendee.name !== "")
               .map((attendee, index) => (
                 <View key={index}>
-                  <Text>{attendee.name}</Text>
+                  <Text style={figmaStyles.textMediumMedium}>{attendee.name}</Text>
                 </View>
               ))}
             {scheduleItem.attendees.filter((attendee) => attendee.name === "").length > 0 && (
@@ -187,6 +237,6 @@ export function ScheduleEventDetails({ route }: any) {
 const styles = StyleSheet.create({
   map: {
     width: "100%",
-    height: 150,
+    height: 175,
   },
 });

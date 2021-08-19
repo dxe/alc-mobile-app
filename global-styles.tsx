@@ -11,13 +11,14 @@ export const figmaColors = {
   orange: "#FF5E37",
   neonPink: "#F891FC",
   neonBlue: "#A9F7F3",
+  darkestBlue: "#181441",
 };
 
 export const figmaStyles = StyleSheet.create({
   h1: {
     fontFamily: "Inter-600",
-    fontSize: 20,
-    lineHeight: 24,
+    fontSize: 24,
+    lineHeight: 29,
     color: figmaColors.white,
   },
   h2: {
@@ -55,6 +56,48 @@ export const figmaStyles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 19,
     color: figmaColors.darkGrey,
+  },
+  textMediumMedium: {
+    fontFamily: "Inter-500",
+    fontSize: 14,
+    lineHeight: 19,
+    color: figmaColors.darkGrey,
+  },
+  textBodyMedium: {
+    fontFamily: "Inter-500",
+    fontSize: 16,
+    lineHeight: 24,
+    color: figmaColors.darkestBlue,
+  },
+  textBody: {
+    fontFamily: "Inter-400",
+    fontSize: 16,
+    lineHeight: 22,
+    color: figmaColors.darkestBlue,
+  },
+  textButton: {
+    fontFamily: "Inter-700",
+    fontSize: 14,
+    lineHeight: 17,
+    color: figmaColors.purple,
+  },
+  buttonPurpleOutline: {
+    borderWidth: 2,
+    borderColor: figmaColors.purple,
+    backgroundColor: figmaColors.white,
+    borderRadius: 23,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    minWidth: 140,
+  },
+  buttonPurple: {
+    backgroundColor: figmaColors.purple,
+    borderRadius: 23,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    minWidth: 140,
+    borderWidth: 2,
+    borderColor: figmaColors.white,
   },
 });
 
