@@ -67,7 +67,8 @@ export const useAPI = (options: APIOptions) => {
   }, [options.path, status]);
 
   // Try to automatically refresh every hour to prevent stale data.
-  // This is pointless b/c the interval will pause when app is backgrounded.
+  // This is pointless unless the app is kept in the foreground
+  // b/c the interval will pause when app is backgrounded.
   useEffect(() => {
     const interval = setInterval(() => {
       setStatus("refreshing");

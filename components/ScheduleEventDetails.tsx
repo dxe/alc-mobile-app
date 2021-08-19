@@ -30,17 +30,12 @@ export function ScheduleEventDetails({ route }: any) {
             ...prev,
             events: prev.events.map((event: any) => {
               if (event.id === scheduleItem.id) {
-                const attendeeIndex = scheduleItem.attendees.findIndex((x) => x.name === user.name);
-                const attendees = !scheduleItem.attending
-                  ? [{ name: user.name }].concat(scheduleItem.attendees)
-                  : scheduleItem.attendees.filter((x, i) => i !== attendeeIndex);
                 const totalAttendees = !scheduleItem.attending
                   ? scheduleItem.total_attendees + 1
                   : scheduleItem.total_attendees - 1;
                 return {
                   ...event,
                   attending: !scheduleItem.attending,
-                  attendees: attendees,
                   total_attendees: totalAttendees,
                 };
               }
@@ -50,15 +45,10 @@ export function ScheduleEventDetails({ route }: any) {
         });
         // update state in this component
         setScheduleItem((prevState: ConferenceEvent) => {
-          const attendeeIndex = prevState.attendees.findIndex((x) => x.name === user.name);
-          const attendees = !prevState.attending
-            ? [{ name: user.name }].concat(prevState.attendees)
-            : prevState.attendees.filter((x, i) => i !== attendeeIndex);
           const totalAttendees = !prevState.attending ? prevState.total_attendees + 1 : prevState.total_attendees - 1;
           return {
             ...prevState,
             attending: !prevState.attending,
-            attendees: attendees,
             total_attendees: totalAttendees,
           };
         });
@@ -147,7 +137,7 @@ export function ScheduleEventDetails({ route }: any) {
           <View style={{ flex: 1 }}>
             <View style={{ borderBottomWidth: 1, borderColor: figmaColors.midGrey, padding: 8 }}>
               <Text style={figmaStyles.textBodyMedium}>{scheduleItem.location.name}</Text>
-              <Text style={figmaStyles.textBody}>
+              <Text style={figmaStyles.textBody} selectable={true}>
                 {scheduleItem.location.address + ", " + scheduleItem.location.city}
               </Text>
             </View>
@@ -212,24 +202,6 @@ export function ScheduleEventDetails({ route }: any) {
         <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 5 }]}>Description</Text>
         <Text style={figmaStyles.textBody}>{scheduleItem.description}</Text>
       </View>
-
-      {scheduleItem.attendees &&
-        scheduleItem.attendees.length > 0 &&
-        scheduleItem.attendees.filter((attendee) => attendee.name !== "").length > 0 && (
-          <View>
-            <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 5 }]}>Going</Text>
-            {scheduleItem.attendees
-              .filter((attendee) => attendee.name !== "")
-              .map((attendee, index) => (
-                <View key={index}>
-                  <Text style={figmaStyles.textMediumMedium}>{attendee.name}</Text>
-                </View>
-              ))}
-            {scheduleItem.attendees.filter((attendee) => attendee.name === "").length > 0 && (
-              <Text>+ {scheduleItem.attendees.filter((attendee) => attendee.name === "").length} others</Text>
-            )}
-          </View>
-        )}
     </ScrollView>
   );
 }

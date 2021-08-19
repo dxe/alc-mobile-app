@@ -48,17 +48,12 @@ export function ScheduleEvent(props: Props) {
             ...prev,
             events: prev.events.map((event: any) => {
               if (event.id === scheduleItem.id) {
-                const attendeeIndex = scheduleItem.attendees.findIndex((x) => x.name === user.name);
-                const attendees = !scheduleItem.attending
-                  ? [{ name: user.name }].concat(scheduleItem.attendees)
-                  : scheduleItem.attendees.filter((x, i) => i !== attendeeIndex);
                 const totalAttendees = !scheduleItem.attending
                   ? scheduleItem.total_attendees + 1
                   : scheduleItem.total_attendees - 1;
                 return {
                   ...event,
                   attending: !scheduleItem.attending,
-                  attendees: attendees,
                   total_attendees: totalAttendees,
                 };
               }
@@ -68,15 +63,10 @@ export function ScheduleEvent(props: Props) {
         });
         // update state in this component
         setScheduleItem((prevState: ConferenceEvent) => {
-          const attendeeIndex = prevState.attendees.findIndex((x) => x.name === user.name);
-          const attendees = !prevState.attending
-            ? [{ name: user.name }].concat(prevState.attendees)
-            : prevState.attendees.filter((x, i) => i !== attendeeIndex);
           const totalAttendees = !prevState.attending ? prevState.total_attendees + 1 : prevState.total_attendees - 1;
           return {
             ...prevState,
             attending: !prevState.attending,
-            attendees: attendees,
             total_attendees: totalAttendees,
           };
         });

@@ -13,7 +13,6 @@ export interface Conference {
 }
 
 export interface ConferenceEvent {
-  attendees: Attendee[];
   attending: boolean;
   description: string;
   id: number;
@@ -24,9 +23,6 @@ export interface ConferenceEvent {
   name: string;
   start_time: string; // TODO: use Date instead?
   total_attendees: number;
-}
-export interface Attendee {
-  name: string;
 }
 
 export interface Location {
