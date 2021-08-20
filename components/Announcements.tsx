@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, View, FlatList } from "react-native";
 import React, { useEffect } from "react";
-import { screenHeaderOptions, globalStyles, figmaColors, figmaStyles } from "../global-styles";
+import { screenHeaderOptions, colors, globalStyles } from "../global-styles";
 import { Icon, Text, Card } from "react-native-elements";
 import { Announcement, useAnnouncements } from "../api/announcement";
 import { showErrorMessage } from "../util";
@@ -42,7 +42,7 @@ function AnnouncementsScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: figmaColors.white }]}
+      style={[{ backgroundColor: colors.white }]}
       contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16, flexGrow: 1, paddingBottom: 30 }]}
       refreshControl={
         <RefreshControl
@@ -59,7 +59,7 @@ function AnnouncementsScreen({ navigation }: any) {
               flex: 1,
               borderRadius: 8,
               borderWidth: 1,
-              borderColor: figmaColors.midGrey,
+              borderColor: colors.midGrey,
               marginVertical: 16,
               marginHorizontal: 0,
               padding: 12,
@@ -74,14 +74,14 @@ function AnnouncementsScreen({ navigation }: any) {
               reverse
               name={item.icon}
               type="font-awesome-5"
-              color={item.icon === "exclamation-triangle" ? figmaColors.orange : figmaColors.black}
+              color={item.icon === "exclamation-triangle" ? colors.orange : colors.black}
               containerStyle={{ marginRight: 12 }}
               solid={true}
             />
             <View style={{ flex: 1 }}>
-              <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
-              <Text style={[figmaStyles.textMediumRegular, { marginBottom: 4 }]}>{item.message}</Text>
-              <Text style={figmaStyles.textSmallRegular}>
+              <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
+              <Text style={[globalStyles.textMediumRegular, { marginBottom: 4 }]}>{item.message}</Text>
+              <Text style={globalStyles.textSmallRegular}>
                 <TimeAgo time={item.send_time} />
               </Text>
             </View>

@@ -6,7 +6,7 @@ import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import { figmaColors } from "./global-styles";
+import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import { getStoredJSON, registerForPushNotificationsAsync, storeJSON } from "./util";
 import { WelcomeScreen } from "./components/Welcome";
@@ -135,9 +135,9 @@ export default function App() {
                   },
                 })}
                 tabBarOptions={{
-                  activeTintColor: figmaColors.neonBlue,
-                  inactiveTintColor: figmaColors.midGrey,
-                  style: { backgroundColor: "black", opacity: 0.9, borderTopWidth: 0 },
+                  activeTintColor: colors.neonBlue,
+                  inactiveTintColor: colors.midGrey,
+                  style: { backgroundColor: colors.black, opacity: 0.9, borderTopWidth: 0 },
                 }}
                 initialRouteName={initialRoute}
               >

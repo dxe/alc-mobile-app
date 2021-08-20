@@ -1,6 +1,6 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors, figmaColors, figmaStyles, globalStyles } from "../global-styles";
+import { colors, globalStyles } from "../global-styles";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
@@ -69,12 +69,12 @@ export function ScheduleEventDetails({ route }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: figmaColors.white }]}
+      style={[{ backgroundColor: colors.white }]}
       contentContainerStyle={[{ paddingVertical: 24, paddingHorizontal: 16 }]}
     >
-      <Text style={[figmaStyles.h1, { color: figmaColors.black, marginBottom: 5 }]}>{scheduleItem.name}</Text>
-      <Text style={figmaStyles.textMediumMedium}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
-      <Text style={figmaStyles.textMediumMedium}>
+      <Text style={[globalStyles.h1, { color: colors.black, marginBottom: 5 }]}>{scheduleItem.name}</Text>
+      <Text style={globalStyles.textMediumMedium}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
+      <Text style={globalStyles.textMediumMedium}>
         {utcToLocal(scheduleItem.start_time).format("h:mm A")} -&nbsp;
         {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
       </Text>
@@ -85,10 +85,10 @@ export function ScheduleEventDetails({ route }: any) {
           {
             marginTop: 15,
             marginBottom: 24,
-            backgroundColor: figmaColors.white,
+            backgroundColor: colors.white,
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: figmaColors.midGrey,
+            borderColor: colors.midGrey,
           },
           globalStyles.shadow,
         ]}
@@ -100,7 +100,7 @@ export function ScheduleEventDetails({ route }: any) {
             borderTopRightRadius: 8,
             overflow: "hidden",
             borderBottomWidth: 1,
-            borderColor: figmaColors.midGrey,
+            borderColor: colors.midGrey,
           }}
         >
           <MapView
@@ -135,9 +135,9 @@ export function ScheduleEventDetails({ route }: any) {
         {/* Address & directions */}
         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flex: 1 }}>
-            <View style={{ borderBottomWidth: 1, borderColor: figmaColors.midGrey, padding: 8 }}>
-              <Text style={figmaStyles.textBodyMedium}>{scheduleItem.location.name}</Text>
-              <Text style={figmaStyles.textBody} selectable={true}>
+            <View style={{ borderBottomWidth: 1, borderColor: colors.midGrey, padding: 8 }}>
+              <Text style={globalStyles.textBodyMedium}>{scheduleItem.location.name}</Text>
+              <Text style={globalStyles.textBody} selectable={true}>
                 {scheduleItem.location.address + ", " + scheduleItem.location.city}
               </Text>
             </View>
@@ -158,9 +158,9 @@ export function ScheduleEventDetails({ route }: any) {
                   name={"directions"}
                   type={"font-awesome-5"}
                   style={{ marginRight: 7 }}
-                  color={figmaColors.purple}
+                  color={colors.purple}
                 />
-                <Text style={figmaStyles.textButton}>Get Directions</Text>
+                <Text style={globalStyles.textButton}>Get Directions</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -169,18 +169,18 @@ export function ScheduleEventDetails({ route }: any) {
 
       <View style={{ flex: 1, flexDirection: "row", marginBottom: 16 }}>
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-          <Icon type="font-awesome-5" name="calendar-check" color={colors.primary} size={25} />
-          <Text style={[figmaStyles.textMediumRegular, { alignSelf: "center", paddingLeft: 10 }]}>
+          <Icon type="font-awesome-5" name="calendar-check" color={colors.purple} size={25} />
+          <Text style={[globalStyles.textMediumRegular, { alignSelf: "center", paddingLeft: 10 }]}>
             {scheduleItem.total_attendees} confirmed attendees
           </Text>
         </View>
         <View style={{ alignSelf: "center", justifyContent: "center" }}>
           <Button
             titleStyle={
-              scheduleItem.attending ? [figmaStyles.textButton, { color: figmaColors.white }] : figmaStyles.textButton
+              scheduleItem.attending ? [globalStyles.textButton, { color: colors.white }] : globalStyles.textButton
             }
             buttonStyle={[
-              scheduleItem.attending ? figmaStyles.buttonPurple : figmaStyles.buttonPurpleOutline,
+              scheduleItem.attending ? globalStyles.buttonPurple : globalStyles.buttonPurpleOutline,
               { flex: 1 },
             ]}
             onPress={eventRSVP}
@@ -191,14 +191,14 @@ export function ScheduleEventDetails({ route }: any) {
                 <Icon
                   name={scheduleItem.attending ? "check" : "plus"}
                   type="font-awesome-5"
-                  color={scheduleItem.attending ? figmaColors.white : figmaColors.purple}
+                  color={scheduleItem.attending ? colors.white : colors.purple}
                   size={16}
                 />
               )
             }
             title={
               submitting ? (
-                <ActivityIndicator size="small" color={figmaColors.purple} />
+                <ActivityIndicator size="small" color={colors.purple} />
               ) : scheduleItem.attending ? (
                 "  Attending"
               ) : (
@@ -211,8 +211,8 @@ export function ScheduleEventDetails({ route }: any) {
       </View>
 
       <View style={{ marginBottom: 16 }}>
-        <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 5 }]}>Description</Text>
-        <Text style={figmaStyles.textBody}>{scheduleItem.description}</Text>
+        <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 5 }]}>Description</Text>
+        <Text style={globalStyles.textBody}>{scheduleItem.description}</Text>
       </View>
     </ScrollView>
   );

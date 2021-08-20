@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
-import { figmaColors, figmaStyles, globalStyles, screenHeaderOptions } from "../global-styles";
+import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { Icon, Card, Text } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { Info, useInfo } from "../api/info";
@@ -41,7 +41,7 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: figmaColors.white }]}
+      style={[{ backgroundColor: colors.white }]}
       contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16, flexGrow: 1, paddingBottom: 30 }]}
       refreshControl={
         <RefreshControl
@@ -59,7 +59,7 @@ function InfoScreen({ navigation }: any) {
                 flex: 1,
                 borderRadius: 8,
                 borderWidth: 1,
-                borderColor: figmaColors.midGrey,
+                borderColor: colors.midGrey,
                 marginVertical: 16,
                 marginHorizontal: 0,
                 padding: 12,
@@ -74,13 +74,13 @@ function InfoScreen({ navigation }: any) {
                 reverse
                 name={item.icon}
                 type="font-awesome-5"
-                color={item.icon === "exclamation-triangle" ? figmaColors.orange : figmaColors.purple}
+                color={item.icon === "exclamation-triangle" ? colors.orange : colors.purple}
                 containerStyle={{ marginRight: 12 }}
                 solid={true}
               />
               <View style={{ flex: 1 }}>
-                <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
-                <Text style={figmaStyles.textSmallRegular}>{item.subtitle}</Text>
+                <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
+                <Text style={globalStyles.textSmallRegular}>{item.subtitle}</Text>
               </View>
             </View>
           </Card>
@@ -101,7 +101,7 @@ function InfoDetails({ route, navigation }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: figmaColors.white }]}
+      style={[{ backgroundColor: colors.white }]}
       contentContainerStyle={[{ paddingVertical: 18, paddingHorizontal: 16 }]}
     >
       <HTML

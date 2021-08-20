@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, ScrollView, RefreshControl, StyleSheet, Pressable, TouchableOpacity } from "react-native";
-import { screenHeaderOptions, figmaStyles, figmaColors } from "../global-styles";
+import { Text, View, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
+import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
 import { showErrorMessage } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
@@ -107,19 +107,19 @@ function HomeScreen({ navigation }: any) {
   return (
     data && (
       <ScrollView
-        style={[{ backgroundColor: figmaColors.purple }]}
+        style={[{ backgroundColor: colors.purple }]}
         contentContainerStyle={[{ paddingVertical: 16, paddingHorizontal: 16, paddingBottom: 30 }]}
         refreshControl={
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}
             onRefresh={() => setStatus("refreshing")}
-            tintColor={figmaColors.white}
+            tintColor={colors.white}
           />
         }
       >
         {currentEvents && currentEvents.length > 0 && (
           <View style={{ marginBottom: 28 }}>
-            <Text style={[figmaStyles.h1]}>Happening Now</Text>
+            <Text style={[globalStyles.h1]}>Happening Now</Text>
 
             {currentEvents.map((e: ConferenceEvent) => {
               return (
@@ -142,7 +142,7 @@ function HomeScreen({ navigation }: any) {
 
         {nextEvents && nextEvents.length > 0 && (
           <View style={{ marginBottom: 28 }}>
-            <Text style={figmaStyles.h1}>Coming Up Next</Text>
+            <Text style={globalStyles.h1}>Coming Up Next</Text>
 
             {nextEvents.map((e: ConferenceEvent) => {
               return (
@@ -165,7 +165,7 @@ function HomeScreen({ navigation }: any) {
 
         {keyEvents && keyEvents.length > 0 && (
           <View style={{ marginBottom: 28 }}>
-            <Text style={figmaStyles.h1}>Today's Main Events</Text>
+            <Text style={globalStyles.h1}>Today's Main Events</Text>
 
             {keyEvents.map((e: ConferenceEvent) => {
               return (

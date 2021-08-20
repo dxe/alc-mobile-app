@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { figmaColors, figmaStyles, globalStyles, screenHeaderOptions } from "../global-styles";
+import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { utcToLocal, showErrorMessage } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
@@ -89,17 +89,17 @@ function ScheduleScreen({ navigation }: any) {
         {data && (
           <CalendarStrip
             style={styles.calendarStrip}
-            calendarHeaderStyle={figmaStyles.textLabel}
-            dateNumberStyle={{ color: figmaColors.purple, fontFamily: "Inter-400", fontSize: 12, lineHeight: 14 }}
-            dateNameStyle={{ color: figmaColors.purple, fontFamily: "Inter-500", fontSize: 12, lineHeight: 14 }}
+            calendarHeaderStyle={globalStyles.textLabel}
+            dateNumberStyle={{ color: colors.purple, fontFamily: "Inter-400", fontSize: 12, lineHeight: 14 }}
+            dateNameStyle={{ color: colors.purple, fontFamily: "Inter-500", fontSize: 12, lineHeight: 14 }}
             highlightDateNumberStyle={{
-              color: figmaColors.white,
+              color: colors.white,
               fontFamily: "Inter-400",
               fontSize: 12,
               lineHeight: 14,
             }}
-            highlightDateNameStyle={{ color: figmaColors.white, fontFamily: "Inter-500", fontSize: 12, lineHeight: 14 }}
-            daySelectionAnimation={{ type: "background", highlightColor: figmaColors.purple, duration: 100 }}
+            highlightDateNameStyle={{ color: colors.white, fontFamily: "Inter-500", fontSize: 12, lineHeight: 14 }}
+            daySelectionAnimation={{ type: "background", highlightColor: colors.purple, duration: 100 }}
             scrollable={false}
             startingDate={utcToLocal(data.conference.start_date)}
             // useIsoWeekday starts the strip on the startingDate instead of on Sunday/Monday.
@@ -125,7 +125,7 @@ function ScheduleScreen({ navigation }: any) {
               <ListItem
                 containerStyle={{
                   padding: item.attending ? 11 : 12, // to offset border width change
-                  backgroundColor: figmaColors.white,
+                  backgroundColor: colors.white,
                   borderRadius: 8,
                 }}
                 key={item.id}
@@ -134,8 +134,8 @@ function ScheduleScreen({ navigation }: any) {
                     flex: 1,
                     borderRadius: 8,
                     borderWidth: item.attending ? 2 : 1,
-                    borderColor: item.attending ? figmaColors.purple : figmaColors.lightGrey,
-                    backgroundColor: figmaColors.white,
+                    borderColor: item.attending ? colors.purple : colors.lightGrey,
+                    backgroundColor: colors.white,
                     marginBottom: index === itemsInSection ? 0 : 18,
                   },
                   globalStyles.shadow,
@@ -148,7 +148,7 @@ function ScheduleScreen({ navigation }: any) {
             );
           }}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={[styles.sectionHeader, figmaStyles.textMediumBold]}>{utcToLocal(title).format("h:mm A")}</Text>
+            <Text style={[styles.sectionHeader, globalStyles.textMediumBold]}>{utcToLocal(title).format("h:mm A")}</Text>
           )}
           refreshControl={
             <RefreshControl
@@ -156,7 +156,7 @@ function ScheduleScreen({ navigation }: any) {
               onRefresh={() => setStatus("refreshing")}
             />
           }
-          style={{ backgroundColor: figmaColors.white }}
+          style={{ backgroundColor: colors.white }}
           contentContainerStyle={{ paddingBottom: 30, paddingHorizontal: 15 }}
         />
       )}
@@ -170,10 +170,10 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 5,
     borderBottomWidth: 1,
-    borderColor: figmaColors.midGrey,
-    backgroundColor: figmaColors.white,
+    borderColor: colors.midGrey,
+    backgroundColor: colors.white,
   },
-  calendarStripWrapper: { paddingTop: 10, backgroundColor: figmaColors.white },
+  calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.white },
   sectionHeader: {
     textAlign: "center",
     //backgroundColor: "#FFFFFFF5", // TODO: add this after working out shadows & border radius

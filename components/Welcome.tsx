@@ -4,15 +4,12 @@ import {
   TextInput,
   StyleSheet,
   Image,
-  KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator,
-  StatusBar,
-  ScrollView,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { figmaColors, figmaStyles } from "../global-styles";
+import { colors, globalStyles } from "../global-styles";
 import { getDeviceID, showErrorMessage } from "../util";
 import { Button } from "react-native-elements";
 import { UserContext } from "../UserContext";
@@ -130,12 +127,12 @@ export function WelcomeScreen() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ backgroundColor: "rgba(0,0,0,0.6)", flex: 1 }}>
           {submitting ? (
-            <ActivityIndicator size="large" color={figmaColors.white} style={{ flex: 1 }} />
+            <ActivityIndicator size="large" color={colors.white} style={{ flex: 1 }} />
           ) : (
             <KeyboardAwareScrollView
               contentContainerStyle={{ flex: 1, justifyContent: "space-evenly", alignItems: "center" }}
             >
-              <Text style={[figmaStyles.textHero, { marginTop: 20 }]}>Welcome</Text>
+              <Text style={[globalStyles.textHero, { marginTop: 20 }]}>Welcome</Text>
               <Image
                 source={require("../assets/logo-circle-shadow.png")}
                 style={{
@@ -145,7 +142,7 @@ export function WelcomeScreen() {
                 }}
               />
               <View style={{ width: "80%", maxWidth: 350, marginBottom: 40 }}>
-                <Text style={[figmaStyles.textBodyMedium, { color: figmaColors.white, marginBottom: 4 }]}>Name</Text>
+                <Text style={[globalStyles.textBodyMedium, { color: colors.white, marginBottom: 4 }]}>Name</Text>
                 <TextInput
                   style={styles.input}
                   onChangeText={(value) => setFormData({ ...formData, name: value })}
@@ -161,7 +158,7 @@ export function WelcomeScreen() {
                     emailInput.current?.focus();
                   }}
                 />
-                <Text style={[figmaStyles.textBodyMedium, { color: figmaColors.white, marginBottom: 4 }]}>Email</Text>
+                <Text style={[globalStyles.textBodyMedium, { color: colors.white, marginBottom: 4 }]}>Email</Text>
                 <TextInput
                   style={[styles.input, { marginBottom: 32 }]}
                   onChangeText={(value) => setFormData({ ...formData, email: value })}
@@ -178,16 +175,16 @@ export function WelcomeScreen() {
                   }}
                 />
                 <Button
-                  titleStyle={[figmaStyles.textButton, { color: figmaColors.white }]}
-                  buttonStyle={[figmaStyles.buttonPurple, { borderColor: figmaColors.purple }]}
+                  titleStyle={[globalStyles.textButton, { color: colors.white }]}
+                  buttonStyle={[globalStyles.buttonPurple, { borderColor: colors.purple }]}
                   onPress={() => submitRegistration(onUserRegistered)}
                   title="Sign Up"
                   disabled={submitting}
                 />
               </View>
               <Button
-                titleStyle={[figmaStyles.textButton, { color: figmaColors.neonBlue }]}
-                buttonStyle={[figmaStyles.buttonPurple, { borderColor: "transparent", backgroundColor: "transparent" }]}
+                titleStyle={[globalStyles.textButton, { color: colors.neonBlue }]}
+                buttonStyle={[globalStyles.buttonPurple, { borderColor: "transparent", backgroundColor: "transparent" }]}
                 onPress={() => registerAnon(onUserRegistered)}
                 title="Skip to Stay Anonymous"
                 disabled={submitting}
@@ -221,8 +218,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 15,
     borderRadius: 10,
-    backgroundColor: figmaColors.white,
-    borderColor: figmaColors.midGrey,
+    backgroundColor: colors.white,
+    borderColor: colors.midGrey,
     marginBottom: 24,
   },
   imageBackground: {

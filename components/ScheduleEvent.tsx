@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import { Icon } from "react-native-elements";
-import { figmaColors, figmaStyles } from "../global-styles";
+import { colors, globalStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
 import { ScheduleContext } from "../ScheduleContext";
@@ -96,22 +96,22 @@ export function ScheduleEvent(props: Props) {
             }}
           >
             <View style={{ flex: 1, flexDirection: "row", marginBottom: 12 }}>
-              <Text style={figmaStyles.textSmallMedium}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
-              <Text style={[figmaStyles.textSmallMedium, { color: figmaColors.mediumGrey }]}>
+              <Text style={globalStyles.textSmallMedium}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
+              <Text style={[globalStyles.textSmallMedium, { color: colors.mediumGrey }]}>
                 {"  –  " + utcToLocal(props.event.start_time).add(props.event.length, "minute").format("h:mm A")}
               </Text>
             </View>
-            <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
+            <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
               {props.event.name}
             </Text>
-            <Text style={figmaStyles.textMediumRegular}>{props.event.location.name}</Text>
+            <Text style={globalStyles.textMediumRegular}>{props.event.location.name}</Text>
           </View>
           <TouchableOpacity onPress={eventRSVP} disabled={submitting}>
             {submitting ? (
               <ActivityIndicator
                 size="small"
-                color={figmaColors.purple}
-                style={{ padding: 10, borderWidth: 2, borderRadius: 100, borderColor: figmaColors.purple }}
+                color={colors.purple}
+                style={{ padding: 10, borderWidth: 2, borderRadius: 100, borderColor: colors.purple }}
               />
             ) : (
               <Icon
@@ -119,13 +119,13 @@ export function ScheduleEvent(props: Props) {
                 raised
                 reverse={scheduleItem.attending}
                 name={scheduleItem.attending ? "check" : "plus"}
-                color={scheduleItem.attending ? figmaColors.purple : figmaColors.purple}
+                color={scheduleItem.attending ? colors.purple : colors.purple}
                 containerStyle={{
                   margin: 0,
                   borderWidth: 2,
                   justifyContent: "center",
                   alignItems: "center",
-                  borderColor: figmaColors.purple,
+                  borderColor: colors.purple,
                 }}
                 size={20}
                 disabled={submitting}
