@@ -87,7 +87,7 @@ export default function App() {
     if (event.type === UpdateEventType.UPDATE_AVAILABLE) {
       Alert.alert(
         "Update Available",
-        "A new app update has been downloaded. Please restart the app to use the latest version.",
+        "A new app update has been downloaded. Please press 'OK' to use the latest version.",
         [
           {
             text: "OK",
