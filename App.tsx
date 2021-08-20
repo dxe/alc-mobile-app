@@ -6,7 +6,7 @@ import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import { colors, figmaColors } from "./global-styles";
+import { figmaColors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import { getStoredJSON, registerForPushNotificationsAsync, storeJSON } from "./util";
 import { WelcomeScreen } from "./components/Welcome";
@@ -16,7 +16,7 @@ import { postRegisterPushNotifications } from "./api/user";
 import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
 import * as Notifications from "expo-notifications";
-import { FAB, Icon } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
 
@@ -146,15 +146,6 @@ export default function App() {
                 <Tab.Screen name="Announcements" component={AnnouncementsStack} />
                 <Tab.Screen name="More" component={InfoStack} />
               </Tab.Navigator>
-              {/*TODO: remove this button after testing*/}
-              <View style={{ position: "absolute", bottom: 100, flex: 1, alignSelf: "center" }}>
-                <FAB
-                  color={colors.lightred}
-                  titleStyle={{ fontSize: 16 }}
-                  onPress={() => setRegisteredConferenceID(0)}
-                  title={"Reset app"}
-                />
-              </View>
             </ScheduleContext.Provider>
           )}
           <FlashMessage position="top" />
