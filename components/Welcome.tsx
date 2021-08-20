@@ -184,7 +184,10 @@ export function WelcomeScreen() {
               </View>
               <Button
                 titleStyle={[globalStyles.textButton, { color: colors.neonBlue }]}
-                buttonStyle={[globalStyles.buttonPurple, { borderColor: "transparent", backgroundColor: "transparent" }]}
+                buttonStyle={[
+                  globalStyles.buttonPurple,
+                  { borderColor: "transparent", backgroundColor: "transparent" },
+                ]}
                 onPress={() => registerAnon(onUserRegistered)}
                 title="Skip to Stay Anonymous"
                 disabled={submitting}

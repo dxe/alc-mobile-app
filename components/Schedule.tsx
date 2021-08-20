@@ -57,6 +57,7 @@ const sectionizeSchedule = (data: any[]) => {
 function ScheduleScreen({ navigation }: any) {
   const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>([]);
   const calendarStrip = useRef<any>();
+  const eventsList = useRef<any>();
   const { data, status, setStatus } = useContext(ScheduleContext);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ function ScheduleScreen({ navigation }: any) {
         })
         .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
     );
+    eventsList.current?.getScrollResponder().scrollTo({ x: 0, y: 0, animated: true });
   };
 
   // Whenever the schedule data is updated, filter it using the selected date.
@@ -116,6 +118,7 @@ function ScheduleScreen({ navigation }: any) {
 
       {filteredSchedule && (
         <SectionList
+          ref={eventsList}
           stickySectionHeadersEnabled={false} // TODO: consider using this if it will work w/ shadows
           sections={sectionizeSchedule(filteredSchedule)}
           keyExtractor={(item: ConferenceEvent, index: number) => (item.id + index).toString()}
@@ -148,7 +151,9 @@ function ScheduleScreen({ navigation }: any) {
             );
           }}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={[styles.sectionHeader, globalStyles.textMediumBold]}>{utcToLocal(title).format("h:mm A")}</Text>
+            <Text style={[styles.sectionHeader, globalStyles.textMediumBold]}>
+              {utcToLocal(title).format("h:mm A")}
+            </Text>
           )}
           refreshControl={
             <RefreshControl

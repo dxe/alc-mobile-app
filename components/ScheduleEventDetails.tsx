@@ -154,12 +154,7 @@ export function ScheduleEventDetails({ route }: any) {
                   });
                 }}
               >
-                <Icon
-                  name={"directions"}
-                  type={"font-awesome-5"}
-                  style={{ marginRight: 7 }}
-                  color={colors.purple}
-                />
+                <Icon name={"directions"} type={"font-awesome-5"} style={{ marginRight: 7 }} color={colors.purple} />
                 <Text style={globalStyles.textButton}>Get Directions</Text>
               </TouchableOpacity>
             </View>
