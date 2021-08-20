@@ -208,7 +208,7 @@ export function ScheduleEventDetails({ route }: any) {
       {scheduleItem.description.trim() != "" && (
         <View style={{ marginBottom: 16 }}>
           <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 5 }]}>Description</Text>
-          <Text style={globalStyles.textBody}>{scheduleItem.description}</Text>
+          <Text style={globalStyles.textBody}>{scheduleItem.description.trim()}</Text>
         </View>
       )}
     </ScrollView>

@@ -80,7 +80,7 @@ function InfoScreen({ navigation }: any) {
               />
               <View style={{ flex: 1 }}>
                 <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
-                <Text style={globalStyles.textSmallRegular}>{item.subtitle}</Text>
+                <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
               </View>
             </View>
           </Card>

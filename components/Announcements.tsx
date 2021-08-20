@@ -80,7 +80,7 @@ function AnnouncementsScreen({ navigation }: any) {
             />
             <View style={{ flex: 1 }}>
               <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
-              <Text style={[globalStyles.textMediumRegular, { marginBottom: 4 }]}>{item.message}</Text>
+              <Text style={[globalStyles.textMediumRegular, { marginBottom: 4 }]}>{item.message.trim()}</Text>
               <Text style={globalStyles.textSmallRegular}>
                 <TimeAgo time={item.send_time} />
               </Text>
