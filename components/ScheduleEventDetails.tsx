@@ -205,10 +205,12 @@ export function ScheduleEventDetails({ route }: any) {
         </View>
       </View>
 
-      <View style={{ marginBottom: 16 }}>
-        <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 5 }]}>Description</Text>
-        <Text style={globalStyles.textBody}>{scheduleItem.description}</Text>
-      </View>
+      {scheduleItem.description.trim() != "" && (
+        <View style={{ marginBottom: 16 }}>
+          <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 5 }]}>Description</Text>
+          <Text style={globalStyles.textBody}>{scheduleItem.description}</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }
