@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StatusBar, View } from "react-native";
+import { Alert, StatusBar, View } from "react-native";
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./components/Home";
@@ -19,6 +19,8 @@ import * as Notifications from "expo-notifications";
 import { Icon } from "react-native-elements";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
+import * as Updates from "expo-updates";
+import { UpdateEvent, UpdateEventType } from "expo-updates";
 
 // How to handle notifications when app is in foreground.
 Notifications.setNotificationHandler({
@@ -63,6 +65,8 @@ export default function App() {
 
     // Fires when a notification is tapped (whether or not app is open).
     Notifications.addNotificationResponseReceivedListener(_handleNotificationResponse);
+
+    Updates.addListener(_handleUpdate);
   }, []);
 
   const _handleNotification = (notification: any) => {
@@ -76,6 +80,22 @@ export default function App() {
       navigationRef.current.navigate("Announcements");
     } else {
       setInitialRoute("Announcements");
+    }
+  };
+
+  const _handleUpdate = (event: UpdateEvent) => {
+    if (event.type === UpdateEventType.UPDATE_AVAILABLE) {
+      Alert.alert(
+        "Update Available",
+        "A new app update has been downloaded. Please restart the app to use the latest version.",
+        [
+          {
+            text: "OK",
+            onPress: () => Updates.reloadAsync(),
+            style: "default",
+          },
+        ]
+      );
     }
   };
 

@@ -25,6 +25,7 @@
     "expo-font": "~9.1.0",
     "expo-notifications": "~0.11.6",
     "expo-status-bar": "~1.0.4",
+    "expo-updates": "~0.5.4",
     "prettier": "^2.3.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
