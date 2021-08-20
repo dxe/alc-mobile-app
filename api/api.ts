@@ -2,6 +2,7 @@ import axios from "axios";
 import { getDeviceID, getStoredJSON, ONE_HOUR_MS, storeJSON, waitFunc } from "../util";
 import { useEffect, useState, useRef } from "react";
 import { AppState } from "react-native";
+import * as Device from "expo-device";
 
 export const CONFERENCE_ID = 1;
 export const BASE_URL = "https://alc-mobile-api.dxe.io/api";
@@ -26,7 +27,6 @@ export const postAPI = async function (options: APIOptions): Promise<void> {
   }
 };
 
-// TODO: handle refreshing at intervals in here too? 1 hour?
 export const useAPI = (options: APIOptions) => {
   const [data, setData] = useState(options.initialValue);
   const [status, setStatus] = useState("initialized");
@@ -70,6 +70,8 @@ export const useAPI = (options: APIOptions) => {
   // This is pointless unless the app is kept in the foreground
   // b/c the interval will pause when app is backgrounded.
   useEffect(() => {
+    if (Device.osName === "Android") return;
+
     const interval = setInterval(() => {
       setStatus("refreshing");
     }, ONE_HOUR_MS);

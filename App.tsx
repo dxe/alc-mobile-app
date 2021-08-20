@@ -9,7 +9,7 @@ import InfoStack from "./components/Info";
 import { colors, figmaColors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import { getStoredJSON, registerForPushNotificationsAsync, storeJSON } from "./util";
-import WelcomeStack from "./components/Welcome";
+import { WelcomeScreen } from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
 import { postRegisterPushNotifications } from "./api/user";
@@ -18,6 +18,7 @@ import { ScheduleContext } from "./ScheduleContext";
 import * as Notifications from "expo-notifications";
 import { FAB, Icon } from "react-native-elements";
 import { useFonts } from "expo-font";
+import * as Device from "expo-device";
 
 // How to handle notifications when app is in foreground.
 Notifications.setNotificationHandler({
@@ -45,6 +46,9 @@ export default function App() {
   });
 
   StatusBar.setBarStyle("light-content", true);
+  if (Device.osName === "Android") {
+    StatusBar.setBackgroundColor("#00000000");
+  }
 
   useEffect(() => {
     (async () => {
@@ -104,7 +108,7 @@ export default function App() {
         <NavigationContainer ref={navigationRef}>
           {registeredConferenceID != CONFERENCE_ID ? (
             <UserContext.Provider value={{ onUserRegistered: userRegistered }}>
-              <WelcomeStack />
+              <WelcomeScreen />
             </UserContext.Provider>
           ) : (
             <ScheduleContext.Provider value={{ data: data, status: status, setData: setData, setStatus: setStatus }}>

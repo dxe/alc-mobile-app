@@ -12,6 +12,8 @@ export const figmaColors = {
   neonPink: "#F891FC",
   neonBlue: "#A9F7F3",
   darkestBlue: "#181441",
+  lightGrey: "#F4F4F4",
+  mediumGrey: "#979797",
 };
 
 export const figmaStyles = StyleSheet.create({
@@ -30,7 +32,7 @@ export const figmaStyles = StyleSheet.create({
   textSmallMedium: {
     fontFamily: "Inter-500",
     fontSize: 12,
-    lineHeight: 14.5,
+    lineHeight: 15,
     color: figmaColors.darkGrey,
   },
   textSmallRegular: {
@@ -63,6 +65,12 @@ export const figmaStyles = StyleSheet.create({
     lineHeight: 19,
     color: figmaColors.darkGrey,
   },
+  textMediumBold: {
+    fontFamily: "Inter-700",
+    fontSize: 14,
+    lineHeight: 17,
+    color: figmaColors.darkGrey,
+  },
   textBodyMedium: {
     fontFamily: "Inter-500",
     fontSize: 16,
@@ -89,6 +97,7 @@ export const figmaStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     minWidth: 140,
+    minHeight: 50,
   },
   buttonPurple: {
     backgroundColor: figmaColors.purple,
@@ -96,8 +105,22 @@ export const figmaStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     minWidth: 140,
+    minHeight: 50,
     borderWidth: 2,
     borderColor: figmaColors.white,
+  },
+  textLabel: {
+    fontFamily: "Inter-500",
+    fontSize: 14,
+    lineHeight: 17,
+    color: figmaColors.purple,
+    textTransform: "uppercase",
+  },
+  textHero: {
+    color: figmaColors.neonPink,
+    fontFamily: "Inter-700",
+    fontSize: 40,
+    lineHeight: 53,
   },
 });
 
@@ -163,5 +186,5 @@ export const screenHeaderOptions: StackNavigationOptions = {
     shadowOpacity: 0,
     borderBottomWidth: 0,
   },
-  headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
+  headerBackTitleVisible: false,
 };

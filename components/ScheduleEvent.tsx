@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
-import { ListItem } from "react-native-elements";
-import { colors, globalStyles } from "../global-styles";
-import FeatherIcon from "react-native-vector-icons/Feather";
+import { Icon } from "react-native-elements";
+import { figmaColors, figmaStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { NavigationProp } from "@react-navigation/native";
 import { ScheduleContext } from "../ScheduleContext";
 
@@ -87,13 +85,6 @@ export function ScheduleEvent(props: Props) {
       }
       style={{ flex: 1, flexDirection: "row" }}
     >
-      <View style={{ paddingRight: 10 }}>
-        <Text style={styles.startTime}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
-        <Text style={styles.endTime}>|</Text>
-        <Text style={styles.endTime}>
-          {utcToLocal(props.event.start_time).add(props.event.length, "minute").format("h:mm A")}
-        </Text>
-      </View>
       <View style={{ flexGrow: 1 }}>
         <View style={{ flex: 1, flexDirection: "row" }}>
           <View
@@ -104,50 +95,47 @@ export function ScheduleEvent(props: Props) {
               alignItems: "flex-start",
             }}
           >
-            <ListItem.Title style={[globalStyles.listItemTitle, { fontSize: 20, marginBottom: 10 }]}>
-              {props.event.name}
-            </ListItem.Title>
-            <ListItem.Subtitle>
-              <FeatherIcon name="map-pin" size={16} /> <Text style={{ fontSize: 16 }}>{props.event.location.name}</Text>
-            </ListItem.Subtitle>
-            <TouchableOpacity
-              onPress={eventRSVP}
-              disabled={submitting}
-              style={[
-                styles.rsvpStatus,
-                { backgroundColor: scheduleItem.attending ? colors.lightgreen : colors.lightred },
-              ]}
-            >
-              <Text style={styles.rsvpStatusText}>{scheduleItem.attending ? "Attending" : "Not attending"}</Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                borderRadius: 100,
-                height: "100%",
-              }}
-            >
-              <Ionicons name="caret-forward" size={30} />
+            <View style={{ flex: 1, flexDirection: "row", marginBottom: 12 }}>
+              <Text style={figmaStyles.textSmallMedium}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
+              <Text style={[figmaStyles.textSmallMedium, { color: figmaColors.mediumGrey }]}>
+                {"  –  " + utcToLocal(props.event.start_time).add(props.event.length, "minute").format("h:mm A")}
+              </Text>
             </View>
+            <Text style={[figmaStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
+              {props.event.name}
+            </Text>
+            <Text style={figmaStyles.textMediumRegular}>{props.event.location.name}</Text>
           </View>
+          <TouchableOpacity onPress={eventRSVP} disabled={submitting}>
+            {submitting ? (
+              <ActivityIndicator
+                size="small"
+                color={figmaColors.purple}
+                style={{ padding: 10, borderWidth: 2, borderRadius: 100, borderColor: figmaColors.purple }}
+              />
+            ) : (
+              <Icon
+                type="font-awesome-5"
+                raised
+                reverse={scheduleItem.attending}
+                name={scheduleItem.attending ? "check" : "plus"}
+                color={scheduleItem.attending ? figmaColors.purple : figmaColors.purple}
+                containerStyle={{
+                  margin: 0,
+                  borderWidth: 2,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderColor: figmaColors.purple,
+                }}
+                size={20}
+                disabled={submitting}
+              />
+            )}
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
-  startTime: { textAlign: "center", backgroundColor: colors.white, fontSize: 15, paddingTop: 3 },
-  endTime: { textAlign: "center", backgroundColor: colors.white, color: colors.grey, fontSize: 15 },
-  rsvpStatus: {
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 100,
-  },
-  rsvpStatusText: { color: colors.white, fontWeight: "bold" },
-  colorPrimary: { color: colors.primary },
-  colorWhite: { color: colors.white },
-});
+const styles = StyleSheet.create({});

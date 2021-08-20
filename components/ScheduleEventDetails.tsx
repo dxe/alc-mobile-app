@@ -1,5 +1,5 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, figmaColors, figmaStyles, globalStyles } from "../global-styles";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker } from "react-native-maps";
@@ -174,7 +174,7 @@ export function ScheduleEventDetails({ route }: any) {
             {scheduleItem.total_attendees} confirmed attendees
           </Text>
         </View>
-        <View style={{ alignSelf: "center" }}>
+        <View style={{ alignSelf: "center", justifyContent: "center" }}>
           <Button
             titleStyle={
               scheduleItem.attending ? [figmaStyles.textButton, { color: figmaColors.white }] : figmaStyles.textButton
@@ -185,14 +185,26 @@ export function ScheduleEventDetails({ route }: any) {
             ]}
             onPress={eventRSVP}
             icon={
-              <Icon
-                name={scheduleItem.attending ? "check" : "plus"}
-                type="font-awesome-5"
-                color={scheduleItem.attending ? figmaColors.white : figmaColors.purple}
-                size={16}
-              />
+              submitting ? (
+                <></>
+              ) : (
+                <Icon
+                  name={scheduleItem.attending ? "check" : "plus"}
+                  type="font-awesome-5"
+                  color={scheduleItem.attending ? figmaColors.white : figmaColors.purple}
+                  size={16}
+                />
+              )
             }
-            title={scheduleItem.attending ? "  Attending" : "  RSVP"}
+            title={
+              submitting ? (
+                <ActivityIndicator size="small" color={figmaColors.purple} />
+              ) : scheduleItem.attending ? (
+                "  Attending"
+              ) : (
+                "  RSVP"
+              )
+            }
             disabled={submitting}
           />
         </View>

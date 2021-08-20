@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
+import { figmaColors, figmaStyles, globalStyles, screenHeaderOptions } from "../global-styles";
 import { utcToLocal, showErrorMessage } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
@@ -89,12 +89,17 @@ function ScheduleScreen({ navigation }: any) {
         {data && (
           <CalendarStrip
             style={styles.calendarStrip}
-            calendarHeaderStyle={styles.colorPrimary}
-            dateNumberStyle={styles.colorPrimary}
-            dateNameStyle={styles.colorPrimary}
-            highlightDateNameStyle={styles.colorWhite}
-            highlightDateNumberStyle={styles.colorWhite}
-            daySelectionAnimation={{ type: "background", highlightColor: colors.primary, duration: 100 }}
+            calendarHeaderStyle={figmaStyles.textLabel}
+            dateNumberStyle={{ color: figmaColors.purple, fontFamily: "Inter-400", fontSize: 12, lineHeight: 14 }}
+            dateNameStyle={{ color: figmaColors.purple, fontFamily: "Inter-500", fontSize: 12, lineHeight: 14 }}
+            highlightDateNumberStyle={{
+              color: figmaColors.white,
+              fontFamily: "Inter-400",
+              fontSize: 12,
+              lineHeight: 14,
+            }}
+            highlightDateNameStyle={{ color: figmaColors.white, fontFamily: "Inter-500", fontSize: 12, lineHeight: 14 }}
+            daySelectionAnimation={{ type: "background", highlightColor: figmaColors.purple, duration: 100 }}
             scrollable={false}
             startingDate={utcToLocal(data.conference.start_date)}
             // useIsoWeekday starts the strip on the startingDate instead of on Sunday/Monday.
@@ -111,43 +116,39 @@ function ScheduleScreen({ navigation }: any) {
 
       {filteredSchedule && (
         <SectionList
+          stickySectionHeadersEnabled={false} // TODO: consider using this if it will work w/ shadows
           sections={sectionizeSchedule(filteredSchedule)}
           keyExtractor={(item: ConferenceEvent, index: number) => (item.id + index).toString()}
           renderItem={({ item, section, index }) => {
             const itemsInSection = section.data.length - 1;
-
             return (
               <ListItem
-                containerStyle={{ backgroundColor: "transparent", paddingVertical: 5 }}
+                containerStyle={{
+                  padding: item.attending ? 11 : 12, // to offset border width change
+                  backgroundColor: figmaColors.white,
+                  borderRadius: 8,
+                }}
                 key={item.id}
-                // TODO: move this styling into a stylesheet if it will work w/ the variables?
                 style={[
                   {
-                    borderStyle: "solid",
-                    paddingBottom: 0,
-                    marginBottom: index === itemsInSection ? 5 : 0,
-                    overflow: "hidden",
-                    borderColor: colors.lightgrey,
-                    borderLeftWidth: 2,
-                    borderRightWidth: 2,
-                    borderTopWidth: index === 0 ? 2 : 0,
-                    borderBottomWidth: index === itemsInSection ? 2 : 0,
-                    borderTopLeftRadius: index === 0 ? 15 : 0,
-                    borderBottomLeftRadius: index === itemsInSection ? 15 : 0,
-                    borderTopRightRadius: index === 0 ? 15 : 0,
-                    borderBottomRightRadius: index === itemsInSection ? 15 : 0,
+                    flex: 1,
+                    borderRadius: 8,
+                    borderWidth: item.attending ? 2 : 1,
+                    borderColor: item.attending ? figmaColors.purple : figmaColors.lightGrey,
+                    backgroundColor: figmaColors.white,
+                    marginBottom: index === itemsInSection ? 0 : 18,
                   },
+                  globalStyles.shadow,
                 ]}
               >
                 <ListItem.Content>
                   <ScheduleEvent event={item} nav={navigation} />
-                  {index === 0 && index !== section.data.length - 1 && <View style={styles.divider} />}
                 </ListItem.Content>
               </ListItem>
             );
           }}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={styles.sectionHeader}>{utcToLocal(title).format("h:mm A")}</Text>
+            <Text style={[styles.sectionHeader, figmaStyles.textMediumBold]}>{utcToLocal(title).format("h:mm A")}</Text>
           )}
           refreshControl={
             <RefreshControl
@@ -155,7 +156,8 @@ function ScheduleScreen({ navigation }: any) {
               onRefresh={() => setStatus("refreshing")}
             />
           }
-          style={[globalStyles.scrollView, { paddingHorizontal: 8 }]}
+          style={{ backgroundColor: figmaColors.white }}
+          contentContainerStyle={{ paddingBottom: 30, paddingHorizontal: 15 }}
         />
       )}
     </View>
@@ -164,23 +166,18 @@ function ScheduleScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   calendarStrip: {
-    height: 90,
+    height: 83,
     paddingTop: 0,
-    paddingBottom: 10,
+    paddingBottom: 5,
     borderBottomWidth: 1,
-    borderColor: colors.lightgrey,
-    backgroundColor: colors.white,
+    borderColor: figmaColors.midGrey,
+    backgroundColor: figmaColors.white,
   },
-  calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.white },
+  calendarStripWrapper: { paddingTop: 10, backgroundColor: figmaColors.white },
   sectionHeader: {
     textAlign: "center",
-    backgroundColor: colors.white,
-    fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 0,
-    paddingVertical: 5,
+    //backgroundColor: "#FFFFFFF5", // TODO: add this after working out shadows & border radius
+    marginTop: 16,
+    marginBottom: 16,
   },
-  divider: { height: 2, width: "100%", backgroundColor: colors.lightgrey, marginTop: 10 },
-  colorPrimary: { color: colors.primary },
-  colorWhite: { color: colors.white },
 });

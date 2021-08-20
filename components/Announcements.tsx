@@ -31,7 +31,7 @@ function AnnouncementsScreen({ navigation }: any) {
   // Refresh the screen whenever it is focused.
   useFocusEffect(
     React.useCallback(() => {
-      setStatus("refreshing");
+      setStatus("silentRefreshing");
     }, [])
   );
 
@@ -43,7 +43,7 @@ function AnnouncementsScreen({ navigation }: any) {
   return (
     <FlatList
       style={[{ backgroundColor: figmaColors.white }]}
-      contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16 }]}
+      contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16, flexGrow: 1, paddingBottom: 30 }]}
       refreshControl={
         <RefreshControl
           refreshing={status === "refreshing" || status === "initialized"}

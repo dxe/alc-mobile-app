@@ -108,7 +108,7 @@ function HomeScreen({ navigation }: any) {
     data && (
       <ScrollView
         style={[{ backgroundColor: figmaColors.purple }]}
-        contentContainerStyle={[{ paddingVertical: 16, paddingHorizontal: 16 }]}
+        contentContainerStyle={[{ paddingVertical: 16, paddingHorizontal: 16, paddingBottom: 30 }]}
         refreshControl={
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}

@@ -20,7 +20,7 @@
     "ios": {
       "bundleIdentifier": "com.dxe.mobile",
       "buildNumber": "6",
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "package": "com.dxe.mobile",
