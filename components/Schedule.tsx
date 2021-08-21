@@ -67,6 +67,7 @@ function ScheduleScreen({ navigation }: any) {
 
   // Filter the schedule by date.
   const onDateSelected = (date: moment.Moment) => {
+    console.log("onDateSelected triggered");
     if (!data) return;
     setFilteredSchedule(
       data.events
@@ -82,7 +83,14 @@ function ScheduleScreen({ navigation }: any) {
   // Whenever the schedule data is updated, filter it using the selected date.
   useEffect(() => {
     if (!data) return;
-    onDateSelected(calendarStrip.current.getSelectedDate());
+    setFilteredSchedule(
+      data.events
+        .filter((item: ConferenceEvent) => {
+          const localDate = moment(moment(item.start_time).utc(true).toDate()).local().format("YYYY-MM-DD");
+          return localDate === calendarStrip.current.getSelectedDate().format("YYYY-MM-DD");
+        })
+        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
+    );
   }, [data]);
 
   return (
