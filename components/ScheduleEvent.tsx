@@ -119,7 +119,7 @@ export function ScheduleEvent(props: Props) {
                 raised
                 reverse={scheduleItem.attending}
                 name={scheduleItem.attending ? "check" : "plus"}
-                color={scheduleItem.attending ? colors.purple : colors.purple}
+                color={colors.purple}
                 containerStyle={{
                   margin: 0,
                   borderWidth: 2,

@@ -67,7 +67,6 @@ function ScheduleScreen({ navigation }: any) {
 
   // Filter the schedule by date.
   const onDateSelected = (date: moment.Moment) => {
-    console.log("onDateSelected triggered");
     if (!data) return;
     setFilteredSchedule(
       data.events
@@ -127,7 +126,7 @@ function ScheduleScreen({ navigation }: any) {
       {filteredSchedule && (
         <SectionList
           ref={eventsList}
-          stickySectionHeadersEnabled={false} // TODO: consider using this if it will work w/ shadows
+          stickySectionHeadersEnabled={false}
           sections={sectionizeSchedule(filteredSchedule)}
           keyExtractor={(item: ConferenceEvent, index: number) => (item.id + index).toString()}
           renderItem={({ item, section, index }) => {
@@ -185,11 +184,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.midGrey,
     backgroundColor: colors.white,
+    paddingHorizontal: 1, // This is needed to fix a UI bug where the calendar strip constantly jiggles on some devices.
   },
   calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.white },
   sectionHeader: {
     textAlign: "center",
-    //backgroundColor: "#FFFFFFF5", // TODO: add this after working out shadows & border radius
     marginTop: 16,
     marginBottom: 16,
   },
