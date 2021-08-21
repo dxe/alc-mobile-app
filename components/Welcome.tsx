@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  Keyboard,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { colors, globalStyles } from "../global-styles";
 import { getDeviceID, showErrorMessage } from "../util";
@@ -56,13 +47,6 @@ export function WelcomeScreen() {
       return;
     }
 
-    // Just commenting this out for now to make sure Apple approves w/o it.
-    // if (!formData.terms) {
-    //   setError("You must accept the terms!");
-    //   setSubmitting(false);
-    //   return;
-    // }
-
     const emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const emailOK = emailRegex.test(formData.email.toLowerCase());
@@ -76,12 +60,13 @@ export function WelcomeScreen() {
     (async () => {
       try {
         const deviceID = await getDeviceID();
+        const osName = Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
         await postAddUser({
           conference_id: CONFERENCE_ID,
           name: formData.name.trim(),
           email: formData.email.trim(),
           device_name: Device.modelName || "",
-          platform: Device.osName + " " + Device.osVersion,
+          platform: osName + " " + Device.osVersion,
         });
         setSubmitting(false);
         callback(deviceID, formData.name.trim());
@@ -92,17 +77,19 @@ export function WelcomeScreen() {
     })();
   };
 
+  // TODO: refactor this to be handled by the submitRegistration function to avoid code duplication
   const registerAnon = (callback: any) => {
     (async () => {
       setSubmitting(true);
       try {
         const deviceID = await getDeviceID();
+        const osName = Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
         await postAddUser({
           conference_id: CONFERENCE_ID,
           name: "",
           email: "",
           device_name: Device.modelName || "",
-          platform: Device.osName + " " + Device.osVersion,
+          platform: osName + " " + Device.osVersion,
         });
         callback(deviceID, "");
       } catch (e) {
@@ -124,24 +111,32 @@ export function WelcomeScreen() {
       />
 
       <View style={{ height: getStatusBarHeight(), backgroundColor: "rgba(0,0,0,0.6)" }} />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ backgroundColor: "rgba(0,0,0,0.6)", flex: 1 }}>
-          {submitting ? (
-            <ActivityIndicator size="large" color={colors.white} style={{ flex: 1 }} />
-          ) : (
-            <KeyboardAwareScrollView
-              contentContainerStyle={{ flex: 1, justifyContent: "space-evenly", alignItems: "center" }}
+
+      <View style={{ backgroundColor: "rgba(0,0,0,0.6)", flex: 1 }}>
+        {submitting ? (
+          <ActivityIndicator size="large" color={colors.white} style={{ flex: 1 }} />
+        ) : (
+          <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "column",
+                alignItems: "center",
+                width: "80%",
+                maxWidth: 350,
+                justifyContent: "space-evenly",
+              }}
             >
-              <Text style={[globalStyles.textHero, { marginTop: 20 }]}>Welcome</Text>
               <Image
                 source={require("../assets/logo-circle-shadow.png")}
                 style={{
                   height: 250,
-                  width: 250,
-                  resizeMode: "stretch",
+                  resizeMode: "contain",
                 }}
               />
-              <View style={{ width: "80%", maxWidth: 350, marginBottom: 40 }}>
+              <View style={{ width: "100%" }}>
                 <Text style={[globalStyles.textBodyMedium, { color: colors.white, marginBottom: 4 }]}>Name</Text>
                 <TextInput
                   style={styles.input}
@@ -192,25 +187,10 @@ export function WelcomeScreen() {
                 title="Skip to Stay Anonymous"
                 disabled={submitting}
               />
-              {/*Just commenting this out for now to make sure Apple approves w/o it.*/}
-              {/*<CheckBox*/}
-              {/*    center*/}
-              {/*    title="Agree to Privacy Policy"*/}
-              {/*    checked={formData.terms}*/}
-              {/*    onPress={() => setFormData({ ...formData, terms: !formData.terms })}*/}
-              {/*/>*/}
-              {/*<Text*/}
-              {/*    style={{ color: colors.primary, fontWeight: "bold" }}*/}
-              {/*    onPress={() => {*/}
-              {/*      Linking.openURL("https://www.legacy.directactioneverywhere.com/alc-app-privacy-policy");*/}
-              {/*    }}*/}
-              {/*>*/}
-              {/*  Privacy Policy*/}
-              {/*</Text>*/}
-            </KeyboardAwareScrollView>
-          )}
-        </View>
-      </TouchableWithoutFeedback>
+            </View>
+          </KeyboardAwareScrollView>
+        )}
+      </View>
     </View>
   );
 }

@@ -49,7 +49,7 @@ export default function App() {
   });
 
   StatusBar.setBarStyle("light-content", true);
-  if (Device.osName === "Android") {
+  if (Device.osName !== "iOS") {
     StatusBar.setBackgroundColor("#00000000");
   }
 
@@ -61,6 +61,7 @@ export default function App() {
       setReady(true);
     })();
 
+    // Fires when a notification is received when app is in foreground.
     // Fires when a notification is received when app is in foreground.
     Notifications.addNotificationReceivedListener(_handleNotification);
 
