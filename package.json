@@ -34,6 +34,7 @@
     "react-native-calendar-strip": "^2.2.4",
     "react-native-elements": "^3.4.2",
     "react-native-flash-message": "^0.1.23",
+    "react-native-gesture-handler": "~1.10.2",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-map-link": "^2.7.28",
     "react-native-maps": "0.27.1",
