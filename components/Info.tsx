@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
+import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity, Pressable } from "react-native";
 import React, { useEffect } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { Icon, Card, Text } from "react-native-elements";
@@ -52,22 +52,22 @@ function InfoScreen({ navigation }: any) {
       data={data.sort((a: Info, b: Info) => a.display_order - b.display_order)}
       keyExtractor={(item) => item.id + item.title}
       renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate("Details", { infoItem: item })}>
-          <Card
-            containerStyle={[
-              {
-                flex: 1,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: colors.midGrey,
-                marginVertical: 16,
-                marginHorizontal: 0,
-                padding: 12,
-                paddingLeft: 6,
-              },
-              globalStyles.shadow,
-            ]}
-          >
+        <Card
+          containerStyle={[
+            {
+              flex: 1,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: colors.midGrey,
+              marginVertical: 16,
+              marginHorizontal: 0,
+              padding: 12,
+              paddingLeft: 6,
+            },
+            globalStyles.shadow,
+          ]}
+        >
+          <TouchableOpacity onPress={() => navigation.navigate("Details", { infoItem: item })}>
             <View style={{ flex: 1, flexDirection: "row" }}>
               <Icon
                 raised
@@ -83,8 +83,8 @@ function InfoScreen({ navigation }: any) {
                 <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
               </View>
             </View>
-          </Card>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </Card>
       )}
     />
   );

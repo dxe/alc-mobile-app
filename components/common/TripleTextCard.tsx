@@ -1,12 +1,16 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Card } from "react-native-elements";
 import { colors, globalStyles } from "../../global-styles";
+import { ConferenceEvent } from "../../api/schedule";
+import { NavigationProp } from "@react-navigation/native";
 
 interface Props {
   middleText: string;
   topElement: React.ReactElement;
   bottomText: string;
+  navigation: NavigationProp<any>;
+  scheduleItem: ConferenceEvent;
 }
 
 export function TripleTextCard(props: Props) {
@@ -24,15 +28,19 @@ export function TripleTextCard(props: Props) {
         globalStyles.shadow,
       ]}
     >
-      <View>
+      <TouchableOpacity
+        onPress={() => props.navigation.navigate("Event Details", { scheduleItem: props.scheduleItem })}
+      >
         <View>
-          <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>{props.topElement}</Text>
+          <View>
+            <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>{props.topElement}</Text>
+          </View>
+          <View>
+            <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}>{props.middleText}</Text>
+            <Text style={globalStyles.textMediumRegular}>{props.bottomText}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}>{props.middleText}</Text>
-          <Text style={globalStyles.textMediumRegular}>{props.bottomText}</Text>
-        </View>
-      </View>
+      </TouchableOpacity>
     </Card>
   );
 }

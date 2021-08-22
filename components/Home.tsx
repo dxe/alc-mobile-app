@@ -123,18 +123,16 @@ function HomeScreen({ navigation }: any) {
 
             {currentEvents.map((e: ConferenceEvent) => {
               return (
-                <TouchableOpacity
+                <TripleTextCard
                   key={e.id}
-                  onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
-                >
-                  <TripleTextCard
-                    topElement={
-                      <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Started " />
-                    }
-                    middleText={e.name}
-                    bottomText={e.location.name + ", " + e.location.city}
-                  />
-                </TouchableOpacity>
+                  navigation={navigation}
+                  scheduleItem={e}
+                  topElement={
+                    <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Started " />
+                  }
+                  middleText={e.name}
+                  bottomText={e.location.name + ", " + e.location.city}
+                />
               );
             })}
           </View>
@@ -146,18 +144,14 @@ function HomeScreen({ navigation }: any) {
 
             {nextEvents.map((e: ConferenceEvent) => {
               return (
-                <TouchableOpacity
+                <TripleTextCard
                   key={e.id}
-                  onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
-                >
-                  <TripleTextCard
-                    topElement={
-                      <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Starts " />
-                    }
-                    middleText={e.name}
-                    bottomText={e.location.name + ", " + e.location.city}
-                  />
-                </TouchableOpacity>
+                  navigation={navigation}
+                  scheduleItem={e}
+                  topElement={<TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Starts " />}
+                  middleText={e.name}
+                  bottomText={e.location.name + ", " + e.location.city}
+                />
               );
             })}
           </View>
@@ -169,26 +163,24 @@ function HomeScreen({ navigation }: any) {
 
             {keyEvents.map((e: ConferenceEvent) => {
               return (
-                <TouchableOpacity
+                <TripleTextCard
                   key={e.id}
-                  onPress={() => navigation.navigate("Event Details", { scheduleItem: e as ConferenceEvent })}
-                >
-                  <TripleTextCard
-                    topElement={
-                      // TODO: say "happening now" or "ended" if key events are in progress or over
-                      <TimeAgo
-                        time={moment(e.start_time).utc(true).local().toISOString()}
-                        pretext={
-                          moment(moment(e.start_time).utc(true).toDate()).local().isAfter(moment())
-                            ? "Starts "
-                            : "Started "
-                        }
-                      />
-                    }
-                    middleText={e.name}
-                    bottomText={e.location.name + ", " + e.location.city}
-                  />
-                </TouchableOpacity>
+                  navigation={navigation}
+                  scheduleItem={e}
+                  topElement={
+                    // TODO: say "happening now" or "ended" if key events are in progress or over
+                    <TimeAgo
+                      time={moment(e.start_time).utc(true).local().toISOString()}
+                      pretext={
+                        moment(moment(e.start_time).utc(true).toDate()).local().isAfter(moment())
+                          ? "Starts "
+                          : "Started "
+                      }
+                    />
+                  }
+                  middleText={e.name}
+                  bottomText={e.location.name + ", " + e.location.city}
+                />
               );
             })}
           </View>
