@@ -169,7 +169,7 @@ function ScheduleScreen({ navigation }: any) {
             />
           }
           style={{ backgroundColor: colors.white }}
-          contentContainerStyle={{ paddingBottom: 30, paddingHorizontal: 15 }}
+          contentContainerStyle={{ paddingBottom: 30, paddingHorizontal: 15, flexGrow: 1 }}
         />
       )}
     </View>
