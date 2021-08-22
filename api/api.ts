@@ -70,7 +70,7 @@ export const useAPI = (options: APIOptions) => {
   // This is pointless unless the app is kept in the foreground
   // b/c the interval will pause when app is backgrounded.
   useEffect(() => {
-    if (Device.osName !== "iOS" && Device.osName != "iPadOS") return;
+    if (Device.brand !== "Apple") return; // Android doesn't like long running interval timers
 
     const interval = setInterval(() => {
       setStatus("refreshing");

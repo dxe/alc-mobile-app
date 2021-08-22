@@ -49,7 +49,7 @@ export default function App() {
   });
 
   StatusBar.setBarStyle("light-content", true);
-  if (Device.osName !== "iOS" && Device.osName != "iPadOS") {
+  if (Device.brand != "Apple") {
     StatusBar.setBackgroundColor("#00000000");
   }
 

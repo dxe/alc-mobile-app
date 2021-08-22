@@ -2,11 +2,12 @@ import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Icon } from "react-native-elements";
 import { ScheduleContext } from "../ScheduleContext";
+import * as Device from "expo-device";
 
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -112,6 +113,7 @@ export function ScheduleEventDetails({ route }: any) {
                 title: scheduleItem.location.name,
                 googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
                 googlePlaceId: scheduleItem.location.place_id,
+                alwaysIncludeGoogle: true,
               })
             }
             mapType={"mutedStandard"}
@@ -123,6 +125,7 @@ export function ScheduleEventDetails({ route }: any) {
               latitudeDelta: 0.00922,
               longitudeDelta: 0.00421,
             }}
+            provider={Device.brand === "Apple" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
           >
             <Marker
               key={scheduleItem.id}
@@ -151,6 +154,7 @@ export function ScheduleEventDetails({ route }: any) {
                     title: scheduleItem.location.name,
                     googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
                     googlePlaceId: scheduleItem.location.place_id,
+                    alwaysIncludeGoogle: true,
                   });
                 }}
               >
