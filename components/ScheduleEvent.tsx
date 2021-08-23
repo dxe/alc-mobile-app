@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
@@ -17,6 +18,8 @@ export function ScheduleEvent(props: Props) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const { setData } = useContext(ScheduleContext);
+  const currentTime = moment(new Date());
+  const endTime = utcToLocal(props.event.start_time).add(props.event.length, "minute");
 
   useEffect(() => {
     if (error === "") return;
@@ -85,7 +88,7 @@ export function ScheduleEvent(props: Props) {
       }
       style={{ flex: 1, flexDirection: "row" }}
     >
-      <View style={{ flexGrow: 1 }}>
+      <View style={{ flexGrow: 1, opacity: currentTime.isAfter(endTime) ? 0.4 : 1.0 }}>
         <View style={{ flex: 1, flexDirection: "row" }}>
           <View
             style={{
@@ -98,7 +101,7 @@ export function ScheduleEvent(props: Props) {
             <View style={{ flex: 1, flexDirection: "row", marginBottom: 12 }}>
               <Text style={globalStyles.textSmallMedium}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
               <Text style={[globalStyles.textSmallMedium, { color: colors.mediumGrey }]}>
-                {"  –  " + utcToLocal(props.event.start_time).add(props.event.length, "minute").format("h:mm A")}
+                {"  –  " + endTime.format("h:mm A")}
               </Text>
             </View>
 
