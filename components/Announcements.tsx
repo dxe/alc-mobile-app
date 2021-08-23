@@ -84,7 +84,7 @@ function AnnouncementsScreen({ navigation }: any) {
               <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
               <Text style={[globalStyles.textMediumRegular, { marginBottom: 4 }]}>{item.message.trim()}</Text>
 
-              {item.url && (
+              {item.url != "" && (
                 <TouchableOpacity
                   onPress={() => WebBrowser.openBrowserAsync(item.url)}
                   style={{ flex: 1, flexDirection: "row", alignItems: "center", paddingVertical: 8 }}
