@@ -18,7 +18,6 @@ export function ScheduleEvent(props: Props) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const { setData } = useContext(ScheduleContext);
-  // const currentTime = moment(new Date());
   const currentTime = moment("2021-09-25T15:00:00.000");
   const endTime = utcToLocal(props.event.start_time).add(props.event.length, "minute");
 
