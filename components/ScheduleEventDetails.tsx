@@ -12,7 +12,6 @@ import * as Device from "expo-device";
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(route.params.scheduleItem);
-  const [error, setError] = useState<string>("");
   const { setData } = useContext(ScheduleContext);
 
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
@@ -54,19 +53,12 @@ export function ScheduleEventDetails({ route }: any) {
           };
         });
       } catch (e) {
-        setError("Failed to RSVP.");
+        showErrorMessage("Failed to RSVP.");
       } finally {
         setSubmitting(false);
       }
     })();
   };
-
-  useEffect(() => {
-    if (error === "") return;
-    showErrorMessage(error);
-    setSubmitting(false);
-    setError("");
-  }, [error]);
 
   return (
     <ScrollView

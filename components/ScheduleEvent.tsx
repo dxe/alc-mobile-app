@@ -1,6 +1,5 @@
-import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { getStoredJSON, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { Icon } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
@@ -16,17 +15,9 @@ interface Props {
 export function ScheduleEvent(props: Props) {
   const [scheduleItem, setScheduleItem] = useState(props.event);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
   const { setData } = useContext(ScheduleContext);
   const currentTime = useCurrentTime();
   const endTime = utcToLocal(props.event.start_time).add(props.event.length, "minute");
-
-  useEffect(() => {
-    if (error === "") return;
-    showErrorMessage(error);
-    setSubmitting(false);
-    setError("");
-  }, [error]);
 
   // Update this component's state whenever the prop gets updated (via Context).
   useEffect(() => {
@@ -72,7 +63,7 @@ export function ScheduleEvent(props: Props) {
           };
         });
       } catch (e) {
-        setError("Failed to RSVP.");
+        showErrorMessage("Failed to RSVP.");
       } finally {
         setSubmitting(false);
       }
@@ -145,5 +136,3 @@ export function ScheduleEvent(props: Props) {
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({});

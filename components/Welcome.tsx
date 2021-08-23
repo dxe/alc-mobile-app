@@ -1,5 +1,5 @@
 import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from "react-native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { colors, globalStyles } from "../global-styles";
 import { getDeviceID, showErrorMessage } from "../util";
 import { Button } from "react-native-elements";
@@ -15,7 +15,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview"
 export function WelcomeScreen() {
   const { onUserRegistered } = useContext(UserContext);
   const [formData, setFormData] = React.useState({} as formData);
-  const [error, setError] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const nameInput = useRef<TextInput | null>(null);
   const emailInput = useRef<TextInput | null>(null);
@@ -26,23 +25,17 @@ export function WelcomeScreen() {
     terms: boolean;
   }
 
-  useEffect(() => {
-    if (error === "") return;
-    showErrorMessage(error);
-    setError("");
-  }, [error]);
-
   const submitRegistration = (callback: any) => {
     setSubmitting(true);
 
     if (!formData.name) {
-      setError("You must provide your name!");
+      showErrorMessage("You must provide your name!");
       setSubmitting(false);
       return;
     }
 
     if (!formData.email) {
-      setError("You must provide your email address!");
+      showErrorMessage("You must provide your email address!");
       setSubmitting(false);
       return;
     }
@@ -52,7 +45,7 @@ export function WelcomeScreen() {
     const emailOK = emailRegex.test(formData.email.toLowerCase());
 
     if (!emailOK) {
-      setError("You must enter a valid email address!");
+      showErrorMessage("You must enter a valid email address!");
       setSubmitting(false);
       return;
     }
@@ -71,8 +64,8 @@ export function WelcomeScreen() {
         setSubmitting(false);
         callback(deviceID, formData.name.trim());
       } catch (e) {
+        showErrorMessage("Registration failed.");
         setSubmitting(false);
-        setError("Registration failed.");
       }
     })();
   };
@@ -93,8 +86,8 @@ export function WelcomeScreen() {
         });
         callback(deviceID, "");
       } catch (e) {
+        showErrorMessage("Registration failed.");
         setSubmitting(false);
-        setError("Registration failed.");
       }
     })();
   };

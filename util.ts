@@ -35,7 +35,7 @@ export const storeJSON = async (key: string, value: any) => {
   try {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem(key, jsonValue);
-    console.log(`stored ${key} data`); // TODO: remove after debugging
+    console.log(`stored ${key} data`);
   } catch (e) {
     console.error(`error storing json data for key ${key}`);
   }
@@ -44,7 +44,7 @@ export const storeJSON = async (key: string, value: any) => {
 export const getStoredJSON = async (key: string): Promise<any> => {
   try {
     const jsonValue = await AsyncStorage.getItem(key);
-    console.log(`read ${key} data from local storage`); // TODO: remove after debugging
+    console.log(`read ${key} data from local storage`);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.error("error reading stored json data");

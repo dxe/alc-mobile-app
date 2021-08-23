@@ -72,7 +72,6 @@ export default function App() {
 
   const _handleNotificationResponse = (response: any) => {
     console.log(`Notification tapped: ${response}`);
-    // TODO: test to ensure this works once app is built
     if (navigationRef.current) {
       navigationRef.current.navigate("Announcements");
     } else {
@@ -96,8 +95,6 @@ export default function App() {
         });
       } catch (e) {
         console.warn("Failed to register for push notifications!");
-        // TODO: ask the user if they'd like to try again?
-        // or just tell them it failed & let them go into their settings to try again?
       }
     })();
   };

@@ -115,7 +115,6 @@ function ScheduleScreen({ navigation }: any) {
             useIsoWeekday={false}
             minDate={utcToLocal(data.conference.start_date)}
             maxDate={utcToLocal(data.conference.end_date)}
-            // TODO: ensure this handles time zones properly
             selectedDate={moment().isBefore(data.conference.start_date) ? moment(data.conference.start_date) : moment()}
             onDateSelected={onDateSelected}
             ref={calendarStrip}

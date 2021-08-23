@@ -8,8 +8,8 @@ export interface Schedule {
 export interface Conference {
   id: number;
   name: string;
-  start_date: string; // TODO: use Date?
-  end_date: string; // TODO: use Date?
+  start_date: string;
+  end_date: string;
 }
 
 export interface ConferenceEvent {
@@ -21,7 +21,7 @@ export interface ConferenceEvent {
   length: number;
   location: Location;
   name: string;
-  start_time: string; // TODO: use Date instead?
+  start_time: string;
   total_attendees: number;
 }
 

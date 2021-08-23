@@ -4,7 +4,7 @@ export interface Announcement {
   id: number;
   icon: string;
   title: string;
-  send_time: string; // TODO: use Date instead?
+  send_time: string;
   message: string;
   url: string;
   url_text: string;

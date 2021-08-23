@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, ScrollView, RefreshControl, Animated, Image } from "react-native";
+import { Text, View, ScrollView, RefreshControl, Image } from "react-native";
 import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
 import { showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
@@ -177,7 +177,6 @@ function HomeScreen({ navigation }: any) {
                   navigation={navigation}
                   scheduleItem={e}
                   topElement={
-                    // TODO: say "happening now" or "ended" if key events are in progress or over
                     <Text>
                       <Text>{utcToLocal(e.start_time).format("h:mm A")}</Text>
                       <Text style={{ color: colors.mediumGrey }}>
