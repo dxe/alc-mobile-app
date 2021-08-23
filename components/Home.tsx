@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, RefreshControl, Animated, Image } from "react-native";
 import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
 import { showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
@@ -8,6 +8,7 @@ import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent } from "../api/schedule";
 import moment from "moment";
 import { ScheduleContext } from "../ScheduleContext";
+import Constants from "expo-constants";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,24 @@ export default function HomeStack() {
         options={{
           ...screenHeaderOptions,
           title: "Animal Liberation Conference",
+          header: () => {
+            return (
+              <View
+                style={{
+                  backgroundColor: colors.black,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingTop: Constants.statusBarHeight,
+                  height: Constants.statusBarHeight + 44,
+                }}
+              >
+                <Image
+                  style={{ height: 55, width: 55, resizeMode: "contain" }}
+                  source={require("../assets/adaptive-icon.png")}
+                />
+              </View>
+            );
+          },
         }}
       />
       <Stack.Screen

@@ -19,8 +19,6 @@ import * as Notifications from "expo-notifications";
 import { Icon } from "react-native-elements";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
-import * as Updates from "expo-updates";
-import { UpdateEvent, UpdateEventType } from "expo-updates";
 import AppLoading from "expo-app-loading";
 
 // How to handle notifications when app is in foreground.
@@ -61,7 +59,6 @@ export default function App() {
       setReady(true);
     })();
 
-    // Fires when a notification is received when app is in foreground.
     // Fires when a notification is received when app is in foreground.
     Notifications.addNotificationReceivedListener(_handleNotification);
 
@@ -110,7 +107,7 @@ export default function App() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+    <View style={{ flex: 1, backgroundColor: colors.black }}>
       <NavigationContainer ref={navigationRef}>
         {registeredConferenceID != CONFERENCE_ID ? (
           <UserContext.Provider value={{ onUserRegistered: userRegistered }}>

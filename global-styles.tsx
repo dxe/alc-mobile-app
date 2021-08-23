@@ -146,7 +146,7 @@ export const screenHeaderOptions: StackNavigationOptions = {
   headerTransparent: false,
   headerStyle: {
     backgroundColor: colors.black,
-    opacity: 0.9,
+    opacity: 1,
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,

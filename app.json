@@ -6,7 +6,7 @@
     "slug": "alc-mobile-app",
     "version": "5.0.1",
     "orientation": "portrait",
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#000000",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
