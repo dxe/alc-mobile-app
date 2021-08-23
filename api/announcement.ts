@@ -6,6 +6,8 @@ export interface Announcement {
   title: string;
   send_time: string; // TODO: use Date instead?
   message: string;
+  url: string;
+  url_text: string;
 }
 
 export const useAnnouncements = (initialValue: any) => {
