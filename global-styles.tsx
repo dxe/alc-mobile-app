@@ -53,6 +53,14 @@ export const globalStyles = StyleSheet.create({
     lineHeight: 15,
     color: colors.black,
   },
+  textSmallBoldUppercasePink: {
+    fontFamily: "Inter-700",
+    fontSize: 12,
+    lineHeight: 15,
+    color: colors.neonPink,
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+  },
   textMediumRegular: {
     fontFamily: "Inter-400",
     fontSize: 14,

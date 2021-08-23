@@ -101,6 +101,9 @@ export function ScheduleEvent(props: Props) {
                 {"  –  " + utcToLocal(props.event.start_time).add(props.event.length, "minute").format("h:mm A")}
               </Text>
             </View>
+
+            {props.event.key_event && <Text style={globalStyles.textSmallBoldUppercasePink}>Main Event</Text>}
+
             <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
               {props.event.name}
             </Text>
