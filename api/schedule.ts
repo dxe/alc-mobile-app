@@ -49,13 +49,13 @@ export const useSchedule = (initialValue: any) => {
   });
 };
 
-export const postRSVP = async (data: RSVP, setData: any, setScheduleItem: any): Promise<any> => {
+export const postRSVP = async (data: RSVP, setScheduleData: any, setScheduleItem: any): Promise<any> => {
   await postAPI({
     path: "/event/rsvp",
     body: data,
   });
   // update rsvp status in context
-  setData((prev: any) => {
+  setScheduleData((prev: any) => {
     return {
       ...prev,
       events: prev.events.map((event: any) => {
