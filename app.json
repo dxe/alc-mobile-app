@@ -39,6 +39,11 @@
         }
       }
     },
+    "notification": {
+      "icon": "./assets/notification-icon.png",
+      "color": "#3738AE",
+      "iosDisplayInForeground": true
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     }
