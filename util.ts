@@ -109,6 +109,7 @@ export const registerForPushNotificationsAsync = async (): Promise<string> => {
   return Promise.resolve(token);
 };
 
+// useCurrentTime returns a Moment object of the current time. It updates every 5 seconds.
 export const useCurrentTime = () => {
   const [currentTime, setCurrentTime] = useState<moment.Moment>(moment());
 

@@ -67,8 +67,6 @@ export default function App() {
 
     // Fires when a notification is tapped (whether or not app is open).
     Notifications.addNotificationResponseReceivedListener(_handleNotificationResponse);
-
-    Updates.addListener(_handleUpdate);
   }, []);
 
   const _handleNotification = (notification: any) => {
@@ -82,22 +80,6 @@ export default function App() {
       navigationRef.current.navigate("Announcements");
     } else {
       setInitialRoute("Announcements");
-    }
-  };
-
-  const _handleUpdate = (event: UpdateEvent) => {
-    if (event.type === UpdateEventType.UPDATE_AVAILABLE) {
-      Alert.alert(
-        "Update Available",
-        "A new app update has been downloaded. Please press 'OK' to use the latest version.",
-        [
-          {
-            text: "OK",
-            onPress: () => Updates.reloadAsync(),
-            style: "default",
-          },
-        ]
-      );
     }
   };
 
