@@ -1,7 +1,7 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
-import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
+import { showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useEffect, useState } from "react";
@@ -19,39 +19,14 @@ export function ScheduleEventDetails({ route }: any) {
     setSubmitting(true);
     (async () => {
       try {
-        await postRSVP({
-          attending: !scheduleItem.attending,
-          event_id: scheduleItem.id,
-        });
-        const user = await getStoredJSON("user");
-        // update rsvp status in context
-        setData((prev: any) => {
-          return {
-            ...prev,
-            events: prev.events.map((event: any) => {
-              if (event.id === scheduleItem.id) {
-                const totalAttendees = !scheduleItem.attending
-                  ? scheduleItem.total_attendees + 1
-                  : scheduleItem.total_attendees - 1;
-                return {
-                  ...event,
-                  attending: !scheduleItem.attending,
-                  total_attendees: totalAttendees,
-                };
-              }
-              return event;
-            }),
-          };
-        });
-        // update state in this component
-        setScheduleItem((prevState: ConferenceEvent) => {
-          const totalAttendees = !prevState.attending ? prevState.total_attendees + 1 : prevState.total_attendees - 1;
-          return {
-            ...prevState,
-            attending: !prevState.attending,
-            total_attendees: totalAttendees,
-          };
-        });
+        await postRSVP(
+          {
+            attending: !scheduleItem.attending,
+            event_id: scheduleItem.id,
+          },
+          setData,
+          setScheduleItem
+        );
       } catch (e) {
         showErrorMessage("Failed to RSVP.");
       } finally {

@@ -2,7 +2,7 @@ import { createStackNavigator, HeaderStyleInterpolators } from "@react-navigatio
 import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { utcToLocal, showErrorMessage } from "../util";
+import { utcToLocal, showErrorMessage, utcToLocalDateString } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
@@ -71,8 +71,7 @@ function ScheduleScreen({ navigation }: any) {
     setFilteredSchedule(
       data.events
         .filter((item: ConferenceEvent) => {
-          const localDate = moment(moment(item.start_time).utc(true).toDate()).local().format("YYYY-MM-DD");
-          return localDate === date.format("YYYY-MM-DD");
+          return utcToLocalDateString(item.start_time) === date.format("YYYY-MM-DD");
         })
         .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
     );
@@ -85,8 +84,7 @@ function ScheduleScreen({ navigation }: any) {
     setFilteredSchedule(
       data.events
         .filter((item: ConferenceEvent) => {
-          const localDate = moment(moment(item.start_time).utc(true).toDate()).local().format("YYYY-MM-DD");
-          return localDate === calendarStrip.current.getSelectedDate().format("YYYY-MM-DD");
+          return utcToLocalDateString(item.start_time) === calendarStrip.current.getSelectedDate().format("YYYY-MM-DD");
         })
         .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
     );

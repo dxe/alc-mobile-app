@@ -49,9 +49,36 @@ export const useSchedule = (initialValue: any) => {
   });
 };
 
-export const postRSVP = (data: RSVP) => {
-  return postAPI({
+export const postRSVP = async (data: RSVP, setData: any, setScheduleItem: any): Promise<any> => {
+  await postAPI({
     path: "/event/rsvp",
     body: data,
   });
+  // update rsvp status in context
+  setData((prev: any) => {
+    return {
+      ...prev,
+      events: prev.events.map((event: any) => {
+        if (event.id === data.event_id) {
+          const totalAttendees = !event.attending ? event.total_attendees + 1 : event.total_attendees - 1;
+          return {
+            ...event,
+            attending: !event.attending,
+            total_attendees: totalAttendees,
+          };
+        }
+        return event;
+      }),
+    };
+  });
+  // update state in this component
+  setScheduleItem((prevState: ConferenceEvent) => {
+    const totalAttendees = !prevState.attending ? prevState.total_attendees + 1 : prevState.total_attendees - 1;
+    return {
+      ...prevState,
+      attending: !prevState.attending,
+      total_attendees: totalAttendees,
+    };
+  });
+  return Promise.resolve();
 };

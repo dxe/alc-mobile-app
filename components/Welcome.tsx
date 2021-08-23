@@ -25,19 +25,15 @@ export function WelcomeScreen() {
     terms: boolean;
   }
 
-  const submitRegistration = (callback: any) => {
-    setSubmitting(true);
-
+  const validateForm = (): boolean => {
     if (!formData.name) {
       showErrorMessage("You must provide your name!");
-      setSubmitting(false);
-      return;
+      return false;
     }
 
     if (!formData.email) {
       showErrorMessage("You must provide your email address!");
-      setSubmitting(false);
-      return;
+      return false;
     }
 
     const emailRegex =
@@ -46,8 +42,21 @@ export function WelcomeScreen() {
 
     if (!emailOK) {
       showErrorMessage("You must enter a valid email address!");
-      setSubmitting(false);
-      return;
+      return false;
+    }
+
+    return true;
+  };
+
+  const submitRegistration = (includeFormData: boolean, callback: any) => {
+    setSubmitting(true);
+
+    if (includeFormData) {
+      const formValid = validateForm();
+      if (!formValid) {
+        setSubmitting(false);
+        return;
+      }
     }
 
     (async () => {
@@ -63,28 +72,6 @@ export function WelcomeScreen() {
         });
         setSubmitting(false);
         callback(deviceID, formData.name.trim());
-      } catch (e) {
-        showErrorMessage("Registration failed.");
-        setSubmitting(false);
-      }
-    })();
-  };
-
-  // TODO: refactor this to be handled by the submitRegistration function to avoid code duplication
-  const registerAnon = (callback: any) => {
-    (async () => {
-      setSubmitting(true);
-      try {
-        const deviceID = await getDeviceID();
-        const osName = Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
-        await postAddUser({
-          conference_id: CONFERENCE_ID,
-          name: "",
-          email: "",
-          device_name: Device.modelName || "",
-          platform: osName + " " + Device.osVersion,
-        });
-        callback(deviceID, "");
       } catch (e) {
         showErrorMessage("Registration failed.");
         setSubmitting(false);
@@ -159,13 +146,13 @@ export function WelcomeScreen() {
                   autoCorrect={false}
                   ref={emailInput}
                   onSubmitEditing={() => {
-                    submitRegistration(onUserRegistered);
+                    submitRegistration(true, onUserRegistered);
                   }}
                 />
                 <Button
                   titleStyle={[globalStyles.textButton, { color: colors.white }]}
                   buttonStyle={[globalStyles.buttonPurple, { borderColor: colors.purple }]}
-                  onPress={() => submitRegistration(onUserRegistered)}
+                  onPress={() => submitRegistration(true, onUserRegistered)}
                   title="Sign Up"
                   disabled={submitting}
                 />
@@ -176,7 +163,7 @@ export function WelcomeScreen() {
                   globalStyles.buttonPurple,
                   { borderColor: "transparent", backgroundColor: "transparent" },
                 ]}
-                onPress={() => registerAnon(onUserRegistered)}
+                onPress={() => submitRegistration(false, onUserRegistered)}
                 title="Skip to Stay Anonymous"
                 disabled={submitting}
               />

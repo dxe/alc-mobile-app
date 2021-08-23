@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
-import { getStoredJSON, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
+import { showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { Icon } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
@@ -29,39 +29,14 @@ export function ScheduleEvent(props: Props) {
     setSubmitting(true);
     (async () => {
       try {
-        await postRSVP({
-          attending: !scheduleItem.attending,
-          event_id: scheduleItem.id,
-        });
-        const user = await getStoredJSON("user");
-        // update rsvp status in context
-        setData((prev: any) => {
-          return {
-            ...prev,
-            events: prev.events.map((event: any) => {
-              if (event.id === scheduleItem.id) {
-                const totalAttendees = !scheduleItem.attending
-                  ? scheduleItem.total_attendees + 1
-                  : scheduleItem.total_attendees - 1;
-                return {
-                  ...event,
-                  attending: !scheduleItem.attending,
-                  total_attendees: totalAttendees,
-                };
-              }
-              return event;
-            }),
-          };
-        });
-        // update state in this component
-        setScheduleItem((prevState: ConferenceEvent) => {
-          const totalAttendees = !prevState.attending ? prevState.total_attendees + 1 : prevState.total_attendees - 1;
-          return {
-            ...prevState,
-            attending: !prevState.attending,
-            total_attendees: totalAttendees,
-          };
-        });
+        await postRSVP(
+          {
+            attending: !scheduleItem.attending,
+            event_id: scheduleItem.id,
+          },
+          setData,
+          setScheduleItem
+        );
       } catch (e) {
         showErrorMessage("Failed to RSVP.");
       } finally {

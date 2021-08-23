@@ -31,6 +31,13 @@ export const utcToLocal = (date: string | undefined): moment.Moment => {
   return moment().utc(true).local();
 };
 
+export const utcToLocalDateString = (date: string | undefined): string => {
+  if (date) {
+    return moment(moment(date).utc(true).toDate()).local().format("YYYY-MM-DD");
+  }
+  return moment().utc(true).local().format("YYYY-MM-DD");
+};
+
 export const storeJSON = async (key: string, value: any) => {
   try {
     const jsonValue = JSON.stringify(value);
