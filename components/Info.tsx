@@ -41,7 +41,7 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: colors.white }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16, flexGrow: 1, paddingBottom: 30 }]}
       refreshControl={
         <RefreshControl

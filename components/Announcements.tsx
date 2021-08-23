@@ -44,7 +44,7 @@ function AnnouncementsScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: colors.white }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16, flexGrow: 1, paddingBottom: 30 }]}
       refreshControl={
         <RefreshControl
@@ -56,19 +56,17 @@ function AnnouncementsScreen({ navigation }: any) {
       keyExtractor={(item) => item.id + item.title}
       renderItem={({ item }) => (
         <Card
-          containerStyle={[
-            {
-              flex: 1,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: colors.midGrey,
-              marginVertical: 16,
-              marginHorizontal: 0,
-              padding: 12,
-              paddingLeft: 6,
-            },
-            globalStyles.shadow,
-          ]}
+          containerStyle={{
+            flex: 1,
+            borderRadius: 8,
+            borderWidth: 0,
+            marginVertical: 16,
+            marginHorizontal: 0,
+            padding: 12,
+            paddingLeft: 6,
+            shadowOpacity: 0,
+            elevation: 0,
+          }}
         >
           <View style={{ flex: 1, flexDirection: "row" }}>
             <Icon

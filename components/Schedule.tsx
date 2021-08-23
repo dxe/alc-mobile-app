@@ -168,7 +168,7 @@ function ScheduleScreen({ navigation }: any) {
               onRefresh={() => setStatus("refreshing")}
             />
           }
-          style={{ backgroundColor: colors.white }}
+          style={{ backgroundColor: colors.lightGrey }}
           contentContainerStyle={{ paddingBottom: 30, paddingHorizontal: 15, flexGrow: 1 }}
         />
       )}

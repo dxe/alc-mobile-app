@@ -102,7 +102,9 @@ export function ScheduleEvent(props: Props) {
               </Text>
             </View>
 
-            {props.event.key_event && <Text style={globalStyles.textSmallBoldUppercasePink}>Main Event</Text>}
+            {props.event.key_event && (
+              <Text style={[globalStyles.textSmallBoldUppercasePink, { marginBottom: 2 }]}>Main Event</Text>
+            )}
 
             <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
               {props.event.name}
