@@ -14,7 +14,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview"
 
 export function WelcomeScreen() {
   const { onUserRegistered } = useContext(UserContext);
-  const [formData, setFormData] = React.useState({} as formData);
+  const [formData, setFormData] = React.useState({ name: "", email: "" } as formData);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const nameInput = useRef<TextInput | null>(null);
   const emailInput = useRef<TextInput | null>(null);
@@ -63,6 +63,7 @@ export function WelcomeScreen() {
       try {
         const deviceID = await getDeviceID();
         const osName = Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
+        console.log(formData);
         await postAddUser({
           conference_id: CONFERENCE_ID,
           name: formData.name.trim(),
@@ -74,6 +75,7 @@ export function WelcomeScreen() {
         callback(deviceID, formData.name.trim());
       } catch (e) {
         showErrorMessage("Registration failed.");
+        console.log(e);
         setSubmitting(false);
       }
     })();
