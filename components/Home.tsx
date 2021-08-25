@@ -74,7 +74,7 @@ function HomeScreen({ navigation }: any) {
         .filter((x: ConferenceEvent) => {
           return moment(x.start_time).utc(true).isAfter(moment());
         })
-        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))[0].start_time;
+        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))[0]?.start_time;
 
       setNextEvents(
         data.events
@@ -128,6 +128,17 @@ function HomeScreen({ navigation }: any) {
           />
         }
       >
+        {currentEvents.length === 0 && nextEvents.length === 0 && keyEvents.length === 0 && (
+          <View>
+            <Text style={[globalStyles.h2, { color: colors.white, marginBottom: 10 }]}>
+              {data.conference.name} has ended.
+            </Text>
+            <Text style={[globalStyles.h2, { color: colors.white }]}>
+              We hope to see you again at our next conference!
+            </Text>
+          </View>
+        )}
+
         {currentEvents && currentEvents.length > 0 && (
           <View style={{ marginBottom: 28 }}>
             <Text style={[globalStyles.h1]}>Happening Now</Text>
