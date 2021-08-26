@@ -116,6 +116,7 @@ function ScheduleScreen({ navigation }: any) {
             selectedDate={moment().isBefore(data.conference.start_date) ? moment(data.conference.start_date) : moment()}
             onDateSelected={onDateSelected}
             ref={calendarStrip}
+            maxDayComponentSize={50} // This is needed to prevent UI glitches
           />
         )}
       </View>
@@ -181,7 +182,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.midGrey,
     backgroundColor: colors.white,
-    paddingHorizontal: 1, // This is needed to fix a UI bug where the calendar strip constantly jiggles on some devices.
   },
   calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.white },
   sectionHeader: {

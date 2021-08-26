@@ -128,7 +128,7 @@ function HomeScreen({ navigation }: any) {
           />
         }
       >
-        {currentEvents.length === 0 && nextEvents.length === 0 && keyEvents.length === 0 && (
+        {moment().isAfter(moment(data.conference.end_date).utc(true)) && (
           <View>
             <Text style={[globalStyles.h2, { color: colors.white, marginBottom: 10 }]}>
               {data.conference.name} has ended.
@@ -177,7 +177,7 @@ function HomeScreen({ navigation }: any) {
           </View>
         )}
 
-        {keyEvents && keyEvents.length > 0 && (
+        {moment().isBefore(moment(data.conference.end_date).utc(true)) && keyEvents && keyEvents.length > 0 && (
           <View style={{ marginBottom: 28 }}>
             <Text style={globalStyles.h1}>Today's Main Events</Text>
 
