@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { screenHeaderOptions, colors, globalStyles } from "../global-styles";
 import { Icon, Text, Card } from "react-native-elements";
 import { Announcement, useAnnouncements } from "../api/announcement";
-import { showErrorMessage, useCurrentTime } from "../util";
+import { logAnalyticsEvent, showErrorMessage, useCurrentTime } from "../util";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import * as WebBrowser from "expo-web-browser";
@@ -15,7 +15,7 @@ export default function AnnouncementsStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
+        name="Announcements"
         component={AnnouncementsScreen}
         options={{
           ...screenHeaderOptions,
@@ -84,7 +84,10 @@ function AnnouncementsScreen({ navigation }: any) {
 
               {item.url != "" && (
                 <TouchableOpacity
-                  onPress={() => WebBrowser.openBrowserAsync(item.url)}
+                  onPress={() => {
+                    logAnalyticsEvent("AnnouncementLinkTapped", item.id, item.url);
+                    WebBrowser.openBrowserAsync(item.url);
+                  }}
                   style={{ flex: 1, flexDirection: "row", alignItems: "center", paddingVertical: 8 }}
                 >
                   <Icon

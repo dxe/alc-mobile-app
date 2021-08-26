@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StatusBar, View } from "react-native";
-import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef, NavigationState } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
@@ -8,7 +8,7 @@ import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
 import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
-import { getStoredJSON, registerForPushNotificationsAsync, storeJSON } from "./util";
+import { getStoredJSON, logAnalyticsScreenChange, registerForPushNotificationsAsync, storeJSON } from "./util";
 import { WelcomeScreen } from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
@@ -38,7 +38,8 @@ export default function App() {
   const { data, setData, status, setStatus } = useSchedule(null);
   const [notification, setNotification] = useState(null);
   const navigationRef = useRef<NavigationContainerRef>(null);
-  const [initialRoute, setInitialRoute] = useState("Home");
+  const routeNameRef = useRef();
+  const [initialRouteName, setInitialRouteName] = useState("Home");
   let [fontsLoaded] = useFonts({
     "Inter-400": require("./assets/fonts/Inter-Regular.ttf"),
     "Inter-500": require("./assets/fonts/Inter-Medium.ttf"),
@@ -75,7 +76,7 @@ export default function App() {
     if (navigationRef.current) {
       navigationRef.current.navigate("Announcements");
     } else {
-      setInitialRoute("Announcements");
+      setInitialRouteName("Announcements");
     }
   };
 
@@ -105,7 +106,13 @@ export default function App() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.black }}>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => logAnalyticsScreenChange(initialRouteName)}
+        onStateChange={() => {
+          logAnalyticsScreenChange(navigationRef.current?.getCurrentRoute()?.name);
+        }}
+      >
         {registeredConferenceID != CONFERENCE_ID ? (
           <UserContext.Provider value={{ onUserRegistered: userRegistered }}>
             <WelcomeScreen />
@@ -139,7 +146,7 @@ export default function App() {
                 inactiveTintColor: colors.midGrey,
                 style: { backgroundColor: colors.black, opacity: 0.9, borderTopWidth: 0 },
               }}
-              initialRouteName={initialRoute}
+              initialRouteName={initialRouteName}
             >
               <Tab.Screen name="Home" component={HomeStack} />
               <Tab.Screen name="Schedule" component={ScheduleStack} />

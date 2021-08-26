@@ -1,7 +1,7 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, globalStyles } from "../global-styles";
-import { showErrorMessage, utcToLocal } from "../util";
+import { logAnalyticsEvent, showErrorMessage, utcToLocal } from "../util";
 import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useEffect, useState } from "react";
@@ -17,6 +17,7 @@ export function ScheduleEventDetails({ route }: any) {
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
     setSubmitting(true);
+    logAnalyticsEvent("LargeRSVPButtonTapped", scheduleItem.id, scheduleItem.name);
     (async () => {
       try {
         await postRSVP(
@@ -73,7 +74,8 @@ export function ScheduleEventDetails({ route }: any) {
         >
           <MapView
             style={styles.map}
-            onPress={() =>
+            onPress={() => {
+              logAnalyticsEvent("MapTapped", scheduleItem.id, scheduleItem.name);
               showLocation({
                 latitude: scheduleItem.location.lat,
                 longitude: scheduleItem.location.lng,
@@ -81,8 +83,8 @@ export function ScheduleEventDetails({ route }: any) {
                 googleForceLatLon: true, // force Google Maps to use the coords for the query instead of the title
                 googlePlaceId: scheduleItem.location.place_id,
                 alwaysIncludeGoogle: true,
-              })
-            }
+              });
+            }}
             mapType={"mutedStandard"}
             zoomEnabled={false}
             scrollEnabled={false}
@@ -115,6 +117,7 @@ export function ScheduleEventDetails({ route }: any) {
               <TouchableOpacity
                 style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center" }}
                 onPress={() => {
+                  logAnalyticsEvent("GetDirectionsTapped", scheduleItem.id, scheduleItem.name);
                   showLocation({
                     latitude: scheduleItem.location.lat,
                     longitude: scheduleItem.location.lng,

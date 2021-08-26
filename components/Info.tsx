@@ -5,7 +5,7 @@ import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { Icon, Card, Text } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { Info, useInfo } from "../api/info";
-import { showErrorMessage } from "../util";
+import { logAnalyticsEvent, showErrorMessage } from "../util";
 
 const Stack = createStackNavigator();
 
@@ -21,10 +21,11 @@ export default function InfoStack() {
         }}
       />
       <Stack.Screen
-        name="Details"
+        name="Info Details"
         component={InfoDetails}
         options={{
           ...screenHeaderOptions,
+          title: "Details",
         }}
       />
     </Stack.Navigator>
@@ -67,7 +68,12 @@ function InfoScreen({ navigation }: any) {
             globalStyles.shadow,
           ]}
         >
-          <TouchableOpacity onPress={() => navigation.navigate("Details", { infoItem: item })}>
+          <TouchableOpacity
+            onPress={() => {
+              logAnalyticsEvent("InfoItemTapped", item.id, item.title);
+              navigation.navigate("Info Details", { infoItem: item });
+            }}
+          >
             <View style={{ flex: 1, flexDirection: "row" }}>
               <Icon
                 raised

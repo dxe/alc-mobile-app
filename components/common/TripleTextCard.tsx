@@ -4,6 +4,7 @@ import { Card } from "react-native-elements";
 import { colors, globalStyles } from "../../global-styles";
 import { ConferenceEvent } from "../../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
+import { logAnalyticsEvent } from "../../util";
 
 interface Props {
   middleText: string;
@@ -29,7 +30,10 @@ export function TripleTextCard(props: Props) {
       ]}
     >
       <TouchableOpacity
-        onPress={() => props.navigation.navigate("Event Details", { scheduleItem: props.scheduleItem })}
+        onPress={() => {
+          logAnalyticsEvent("TripleTextCardTapped", props.scheduleItem.id, props.scheduleItem.name);
+          props.navigation.navigate("Event Details", { scheduleItem: props.scheduleItem });
+        }}
       >
         <View>
           <View>

@@ -2,7 +2,7 @@ import { createStackNavigator, HeaderStyleInterpolators } from "@react-navigatio
 import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
-import { utcToLocal, showErrorMessage, utcToLocalDateString } from "../util";
+import { utcToLocal, showErrorMessage, utcToLocalDateString, logAnalyticsEvent } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
@@ -68,6 +68,7 @@ function ScheduleScreen({ navigation }: any) {
   // Filter the schedule by date.
   const onDateSelected = (date: moment.Moment) => {
     if (!data) return;
+    logAnalyticsEvent("CalendarStripDateTapped", 0, date.format("YYYY-MM-DD"));
     setFilteredSchedule(
       data.events
         .filter((item: ConferenceEvent) => {

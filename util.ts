@@ -6,6 +6,7 @@ import { Platform } from "react-native";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
+import * as Analytics from "expo-firebase-analytics";
 
 export const ONE_HOUR_MS = 1000 * 60 * 60;
 
@@ -128,4 +129,29 @@ export const useCurrentTime = () => {
   }, [currentTime]);
 
   return currentTime;
+};
+
+export const logAnalyticsScreenChange = async (screenName: string | undefined) => {
+  console.log(`Screen changed to ${screenName}`);
+  try {
+    await Analytics.setCurrentScreen(screenName);
+  } catch (e) {
+    if (Constants.isDevice) {
+      console.warn("Analytics logging failed");
+    }
+  }
+};
+
+export const logAnalyticsEvent = async (eventName: string, itemID: number, itemDescription: string) => {
+  console.log(`${eventName}: ${itemID} (${itemDescription})`);
+  try {
+    await Analytics.logEvent(eventName, {
+      id: itemID,
+      description: itemDescription,
+    });
+  } catch (e) {
+    if (Constants.isDevice) {
+      console.warn("Analytics logging failed");
+    }
+  }
 };

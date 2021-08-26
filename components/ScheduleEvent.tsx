@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
-import { showErrorMessage, useCurrentTime, utcToLocal } from "../util";
+import { logAnalyticsEvent, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { Icon } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
@@ -27,6 +27,7 @@ export function ScheduleEvent(props: Props) {
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
     setSubmitting(true);
+    logAnalyticsEvent("SmallRSVPButtonTapped", scheduleItem.id, scheduleItem.name);
     (async () => {
       try {
         await postRSVP(
@@ -47,11 +48,12 @@ export function ScheduleEvent(props: Props) {
 
   return (
     <TouchableOpacity
-      onPress={() =>
+      onPress={() => {
+        logAnalyticsEvent("ScheduleEventTapped", scheduleItem.id, scheduleItem.name);
         props.nav.navigate("Event Details", {
           scheduleItem: scheduleItem as ConferenceEvent,
-        })
-      }
+        });
+      }}
       style={{ flex: 1, flexDirection: "row" }}
     >
       <View style={{ flexGrow: 1, opacity: currentTime.isAfter(endTime) ? 0.4 : 1.0 }}>
