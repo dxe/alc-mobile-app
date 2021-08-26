@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from "react-native";
 import React, { useContext, useRef, useState } from "react";
 import { colors, globalStyles } from "../global-styles";
-import { getDeviceID, showErrorMessage } from "../util";
+import { getDeviceID, logAnalyticsEvent, showErrorMessage } from "../util";
 import { Button } from "react-native-elements";
 import { UserContext } from "../UserContext";
 import { postAddUser } from "../api/user";
@@ -154,7 +154,10 @@ export function WelcomeScreen() {
                 <Button
                   titleStyle={[globalStyles.textButton, { color: colors.white }]}
                   buttonStyle={[globalStyles.buttonPurple, { borderColor: colors.purple }]}
-                  onPress={() => submitRegistration(true, onUserRegistered)}
+                  onPress={() => {
+                    logAnalyticsEvent("SignUpButtonTapped", 0, "");
+                    submitRegistration(true, onUserRegistered);
+                  }}
                   title="Sign Up"
                   disabled={submitting}
                 />
@@ -165,7 +168,10 @@ export function WelcomeScreen() {
                   globalStyles.buttonPurple,
                   { borderColor: "transparent", backgroundColor: "transparent" },
                 ]}
-                onPress={() => submitRegistration(false, onUserRegistered)}
+                onPress={() => {
+                  logAnalyticsEvent("SignUpAnonymousButtonTapped", 0, "");
+                  submitRegistration(false, onUserRegistered);
+                }}
                 title="Skip to Stay Anonymous"
                 disabled={submitting}
               />
