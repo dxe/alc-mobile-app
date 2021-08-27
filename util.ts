@@ -136,9 +136,7 @@ export const logAnalyticsScreenChange = async (screenName: string | undefined) =
   try {
     await Analytics.setCurrentScreen(screenName);
   } catch (e) {
-    if (Constants.isDevice) {
-      console.warn("Analytics logging failed");
-    }
+      console.warn(`Analytics logging failed: ${e}`);
   }
 };
 
@@ -150,8 +148,6 @@ export const logAnalyticsEvent = async (eventName: string, itemID: number, itemD
       description: itemDescription,
     });
   } catch (e) {
-    if (Constants.isDevice) {
-      console.warn("Analytics logging failed");
-    }
+    console.warn(`Analytics logging failed: ${e}`);
   }
 };

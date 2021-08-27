@@ -46,7 +46,13 @@
       "iosDisplayInForeground": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyD67EKeync3GaoFdAsrXGwettX-iAqMKg8",
+          "measurementId": "G-6QB38JPSRK"
+        }
+      }
     }
   }
 }
