@@ -21,6 +21,7 @@
       "bundleIdentifier": "com.dxe.mobile",
       "buildNumber": "9",
       "supportsTablet": false,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleMapsApiKey": "AIzaSyA2cv39gh8OwETbbwSCDTd2tHr4HbMltk0"
       }
