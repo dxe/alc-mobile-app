@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StatusBar, View } from "react-native";
-import { NavigationContainer, NavigationContainerRef, NavigationState } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
@@ -8,7 +8,13 @@ import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
 import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
-import { getStoredJSON, logAnalyticsScreenChange, registerForPushNotificationsAsync, storeJSON } from "./util";
+import {
+  getStoredJSON,
+  logAnalyticsEvent,
+  logAnalyticsScreenChange,
+  registerForPushNotificationsAsync,
+  storeJSON,
+} from "./util";
 import { WelcomeScreen } from "./components/Welcome";
 import { CONFERENCE_ID } from "./api/api";
 import { UserContext } from "./UserContext";
@@ -20,6 +26,7 @@ import { Icon } from "react-native-elements";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
 import AppLoading from "expo-app-loading";
+import { NotificationResponse } from "expo-notifications";
 
 // How to handle notifications when app is in foreground.
 Notifications.setNotificationHandler({
@@ -71,8 +78,9 @@ export default function App() {
     setNotification(notification);
   };
 
-  const _handleNotificationResponse = (response: any) => {
-    console.log(`Notification tapped: ${response}`);
+  const _handleNotificationResponse = (response: NotificationResponse) => {
+    const notificationTitle = response?.notification?.request?.content?.title || "";
+    logAnalyticsEvent("NotificationTapped", 0, notificationTitle);
     if (navigationRef.current) {
       navigationRef.current.navigate("Announcements");
     } else {
