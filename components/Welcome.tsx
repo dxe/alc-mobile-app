@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from "react-native";
 import React, { useContext, useRef, useState } from "react";
 import { colors, globalStyles } from "../global-styles";
-import { getDeviceID, logAnalyticsEvent, showErrorMessage } from "../util";
+import { getDeviceID, logAnalyticsEvent, showErrorMessage, getOSName } from "../util";
 import { Button } from "react-native-elements";
 import { UserContext } from "../UserContext";
 import { postAddUser } from "../api/user";
@@ -62,7 +62,7 @@ export function WelcomeScreen() {
     (async () => {
       try {
         const deviceID = await getDeviceID();
-        const osName = Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
+        const osName = getOSName();
         console.log(formData);
         await postAddUser({
           conference_id: CONFERENCE_ID,

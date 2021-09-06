@@ -7,6 +7,7 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import * as Analytics from "expo-firebase-analytics";
+import * as Device from "expo-device";
 
 export const ONE_HOUR_MS = 1000 * 60 * 60;
 
@@ -150,4 +151,8 @@ export const logAnalyticsEvent = async (eventName: string, itemID: number, itemD
   } catch (e) {
     console.warn(`Analytics logging failed: ${e}`);
   }
+};
+
+export const getOSName = () => {
+  return Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
 };

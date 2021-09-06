@@ -9,6 +9,7 @@ import InfoStack from "./components/Info";
 import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import {
+  getOSName,
   getStoredJSON,
   logAnalyticsEvent,
   logAnalyticsScreenChange,
@@ -148,6 +149,7 @@ export default function App() {
 
                   return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
                 },
+                unmountOnBlur: getOSName() === "Android",
               })}
               tabBarOptions={{
                 activeTintColor: colors.neonBlue,
