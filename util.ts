@@ -136,7 +136,7 @@ export const logAnalyticsScreenChange = async (screenName: string | undefined) =
   try {
     await Analytics.setCurrentScreen(screenName);
   } catch (e) {
-      console.warn(`Analytics logging failed: ${e}`);
+    console.warn(`Analytics logging failed: ${e}`);
   }
 };
 

@@ -127,7 +127,7 @@ function ScheduleScreen({ navigation }: any) {
           ref={eventsList}
           stickySectionHeadersEnabled={false}
           sections={sectionizeSchedule(filteredSchedule)}
-          keyExtractor={(item: ConferenceEvent, index: number) => (item.id + index).toString()}
+          keyExtractor={(item: ConferenceEvent) => item.id.toString()}
           renderItem={({ item, section, index }) => {
             const itemsInSection = section.data.length - 1;
             return (

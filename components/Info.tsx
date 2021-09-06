@@ -51,7 +51,7 @@ function InfoScreen({ navigation }: any) {
         />
       }
       data={data.sort((a: Info, b: Info) => a.display_order - b.display_order)}
-      keyExtractor={(item) => item.id + item.title}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <Card
           containerStyle={[

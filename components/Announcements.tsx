@@ -53,7 +53,7 @@ function AnnouncementsScreen({ navigation }: any) {
         />
       }
       data={data.sort((a: Announcement, b: Announcement) => b.send_time.localeCompare(a.send_time))}
-      keyExtractor={(item) => item.id + item.title}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <Card
           containerStyle={{
