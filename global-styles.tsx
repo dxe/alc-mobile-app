@@ -61,6 +61,14 @@ export const globalStyles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
+  textSmallBoldUppercaseGrey: {
+    fontFamily: "Inter-700",
+    fontSize: 12,
+    lineHeight: 15,
+    color: colors.mediumGrey,
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+  },
   textMediumRegular: {
     fontFamily: "Inter-400",
     fontSize: 14,

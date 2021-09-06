@@ -19,6 +19,7 @@ export interface ConferenceEvent {
   id: number;
   image_url: string | null;
   key_event: boolean;
+  breakout_session: boolean;
   length: number;
   location: Location;
   name: string;

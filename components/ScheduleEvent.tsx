@@ -77,6 +77,10 @@ export function ScheduleEvent(props: Props) {
               <Text style={[globalStyles.textSmallBoldUppercasePink, { marginBottom: 2 }]}>Main Event</Text>
             )}
 
+            {props.event.breakout_session && (
+              <Text style={[globalStyles.textSmallBoldUppercaseGrey, { marginBottom: 2 }]}>Breakout Session</Text>
+            )}
+
             <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
               {props.event.name}
             </Text>
