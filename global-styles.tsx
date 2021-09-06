@@ -7,7 +7,7 @@ export const colors = {
   darkGrey: "#323538",
   midGrey: "#C4C4C4",
   black: "#000000",
-  purple: "#3738AE",
+  purple: "#1B3DB7",
   orange: "#FF5E37",
   neonPink: "#F891FC",
   neonBlue: "#A9F7F3",
