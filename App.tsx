@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StatusBar, View } from "react-native";
-import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef, StackActions } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
@@ -37,6 +37,26 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
+
+// Function to fire when a tab navigation event occurs.
+// This is used to reset the navigation stack on a screen component
+// when navigating to another screen component on Android, since that
+// is the expected default behavior for the Android OS.
+export const _tabNavigationListener = (props: any) => {
+  if (getOSName() !== "Android") return {};
+  const { navigation } = props;
+  return {
+    blur: (e: any) => {
+      const target = e.target;
+      const state = navigation.dangerouslyGetState();
+      const route = state.routes.find((r: any) => r.key === target);
+      // If we are leaving a tab that has its own stack navigation, then clear it.
+      if (route.state?.type === "stack" && route.state.routes?.length > 1) {
+        navigation.dispatch(StackActions.popToTop());
+      }
+    },
+  };
+};
 
 const Tab = createBottomTabNavigator();
 
@@ -149,7 +169,6 @@ export default function App() {
 
                   return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
                 },
-                unmountOnBlur: getOSName() === "Android",
               })}
               tabBarOptions={{
                 activeTintColor: colors.neonBlue,
@@ -158,10 +177,26 @@ export default function App() {
               }}
               initialRouteName={initialRouteName}
             >
-              <Tab.Screen name="Home" component={HomeStack} />
-              <Tab.Screen name="Schedule" component={ScheduleStack} />
-              <Tab.Screen name="Announcements" component={AnnouncementsStack} />
-              <Tab.Screen name="More" component={InfoStack} />
+              <Tab.Screen
+                name="Home"
+                component={HomeStack}
+                listeners={(props) => _tabNavigationListener({ ...props })}
+              />
+              <Tab.Screen
+                name="Schedule"
+                component={ScheduleStack}
+                listeners={(props) => _tabNavigationListener({ ...props })}
+              />
+              <Tab.Screen
+                name="Announcements"
+                component={AnnouncementsStack}
+                listeners={(props) => _tabNavigationListener({ ...props })}
+              />
+              <Tab.Screen
+                name="More"
+                component={InfoStack}
+                listeners={(props) => _tabNavigationListener({ ...props })}
+              />
             </Tab.Navigator>
           </ScheduleContext.Provider>
         )}

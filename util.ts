@@ -8,6 +8,7 @@ import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import * as Analytics from "expo-firebase-analytics";
 import * as Device from "expo-device";
+import { StackActions } from "@react-navigation/native";
 
 export const ONE_HOUR_MS = 1000 * 60 * 60;
 
