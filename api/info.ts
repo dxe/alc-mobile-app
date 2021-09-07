@@ -7,6 +7,8 @@ export interface Info {
   subtitle: string;
   content: string;
   display_order: number;
+  image_url: string;
+  key_info: boolean;
 }
 
 export const useInfo = (initialValue: any) => {

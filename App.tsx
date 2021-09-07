@@ -22,12 +22,14 @@ import { UserContext } from "./UserContext";
 import { postRegisterPushNotifications } from "./api/user";
 import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
+import { InfoContext } from "./InfoContext";
 import * as Notifications from "expo-notifications";
 import { Icon } from "react-native-elements";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
 import AppLoading from "expo-app-loading";
 import { NotificationResponse } from "expo-notifications";
+import { useInfo } from "./api/info";
 
 // How to handle notifications when app is in foreground.
 Notifications.setNotificationHandler({
@@ -64,6 +66,7 @@ export default function App() {
   const [registeredConferenceID, setRegisteredConferenceID] = useState<number>(0);
   const [ready, setReady] = useState<boolean>(false);
   const { data, setData, status, setStatus } = useSchedule(null);
+  const { data: infoData, status: infoStatus, setStatus: setInfoStatus } = useInfo([]);
   const [notification, setNotification] = useState(null);
   const navigationRef = useRef<NavigationContainerRef>(null);
   const routeNameRef = useRef();
@@ -148,56 +151,58 @@ export default function App() {
           </UserContext.Provider>
         ) : (
           <ScheduleContext.Provider value={{ data: data, status: status, setData: setData, setStatus: setStatus }}>
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
+            <InfoContext.Provider value={{ data: infoData, status: infoStatus, setStatus: setInfoStatus }}>
+              <Tab.Navigator
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
 
-                  switch (route.name) {
-                    case "Home":
-                      iconName = "home";
-                      break;
-                    case "Schedule":
-                      iconName = "calendar";
-                      break;
-                    case "Announcements":
-                      iconName = "bell";
-                      break;
-                    default:
-                      iconName = "ellipsis-h";
-                  }
+                    switch (route.name) {
+                      case "Home":
+                        iconName = "home";
+                        break;
+                      case "Schedule":
+                        iconName = "calendar";
+                        break;
+                      case "Announcements":
+                        iconName = "bell";
+                        break;
+                      default:
+                        iconName = "ellipsis-h";
+                    }
 
-                  return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
-                },
-              })}
-              tabBarOptions={{
-                activeTintColor: colors.neonBlue,
-                inactiveTintColor: colors.midGrey,
-                style: { backgroundColor: colors.black, opacity: 0.9, borderTopWidth: 0 },
-              }}
-              initialRouteName={initialRouteName}
-            >
-              <Tab.Screen
-                name="Home"
-                component={HomeStack}
-                listeners={(props) => _tabNavigationListener({ ...props })}
-              />
-              <Tab.Screen
-                name="Schedule"
-                component={ScheduleStack}
-                listeners={(props) => _tabNavigationListener({ ...props })}
-              />
-              <Tab.Screen
-                name="Announcements"
-                component={AnnouncementsStack}
-                listeners={(props) => _tabNavigationListener({ ...props })}
-              />
-              <Tab.Screen
-                name="More"
-                component={InfoStack}
-                listeners={(props) => _tabNavigationListener({ ...props })}
-              />
-            </Tab.Navigator>
+                    return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
+                  },
+                })}
+                tabBarOptions={{
+                  activeTintColor: colors.neonBlue,
+                  inactiveTintColor: colors.midGrey,
+                  style: { backgroundColor: colors.black, opacity: 0.9, borderTopWidth: 0 },
+                }}
+                initialRouteName={initialRouteName}
+              >
+                <Tab.Screen
+                  name="Home"
+                  component={HomeStack}
+                  listeners={(props) => _tabNavigationListener({ ...props })}
+                />
+                <Tab.Screen
+                  name="Schedule"
+                  component={ScheduleStack}
+                  listeners={(props) => _tabNavigationListener({ ...props })}
+                />
+                <Tab.Screen
+                  name="Announcements"
+                  component={AnnouncementsStack}
+                  listeners={(props) => _tabNavigationListener({ ...props })}
+                />
+                <Tab.Screen
+                  name="More"
+                  component={InfoStack}
+                  listeners={(props) => _tabNavigationListener({ ...props })}
+                />
+              </Tab.Navigator>
+            </InfoContext.Provider>
           </ScheduleContext.Provider>
         )}
         <FlashMessage position="top" />

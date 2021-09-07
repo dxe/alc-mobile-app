@@ -1,14 +1,18 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, ScrollView, RefreshControl, Image } from "react-native";
+import { Text, View, ScrollView, RefreshControl, Image, ImageBackground, TouchableOpacity } from "react-native";
 import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
-import { showErrorMessage, useCurrentTime, utcToLocal } from "../util";
+import { logAnalyticsEvent, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent } from "../api/schedule";
 import moment from "moment";
 import { ScheduleContext } from "../ScheduleContext";
 import Constants from "expo-constants";
+import { Info, useInfo } from "../api/info";
+import { InfoContext } from "../InfoContext";
+import { InfoDetails } from "./Info";
+import { Card } from "react-native-elements";
 
 const Stack = createStackNavigator();
 
@@ -48,6 +52,13 @@ export default function HomeStack() {
           ...screenHeaderOptions,
         }}
       />
+      <Stack.Screen
+        name="Info Details"
+        component={InfoDetails}
+        options={{
+          ...screenHeaderOptions,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -58,11 +69,22 @@ function HomeScreen({ navigation }: any) {
   const [keyEvents, setKeyEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const { data, status, setStatus } = useContext(ScheduleContext);
   const currentTime = useCurrentTime();
+  const { data: infoData, status: infoStatus, setStatus: setInfoStatus } = useContext(InfoContext);
 
   useEffect(() => {
     if (status != "error") return;
     showErrorMessage("Failed to get latest schedule from server.");
   }, [status]);
+
+  useEffect(() => {
+    if (infoStatus != "error") return;
+    showErrorMessage("Failed to get latest info from server.");
+  }, [infoStatus]);
+
+  const onRefresh = () => {
+    setStatus("refreshing");
+    setInfoStatus("refreshing");
+  };
 
   // Update displayed current & next events.
   useEffect(() => {
@@ -123,7 +145,7 @@ function HomeScreen({ navigation }: any) {
         refreshControl={
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}
-            onRefresh={() => setStatus("refreshing")}
+            onRefresh={onRefresh}
             tintColor={colors.white}
           />
         }
@@ -140,13 +162,13 @@ function HomeScreen({ navigation }: any) {
         )}
 
         {currentEvents && currentEvents.length > 0 && (
-          <View style={{ marginBottom: 28 }}>
+          <View style={{ marginBottom: 26 }}>
             <Text style={[globalStyles.h1]}>Happening Now</Text>
 
             {currentEvents.map((e: ConferenceEvent) => {
               return (
                 <TripleTextCard
-                  key={e.id}
+                  key={e.id + "_current"}
                   navigation={navigation}
                   scheduleItem={e}
                   topElement={<Text>Started {moment(e.start_time).utc(true).from(currentTime)}</Text>}
@@ -159,13 +181,13 @@ function HomeScreen({ navigation }: any) {
         )}
 
         {nextEvents && nextEvents.length > 0 && (
-          <View style={{ marginBottom: 28 }}>
+          <View style={{ marginBottom: 26 }}>
             <Text style={globalStyles.h1}>Coming Up Next</Text>
 
             {nextEvents.map((e: ConferenceEvent) => {
               return (
                 <TripleTextCard
-                  key={e.id}
+                  key={e.id + "_next"}
                   navigation={navigation}
                   scheduleItem={e}
                   topElement={<Text>Starts {moment(e.start_time).utc(true).from(currentTime)}</Text>}
@@ -178,13 +200,13 @@ function HomeScreen({ navigation }: any) {
         )}
 
         {moment().isBefore(moment(data.conference.end_date).utc(true)) && keyEvents && keyEvents.length > 0 && (
-          <View style={{ marginBottom: 28 }}>
+          <View style={{ marginBottom: 26 }}>
             <Text style={globalStyles.h1}>Today's Main Events</Text>
 
             {keyEvents.map((e: ConferenceEvent) => {
               return (
                 <TripleTextCard
-                  key={e.id}
+                  key={e.id + "_key"}
                   navigation={navigation}
                   scheduleItem={e}
                   topElement={
@@ -202,6 +224,54 @@ function HomeScreen({ navigation }: any) {
             })}
           </View>
         )}
+
+        <View style={{ marginTop: 16 }}>
+          {infoData
+            .filter((info: Info) => info.key_info)
+            .map((item: Info) => (
+              <View key={item.id + "_info"} style={[{ height: 120, marginBottom: 16 }, globalStyles.shadow]}>
+                <TouchableOpacity
+                  style={{ flex: 1 }}
+                  onPress={() => {
+                    logAnalyticsEvent("FeaturedInfoItemTapped", item.id, item.title);
+                    navigation.navigate("Info Details", { infoItem: item });
+                  }}
+                >
+                  <ImageBackground
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      padding: 0,
+                      position: "absolute",
+                    }}
+                    imageStyle={{
+                      resizeMode: "cover",
+                      width: "100%",
+                      height: "100%",
+                      padding: 0,
+                      margin: 0,
+                      borderRadius: 12,
+                    }}
+                    source={{ uri: item.image_url }}
+                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: "#00000088",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      borderRadius: 12,
+                      padding: 12,
+                      borderColor: colors.white,
+                      borderWidth: 1,
+                    }}
+                  >
+                    <Text style={[globalStyles.h1, { textAlign: "center" }]}>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+        </View>
       </ScrollView>
     )
   );

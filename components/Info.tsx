@@ -1,11 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity, Pressable } from "react-native";
-import React, { useEffect } from "react";
+import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
+import React, { useContext, useEffect } from "react";
 import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
 import { Icon, Card, Text } from "react-native-elements";
 import HTML from "react-native-render-html";
-import { Info, useInfo } from "../api/info";
+import { Info } from "../api/info";
 import { logAnalyticsEvent, showErrorMessage } from "../util";
+import { InfoContext } from "../InfoContext";
 
 const Stack = createStackNavigator();
 
@@ -33,7 +34,7 @@ export default function InfoStack() {
 }
 
 function InfoScreen({ navigation }: any) {
-  const { data, status, setStatus } = useInfo([]);
+  const { data, status, setStatus } = useContext(InfoContext);
 
   useEffect(() => {
     if (status != "error") return;
@@ -96,7 +97,7 @@ function InfoScreen({ navigation }: any) {
   );
 }
 
-function InfoDetails({ route, navigation }: any) {
+export function InfoDetails({ route, navigation }: any) {
   const { infoItem } = route.params;
 
   React.useLayoutEffect(() => {

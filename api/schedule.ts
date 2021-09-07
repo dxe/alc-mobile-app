@@ -1,5 +1,4 @@
 import { CONFERENCE_ID, postAPI, useAPI } from "./api";
-import { logAnalyticsEvent } from "../util";
 
 export interface Schedule {
   events: ConferenceEvent[];
