@@ -8,7 +8,6 @@ import { logAnalyticsEvent, showErrorMessage, useCurrentTime } from "../util";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import * as WebBrowser from "expo-web-browser";
-import * as Notifications from "expo-notifications";
 
 const Stack = createStackNavigator();
 

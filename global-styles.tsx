@@ -14,6 +14,7 @@ export const colors = {
   darkestBlue: "#181441",
   lightGrey: "#F4F4F4",
   mediumGrey: "#979797",
+  green: "#51A055",
 };
 
 export const globalStyles = StyleSheet.create({
@@ -61,11 +62,11 @@ export const globalStyles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
-  textSmallBoldUppercaseGrey: {
+  textSmallBoldUppercaseGreen: {
     fontFamily: "Inter-700",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.mediumGrey,
+    color: colors.green,
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
