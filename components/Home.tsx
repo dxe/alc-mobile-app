@@ -229,7 +229,13 @@ function HomeScreen({ navigation }: any) {
           {infoData
             .filter((info: Info) => info.key_info)
             .map((item: Info) => (
-              <View key={item.id + "_info"} style={[{ height: 120, marginBottom: 16 }, globalStyles.shadow]}>
+              <View
+                key={item.id + "_info"}
+                style={[
+                  { height: 120, marginBottom: 16, backgroundColor: colors.black, borderRadius: 12 },
+                  globalStyles.shadow,
+                ]}
+              >
                 <TouchableOpacity
                   style={{ flex: 1 }}
                   onPress={() => {
