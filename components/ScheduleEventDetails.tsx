@@ -143,7 +143,7 @@ export function ScheduleEventDetails({ route }: any) {
             {scheduleItem.total_attendees} confirmed attendees
           </Text>
         </View>
-        <View style={{ alignSelf: "center", justifyContent: "center" }}>
+        <View style={{ alignSelf: "center", justifyContent: "center", paddingLeft: 25 }}>
           <Button
             titleStyle={
               scheduleItem.attending ? [globalStyles.textButton, { color: colors.white }] : globalStyles.textButton
