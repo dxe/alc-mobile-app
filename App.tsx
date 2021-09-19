@@ -71,6 +71,7 @@ export default function App() {
   const navigationRef = useRef<NavigationContainerRef>(null);
   const routeNameRef = useRef();
   const [initialRouteName, setInitialRouteName] = useState("Home");
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
   let [fontsLoaded] = useFonts({
     "Inter-400": require("./assets/fonts/Inter-Regular.ttf"),
     "Inter-500": require("./assets/fonts/Inter-Medium.ttf"),
@@ -84,6 +85,11 @@ export default function App() {
   }
 
   useEffect(() => {
+    // To handle when a notification is tapped.
+    _handleNotificationResponse(lastNotificationResponse);
+  }, [lastNotificationResponse]);
+
+  useEffect(() => {
     (async () => {
       const user = await getStoredJSON("user");
       const id = user?.conference;
@@ -93,23 +99,30 @@ export default function App() {
 
     // Fires when a notification is received when app is in foreground.
     Notifications.addNotificationReceivedListener(_handleNotification);
-
-    // Fires when a notification is tapped (whether or not app is open).
-    Notifications.addNotificationResponseReceivedListener(_handleNotificationResponse);
   }, []);
 
   const _handleNotification = (notification: any) => {
     setNotification(notification);
   };
 
-  const _handleNotificationResponse = (response: NotificationResponse) => {
-    const notificationTitle = response?.notification?.request?.content?.title || "";
-    logAnalyticsEvent("NotificationTapped", 0, notificationTitle);
-    if (navigationRef.current) {
-      navigationRef.current.navigate("Announcements");
-    } else {
-      setInitialRouteName("Announcements");
-    }
+  const _handleNotificationResponse = (response: NotificationResponse | undefined | null) => {
+    if (response === undefined || response === null) return;
+
+    (async () => {
+      const lastNotificationDate = await getStoredJSON("last_notification_date");
+
+      if (!lastNotificationDate || response.notification?.date > lastNotificationDate) {
+        const notificationTitle = response?.notification?.request?.content?.title || "";
+        logAnalyticsEvent("NotificationTapped", 0, notificationTitle);
+        if (navigationRef.current) {
+          navigationRef.current.navigate("Announcements");
+        } else {
+          setInitialRouteName("Announcements");
+        }
+      }
+
+      await storeJSON("last_notification_date", response.notification.date);
+    })();
   };
 
   const userRegistered = (deviceID: string, userName: string) => {
