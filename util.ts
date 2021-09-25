@@ -5,6 +5,7 @@ import * as Application from "expo-application";
 import { Platform } from "react-native";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
+import { useEffect, useState } from "react";
 
 export const ONE_HOUR_MS = 1000 * 60 * 60;
 
@@ -106,4 +107,17 @@ export const registerForPushNotificationsAsync = async (): Promise<string> => {
   }
 
   return Promise.resolve(token);
+};
+
+export const useCurrentTime = () => {
+  const [currentTime, setCurrentTime] = useState<moment.Moment>(moment());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(moment());
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [currentTime]);
+
+  return currentTime;
 };

@@ -2,11 +2,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
 import { Text, View, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
-import { showErrorMessage, utcToLocal } from "../util";
+import { showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent } from "../api/schedule";
-import { TimeAgo } from "./common/TimeAgo";
 import moment from "moment";
 import { ScheduleContext } from "../ScheduleContext";
 
@@ -35,11 +34,11 @@ export default function HomeStack() {
 }
 
 function HomeScreen({ navigation }: any) {
-  const [currentTime, setCurrentTime] = useState<moment.Moment>(moment());
   const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const [keyEvents, setKeyEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
   const { data, status, setStatus } = useContext(ScheduleContext);
+  const currentTime = useCurrentTime();
 
   useEffect(() => {
     if (status != "error") return;
@@ -95,13 +94,6 @@ function HomeScreen({ navigation }: any) {
       );
     };
     updateFeaturedEvents();
-
-    const interval = setInterval(() => {
-      setCurrentTime(moment().utc());
-      updateFeaturedEvents();
-    }, 1000);
-
-    return () => clearInterval(interval);
   }, [currentTime, data]);
 
   return (
@@ -127,9 +119,7 @@ function HomeScreen({ navigation }: any) {
                   key={e.id}
                   navigation={navigation}
                   scheduleItem={e}
-                  topElement={
-                    <TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Started " />
-                  }
+                  topElement={<Text>Started {moment(e.start_time).utc(true).from(currentTime)}</Text>}
                   middleText={e.name}
                   bottomText={e.location.name + ", " + e.location.city}
                 />
@@ -148,7 +138,7 @@ function HomeScreen({ navigation }: any) {
                   key={e.id}
                   navigation={navigation}
                   scheduleItem={e}
-                  topElement={<TimeAgo time={moment(e.start_time).utc(true).local().toISOString()} pretext="Starts " />}
+                  topElement={<Text>Starts {moment(e.start_time).utc(true).from(currentTime)}</Text>}
                   middleText={e.name}
                   bottomText={e.location.name + ", " + e.location.city}
                 />

@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { getStoredJSON, showErrorMessage, utcToLocal } from "../util";
+import { getStoredJSON, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
 import { Icon } from "react-native-elements";
 import { colors, globalStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
@@ -18,7 +18,7 @@ export function ScheduleEvent(props: Props) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const { setData } = useContext(ScheduleContext);
-  const currentTime = moment(new Date());
+  const currentTime = useCurrentTime();
   const endTime = utcToLocal(props.event.start_time).add(props.event.length, "minute");
 
   useEffect(() => {

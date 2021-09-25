@@ -4,8 +4,7 @@ import React, { useEffect } from "react";
 import { screenHeaderOptions, colors, globalStyles } from "../global-styles";
 import { Icon, Text, Card } from "react-native-elements";
 import { Announcement, useAnnouncements } from "../api/announcement";
-import { showErrorMessage } from "../util";
-import { TimeAgo } from "./common/TimeAgo";
+import { showErrorMessage, useCurrentTime } from "../util";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import * as WebBrowser from "expo-web-browser";
@@ -29,6 +28,7 @@ export default function AnnouncementsStack() {
 
 function AnnouncementsScreen({ navigation }: any) {
   const { data, status, setStatus } = useAnnouncements([]);
+  const currentTime = useCurrentTime();
 
   // Refresh the screen whenever it is focused.
   useFocusEffect(
@@ -100,9 +100,7 @@ function AnnouncementsScreen({ navigation }: any) {
                 </TouchableOpacity>
               )}
 
-              <Text style={globalStyles.textSmallRegular}>
-                <TimeAgo time={moment(item.send_time).utc(true).local().toISOString()} />
-              </Text>
+              <Text style={globalStyles.textSmallRegular}>{moment(item.send_time).utc(true).from(currentTime)}</Text>
             </View>
           </View>
         </Card>
