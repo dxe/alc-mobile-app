@@ -2,7 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
 import { Text, View, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
-import { showErrorMessage } from "../util";
+import { showErrorMessage, utcToLocal } from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent } from "../api/schedule";
@@ -169,14 +169,12 @@ function HomeScreen({ navigation }: any) {
                   scheduleItem={e}
                   topElement={
                     // TODO: say "happening now" or "ended" if key events are in progress or over
-                    <TimeAgo
-                      time={moment(e.start_time).utc(true).local().toISOString()}
-                      pretext={
-                        moment(moment(e.start_time).utc(true).toDate()).local().isAfter(moment())
-                          ? "Starts "
-                          : "Started "
-                      }
-                    />
+                    <Text>
+                      <Text>{utcToLocal(e.start_time).format("h:mm A")}</Text>
+                      <Text style={{ color: colors.mediumGrey }}>
+                        {" – " + utcToLocal(e.start_time).add(e.length, "minute").format("h:mm A")}
+                      </Text>
+                    </Text>
                   }
                   middleText={e.name}
                   bottomText={e.location.name + ", " + e.location.city}
