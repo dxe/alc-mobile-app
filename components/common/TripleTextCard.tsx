@@ -50,8 +50,6 @@ export function TripleTextCard(props: Props) {
             name="angle-right"
             color={colors.purple}
             containerStyle={{
-              //margin: 0,
-              //marginLeft: 15,
               justifyContent: "center",
               alignItems: "center",
             }}
