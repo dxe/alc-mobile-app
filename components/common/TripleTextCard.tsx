@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, Icon } from "react-native-elements";
 import { colors, globalStyles } from "../../global-styles";
 import { ConferenceEvent } from "../../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
@@ -35,14 +35,28 @@ export function TripleTextCard(props: Props) {
           props.navigation.navigate("Event Details", { scheduleItem: props.scheduleItem });
         }}
       >
-        <View>
-          <View>
-            <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>{props.topElement}</Text>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}>
+          <View style={{ flex: 1, justifyContent: "flex-start" }}>
+            <View>
+              <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>{props.topElement}</Text>
+            </View>
+            <View>
+              <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}>{props.middleText}</Text>
+              <Text style={globalStyles.textMediumRegular}>{props.bottomText}</Text>
+            </View>
           </View>
-          <View>
-            <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}>{props.middleText}</Text>
-            <Text style={globalStyles.textMediumRegular}>{props.bottomText}</Text>
-          </View>
+          <Icon
+            type="font-awesome-5"
+            name="angle-right"
+            color={colors.purple}
+            containerStyle={{
+              //margin: 0,
+              //marginLeft: 15,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            size={20}
+          />
         </View>
       </TouchableOpacity>
     </Card>
