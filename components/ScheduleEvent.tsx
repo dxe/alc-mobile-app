@@ -112,6 +112,18 @@ export function ScheduleEvent(props: Props) {
               />
             )}
           </TouchableOpacity>
+          <Icon
+            type="font-awesome-5"
+            name="angle-right"
+            color={colors.purple}
+            containerStyle={{
+              margin: 0,
+              marginLeft: 15,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            size={20}
+          />
         </View>
       </View>
     </TouchableOpacity>
