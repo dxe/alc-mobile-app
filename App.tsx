@@ -110,7 +110,9 @@ export default function App() {
     })();
 
     // Fires when a notification is received when app is in foreground.
-    Notifications.addNotificationReceivedListener(_handleNotification);
+    const subscription =
+      Notifications.addNotificationReceivedListener(_handleNotification);
+    return () => subscription.remove();
   }, []);
 
   const _handleNotification = (notification: any) => {

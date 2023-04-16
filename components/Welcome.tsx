@@ -63,7 +63,10 @@ export function WelcomeScreen() {
     return true;
   };
 
-  const submitRegistration = (includeFormData: boolean, callback: any) => {
+  const submitRegistration = (
+    includeFormData: boolean,
+    callback: (deviceId: string, name: string) => unknown | Promise<unknown>
+  ) => {
     setSubmitting(true);
 
     if (includeFormData) {
@@ -209,7 +212,7 @@ export function WelcomeScreen() {
                     { color: colors.white },
                   ]}
                   buttonStyle={[
-                    globalStyles.buttonPurple,
+                    globalStyles.buttonPrimary,
                     { borderColor: colors.primary },
                   ]}
                   onPress={() => {
@@ -226,7 +229,7 @@ export function WelcomeScreen() {
                   { color: colors.lightBlue },
                 ]}
                 buttonStyle={[
-                  globalStyles.buttonPurple,
+                  globalStyles.buttonPrimary,
                   {
                     borderColor: "transparent",
                     backgroundColor: "transparent",

@@ -21,7 +21,7 @@ import { ScheduleContext } from "../ScheduleContext";
 import * as Device from "expo-device";
 
 export function ScheduleEventDetails({ route }: any) {
-  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(
     route.params.scheduleItem
   );
@@ -29,7 +29,7 @@ export function ScheduleEventDetails({ route }: any) {
 
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
-    setSubmitting(true);
+    setIsSubmitting(true);
     logAnalyticsEvent(
       "LargeRSVPButtonTapped",
       scheduleItem.id,
@@ -48,7 +48,7 @@ export function ScheduleEventDetails({ route }: any) {
       } catch (e) {
         showErrorMessage("Failed to RSVP.");
       } finally {
-        setSubmitting(false);
+        setIsSubmitting(false);
       }
     })();
   };
@@ -242,13 +242,13 @@ export function ScheduleEventDetails({ route }: any) {
             }
             buttonStyle={[
               scheduleItem.attending
-                ? globalStyles.buttonPurple
-                : globalStyles.buttonPurpleOutline,
+                ? globalStyles.buttonPrimary
+                : globalStyles.buttonPrimaryOutline,
               { flex: 1 },
             ]}
             onPress={eventRSVP}
             icon={
-              submitting ? (
+              isSubmitting ? (
                 <></>
               ) : (
                 <Icon
@@ -260,7 +260,7 @@ export function ScheduleEventDetails({ route }: any) {
               )
             }
             title={
-              submitting ? (
+              isSubmitting ? (
                 <ActivityIndicator size="small" color={colors.primary} />
               ) : scheduleItem.attending ? (
                 "  Attending"
@@ -268,7 +268,7 @@ export function ScheduleEventDetails({ route }: any) {
                 "  RSVP"
               )
             }
-            disabled={submitting}
+            disabled={isSubmitting}
           />
         </View>
       </View>

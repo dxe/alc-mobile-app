@@ -130,7 +130,11 @@ export function ScheduleEvent(props: Props) {
               {props.event.location.name}
             </Text>
           </View>
-          <TouchableOpacity onPress={eventRSVP} disabled={submitting}>
+          <TouchableOpacity
+            onPress={eventRSVP}
+            disabled={submitting}
+            style={{ alignSelf: "flex-start" }}
+          >
             {submitting ? (
               <ActivityIndicator
                 size="small"
@@ -146,15 +150,23 @@ export function ScheduleEvent(props: Props) {
               <Icon
                 type="font-awesome-5"
                 raised
-                reverse={scheduleItem.attending}
+                reverse
                 name={scheduleItem.attending ? "check" : "plus"}
-                color={newColors.lightGreen}
+                color={
+                  scheduleItem.attending
+                    ? newColors.lightGreen
+                    : newColors.darkGrey
+                }
+                reverseColor={
+                  scheduleItem.attending ? colors.white : colors.primary
+                }
                 containerStyle={{
                   margin: 0,
                   borderWidth: 2,
                   justifyContent: "center",
                   alignItems: "center",
                   borderColor: colors.primary,
+                  backgroundColor: colors.primary,
                 }}
                 size={20}
                 disabled={submitting}

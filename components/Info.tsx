@@ -106,7 +106,10 @@ function InfoScreen({ navigation }: any) {
                     ? colors.orange
                     : colors.primary
                 }
-                containerStyle={{ marginRight: 12 }}
+                containerStyle={{
+                  marginRight: 12,
+                  backgroundColor: colors.primary,
+                }}
                 solid={true}
               />
               <View style={{ flex: 1 }}>

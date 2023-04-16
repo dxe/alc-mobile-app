@@ -7,7 +7,7 @@ import React from "react";
 
 // New colors for 2023.
 export const newColors = {
-  lightGreen: "#4BAC5E",
+  lightGreen: "#62C287",
   lightBlue: "#A6D8F6",
   darkGrey: "#292929",
   mediumGrey: "#404040",
@@ -38,7 +38,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-600",
     fontSize: 20,
     lineHeight: 24,
-    color: colors.lightBlue,
+    color: newColors.lightBlue,
   },
   textSmallMedium: {
     fontFamily: "Inter-500",
@@ -68,7 +68,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-700",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.lightBlue,
+    color: newColors.lightBlue,
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
@@ -76,7 +76,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-700",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.green,
+    color: newColors.lightGreen,
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
@@ -116,17 +116,17 @@ export const globalStyles = StyleSheet.create({
     lineHeight: 17,
     color: colors.primary,
   },
-  buttonPurpleOutline: {
+  buttonPrimaryOutline: {
     borderWidth: 2,
     borderColor: colors.primary,
-    backgroundColor: colors.white,
+    backgroundColor: newColors.mediumGrey,
     borderRadius: 23,
     paddingVertical: 12,
     paddingHorizontal: 12,
     minWidth: 140,
     minHeight: 50,
   },
-  buttonPurple: {
+  buttonPrimary: {
     backgroundColor: colors.primary,
     borderRadius: 23,
     paddingVertical: 12,
@@ -134,7 +134,7 @@ export const globalStyles = StyleSheet.create({
     minWidth: 140,
     minHeight: 50,
     borderWidth: 2,
-    borderColor: colors.white,
+    borderColor: colors.primary,
   },
   textLabel: {
     fontFamily: "Inter-500",
@@ -144,7 +144,7 @@ export const globalStyles = StyleSheet.create({
     textTransform: "uppercase",
   },
   textHero: {
-    color: colors.lightBlue,
+    color: newColors.lightBlue,
     fontFamily: "Inter-700",
     fontSize: 40,
     lineHeight: 53,
@@ -159,7 +159,7 @@ export const globalStyles = StyleSheet.create({
 });
 
 export const screenHeaderOptions: StackNavigationOptions = {
-  headerTintColor: colors.lightBlue,
+  headerTintColor: newColors.lightBlue,
   headerTitleStyle: [globalStyles.h2, { fontSize: 18 }],
   headerBackTitleStyle: [globalStyles.h2, { fontSize: 16 }],
   headerTransparent: false,

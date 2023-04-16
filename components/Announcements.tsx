@@ -65,9 +65,13 @@ function AnnouncementsScreen({ navigation }: any) {
           tintColor={colors.midGrey}
         />
       }
-      data={data.sort((a: Announcement, b: Announcement) =>
-        b.send_time.localeCompare(a.send_time)
-      )}
+      data={
+        data && Array.isArray(data)
+          ? data.sort((a: Announcement, b: Announcement) =>
+              b.send_time.localeCompare(a.send_time)
+            )
+          : []
+      }
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <Card

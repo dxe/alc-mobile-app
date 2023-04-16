@@ -11,11 +11,12 @@ export interface Announcement {
 }
 
 export const useAnnouncements = (initialValue: any) => {
-  return useAPI({
+  const { data, ...result } = useAPI({
     path: "/announcement/list",
     body: {
       conference_id: CONFERENCE_ID,
     },
     initialValue: initialValue,
   });
+  return { data: data as Announcement[], ...result };
 };

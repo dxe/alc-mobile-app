@@ -30,6 +30,7 @@ import Constants from "expo-constants";
 import { Info } from "../api/info";
 import { InfoContext } from "../InfoContext";
 import { InfoDetails } from "./Info";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,7 @@ export default function HomeStack() {
         options={{
           ...screenHeaderOptions,
           title: "Animal Liberation Conference",
+          headerTransparent: false,
           header: () => {
             return (
               <View
@@ -191,6 +193,8 @@ function HomeScreen({ navigation }: any) {
           />
         }
       >
+        {/*TODO: Try gradiant color here.*/}
+        {/*<LinearGradient colors={["rgba(255,255,255,0.8)", "transparent"]} />*/}
         {moment().isAfter(moment(data.conference.end_date).utc(true)) && (
           <View>
             <Text
