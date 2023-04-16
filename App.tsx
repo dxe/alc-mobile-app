@@ -1,6 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StatusBar, View } from "react-native";
-import { NavigationContainer, NavigationContainerRef, StackActions } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+  StackActions,
+} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
@@ -27,9 +31,12 @@ import * as Notifications from "expo-notifications";
 import { Icon } from "react-native-elements";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen";
 import { NotificationResponse } from "expo-notifications";
 import { useInfo } from "./api/info";
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 // How to handle notifications when app is in foreground.
 Notifications.setNotificationHandler({
@@ -63,16 +70,21 @@ export const _tabNavigationListener = (props: any) => {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [registeredConferenceID, setRegisteredConferenceID] = useState<number>(0);
-  const [ready, setReady] = useState<boolean>(false);
+  const [registeredConferenceID, setRegisteredConferenceID] =
+    useState<number>(0);
+  const [isReady, setIsReady] = useState<boolean>(false);
   const { data, setData, status, setStatus } = useSchedule(null);
-  const { data: infoData, status: infoStatus, setStatus: setInfoStatus } = useInfo([]);
+  const {
+    data: infoData,
+    status: infoStatus,
+    setStatus: setInfoStatus,
+  } = useInfo([]);
   const [notification, setNotification] = useState(null);
   const navigationRef = useRef<NavigationContainerRef>(null);
   const routeNameRef = useRef();
   const [initialRouteName, setInitialRouteName] = useState("Home");
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
-  let [fontsLoaded] = useFonts({
+  let [isFontsLoaded] = useFonts({
     "Inter-400": require("./assets/fonts/Inter-Regular.ttf"),
     "Inter-500": require("./assets/fonts/Inter-Medium.ttf"),
     "Inter-600": require("./assets/fonts/Inter-SemiBold.ttf"),
@@ -94,7 +106,7 @@ export default function App() {
       const user = await getStoredJSON("user");
       const id = user?.conference;
       setRegisteredConferenceID(id ? id : 0);
-      setReady(true);
+      setIsReady(true);
     })();
 
     // Fires when a notification is received when app is in foreground.
@@ -105,14 +117,22 @@ export default function App() {
     setNotification(notification);
   };
 
-  const _handleNotificationResponse = (response: NotificationResponse | undefined | null) => {
+  const _handleNotificationResponse = (
+    response: NotificationResponse | undefined | null
+  ) => {
     if (response === undefined || response === null) return;
 
     (async () => {
-      const lastNotificationDate = await getStoredJSON("last_notification_date");
+      const lastNotificationDate = await getStoredJSON(
+        "last_notification_date"
+      );
 
-      if (!lastNotificationDate || response.notification?.date > lastNotificationDate) {
-        const notificationTitle = response?.notification?.request?.content?.title || "";
+      if (
+        !lastNotificationDate ||
+        response.notification?.date > lastNotificationDate
+      ) {
+        const notificationTitle =
+          response?.notification?.request?.content?.title || "";
         logAnalyticsEvent("NotificationTapped", 0, notificationTitle);
         if (navigationRef.current) {
           navigationRef.current.navigate("Announcements");
@@ -145,17 +165,33 @@ export default function App() {
     })();
   };
 
-  if (!ready || !fontsLoaded) {
-    return <AppLoading />;
+  const onLayoutRootView = useCallback(async () => {
+    if (isReady && isFontsLoaded) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [isReady, isFontsLoaded]);
+
+  if (!isReady || !isFontsLoaded) {
+    return null;
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.black }}>
+    <View
+      style={{ flex: 1, backgroundColor: colors.black }}
+      onLayout={onLayoutRootView}
+    >
       <NavigationContainer
         ref={navigationRef}
         onReady={() => logAnalyticsScreenChange(initialRouteName)}
         onStateChange={() => {
-          logAnalyticsScreenChange(navigationRef.current?.getCurrentRoute()?.name);
+          logAnalyticsScreenChange(
+            navigationRef.current?.getCurrentRoute()?.name
+          );
         }}
       >
         {registeredConferenceID != CONFERENCE_ID ? (
@@ -163,8 +199,21 @@ export default function App() {
             <WelcomeScreen />
           </UserContext.Provider>
         ) : (
-          <ScheduleContext.Provider value={{ data: data, status: status, setData: setData, setStatus: setStatus }}>
-            <InfoContext.Provider value={{ data: infoData, status: infoStatus, setStatus: setInfoStatus }}>
+          <ScheduleContext.Provider
+            value={{
+              data: data,
+              status: status,
+              setData: setData,
+              setStatus: setStatus,
+            }}
+          >
+            <InfoContext.Provider
+              value={{
+                data: infoData,
+                status: infoStatus,
+                setStatus: setInfoStatus,
+              }}
+            >
               <Tab.Navigator
                 screenOptions={({ route }) => ({
                   tabBarIcon: ({ focused, color, size }) => {
@@ -184,13 +233,25 @@ export default function App() {
                         iconName = "ellipsis-h";
                     }
 
-                    return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
+                    return (
+                      <Icon
+                        name={iconName}
+                        size={size}
+                        type="font-awesome-5"
+                        color={color}
+                        solid={focused}
+                      />
+                    );
                   },
                 })}
                 tabBarOptions={{
                   activeTintColor: colors.neonBlue,
                   inactiveTintColor: colors.midGrey,
-                  style: { backgroundColor: colors.black, opacity: 0.9, borderTopWidth: 0 },
+                  style: {
+                    backgroundColor: colors.black,
+                    opacity: 0.9,
+                    borderTopWidth: 0,
+                  },
                 }}
                 initialRouteName={initialRouteName}
               >

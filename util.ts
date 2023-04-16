@@ -6,9 +6,8 @@ import { Platform } from "react-native";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
-import * as Analytics from "expo-firebase-analytics";
+import analytics from "@react-native-firebase/analytics";
 import * as Device from "expo-device";
-import { StackActions } from "@react-navigation/native";
 
 export const ONE_HOUR_MS = 1000 * 60 * 60;
 
@@ -22,7 +21,10 @@ const DEFAULT_TIMEOUT = 500;
 
 // waitFunc wraps an async function and causes it to take at least a certain amount of time to resolve.
 // This is used to improve the UX in case something loads so quickly that the user thinks nothing happened.
-export const waitFunc = async (fn: Promise<any>, timeout: number = DEFAULT_TIMEOUT): Promise<any> => {
+export const waitFunc = async (
+  fn: Promise<any>,
+  timeout: number = DEFAULT_TIMEOUT
+): Promise<any> => {
   const [value] = await Promise.all([fn, wait(timeout)]);
   return value;
 };
@@ -133,19 +135,25 @@ export const useCurrentTime = () => {
   return currentTime;
 };
 
-export const logAnalyticsScreenChange = async (screenName: string | undefined) => {
+export const logAnalyticsScreenChange = async (
+  screenName: string | undefined
+) => {
   console.log(`Screen changed to ${screenName}`);
   try {
-    await Analytics.setCurrentScreen(screenName);
+    await analytics().logScreenView({ screen_name: screenName });
   } catch (e) {
     console.warn(`Analytics logging failed: ${e}`);
   }
 };
 
-export const logAnalyticsEvent = async (eventName: string, itemID: number, itemDescription: string) => {
+export const logAnalyticsEvent = async (
+  eventName: string,
+  itemID: number,
+  itemDescription: string
+) => {
   console.log(`${eventName}: ${itemID} (${itemDescription})`);
   try {
-    await Analytics.logEvent(eventName, {
+    await analytics().logEvent(eventName, {
       id: itemID,
       description: itemDescription,
     });
@@ -155,5 +163,7 @@ export const logAnalyticsEvent = async (eventName: string, itemID: number, itemD
 };
 
 export const getOSName = () => {
-  return Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
+  return Device.osName === "iOS" || Device.osName === "iPadOS"
+    ? Device.osName
+    : "Android";
 };

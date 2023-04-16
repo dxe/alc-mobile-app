@@ -53,6 +53,23 @@
           "measurementId": "G-6QB38JPSRK"
         }
       }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      "@react-native-firebase/app",
+      "./react-native-maps-plugin"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a114cde5-7d72-4393-accd-9932cb79cffd"
+      }
     }
   }
 }
