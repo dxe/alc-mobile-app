@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors, globalStyles } from "../global-styles";
+import { colors, globalStyles, newColors } from "../global-styles";
 import { logAnalyticsEvent, showErrorMessage, utcToLocal } from "../util";
 import MapView, {
   Marker,
@@ -55,10 +55,10 @@ export function ScheduleEventDetails({ route }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: colors.white }]}
+      style={[{ backgroundColor: newColors.mediumGrey }]}
       contentContainerStyle={[{ paddingVertical: 24, paddingHorizontal: 16 }]}
     >
-      <Text style={[globalStyles.h1, { color: colors.black, marginBottom: 5 }]}>
+      <Text style={[globalStyles.h1, { marginBottom: 5 }]}>
         {scheduleItem.name}
       </Text>
       <Text style={globalStyles.textMediumMedium}>
@@ -146,6 +146,8 @@ export function ScheduleEventDetails({ route }: any) {
             flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
+            backgroundColor: newColors.darkGrey,
+            borderRadius: 8,
           }}
         >
           <View style={{ flex: 1 }}>
@@ -154,6 +156,7 @@ export function ScheduleEventDetails({ route }: any) {
                 borderBottomWidth: 1,
                 borderColor: colors.midGrey,
                 padding: 8,
+                backgroundColor: newColors.darkGrey,
               }}
             >
               <Text style={globalStyles.textBodyMedium}>
@@ -165,7 +168,12 @@ export function ScheduleEventDetails({ route }: any) {
                   scheduleItem.location.city}
               </Text>
             </View>
-            <View style={{ flex: 1, padding: 14 }}>
+            <View
+              style={{
+                flex: 1,
+                padding: 14,
+              }}
+            >
               <TouchableOpacity
                 style={{
                   flex: 1,
@@ -193,7 +201,7 @@ export function ScheduleEventDetails({ route }: any) {
                   name={"directions"}
                   type={"font-awesome-5"}
                   style={{ marginRight: 7 }}
-                  color={colors.purple}
+                  color={colors.primary}
                 />
                 <Text style={globalStyles.textButton}>Get Directions</Text>
               </TouchableOpacity>
@@ -207,7 +215,7 @@ export function ScheduleEventDetails({ route }: any) {
           <Icon
             type="font-awesome-5"
             name="calendar-check"
-            color={colors.purple}
+            color={colors.primary}
             size={25}
           />
           <Text
@@ -246,14 +254,14 @@ export function ScheduleEventDetails({ route }: any) {
                 <Icon
                   name={scheduleItem.attending ? "check" : "plus"}
                   type="font-awesome-5"
-                  color={scheduleItem.attending ? colors.white : colors.purple}
+                  color={scheduleItem.attending ? colors.white : colors.primary}
                   size={16}
                 />
               )
             }
             title={
               submitting ? (
-                <ActivityIndicator size="small" color={colors.purple} />
+                <ActivityIndicator size="small" color={colors.primary} />
               ) : scheduleItem.attending ? (
                 "  Attending"
               ) : (

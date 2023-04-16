@@ -10,7 +10,7 @@ import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import { colors } from "./global-styles";
+import { colors, newColors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import {
   getOSName,
@@ -245,10 +245,10 @@ export default function App() {
                   },
                 })}
                 tabBarOptions={{
-                  activeTintColor: colors.neonBlue,
+                  activeTintColor: colors.lightBlue,
                   inactiveTintColor: colors.midGrey,
                   style: {
-                    backgroundColor: colors.black,
+                    backgroundColor: newColors.darkGrey,
                     opacity: 0.9,
                     borderTopWidth: 0,
                   },

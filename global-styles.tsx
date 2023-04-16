@@ -1,16 +1,26 @@
 import { StyleSheet } from "react-native";
-import { StackNavigationOptions, HeaderStyleInterpolators } from "@react-navigation/stack";
+import {
+  StackNavigationOptions,
+  HeaderStyleInterpolators,
+} from "@react-navigation/stack";
 import React from "react";
+
+// New colors for 2023.
+export const newColors = {
+  lightGreen: "#4BAC5E",
+  lightBlue: "#A6D8F6",
+  darkGrey: "#292929",
+  mediumGrey: "#404040",
+};
 
 export const colors = {
   white: "#FFFFFF",
   darkGrey: "#323538",
   midGrey: "#C4C4C4",
   black: "#000000",
-  purple: "#1B3DB7",
-  orange: "#FF5E37",
-  neonPink: "#F891FC",
-  neonBlue: "#A9F7F3",
+  primary: newColors.lightGreen,
+  orange: "#FF8937",
+  lightBlue: newColors.lightBlue,
   darkestBlue: "#181441",
   lightGrey: "#F4F4F4",
   mediumGrey: "#979797",
@@ -28,37 +38,37 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-600",
     fontSize: 20,
     lineHeight: 24,
-    color: colors.neonPink,
+    color: colors.lightBlue,
   },
   textSmallMedium: {
     fontFamily: "Inter-500",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.darkGrey,
+    color: colors.white,
   },
   textSmallRegular: {
     fontFamily: "Inter-400",
     fontSize: 12,
     lineHeight: 18,
-    color: colors.darkGrey,
+    color: colors.white,
   },
   textLargeSemiBold: {
     fontFamily: "Inter-600",
     fontSize: 18,
     lineHeight: 24,
-    color: colors.black,
+    color: colors.white,
   },
   textSmallSemiBold: {
     fontFamily: "Inter-600",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.black,
+    color: colors.white,
   },
   textSmallBoldUppercasePink: {
     fontFamily: "Inter-700",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.neonPink,
+    color: colors.lightBlue,
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
@@ -74,41 +84,41 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-400",
     fontSize: 14,
     lineHeight: 19,
-    color: colors.darkGrey,
+    color: colors.white,
   },
   textMediumMedium: {
     fontFamily: "Inter-500",
     fontSize: 14,
     lineHeight: 19,
-    color: colors.darkGrey,
+    color: colors.white,
   },
   textMediumBold: {
     fontFamily: "Inter-700",
     fontSize: 14,
     lineHeight: 17,
-    color: colors.darkGrey,
+    color: colors.white,
   },
   textBodyMedium: {
     fontFamily: "Inter-500",
     fontSize: 16,
     lineHeight: 24,
-    color: colors.darkestBlue,
+    color: colors.white,
   },
   textBody: {
     fontFamily: "Inter-400",
     fontSize: 16,
     lineHeight: 22,
-    color: colors.darkestBlue,
+    color: colors.white,
   },
   textButton: {
     fontFamily: "Inter-700",
     fontSize: 14,
     lineHeight: 17,
-    color: colors.purple,
+    color: colors.primary,
   },
   buttonPurpleOutline: {
     borderWidth: 2,
-    borderColor: colors.purple,
+    borderColor: colors.primary,
     backgroundColor: colors.white,
     borderRadius: 23,
     paddingVertical: 12,
@@ -117,7 +127,7 @@ export const globalStyles = StyleSheet.create({
     minHeight: 50,
   },
   buttonPurple: {
-    backgroundColor: colors.purple,
+    backgroundColor: colors.primary,
     borderRadius: 23,
     paddingVertical: 12,
     paddingHorizontal: 12,
@@ -130,11 +140,11 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-500",
     fontSize: 14,
     lineHeight: 17,
-    color: colors.purple,
+    color: colors.primary,
     textTransform: "uppercase",
   },
   textHero: {
-    color: colors.neonPink,
+    color: colors.lightBlue,
     fontFamily: "Inter-700",
     fontSize: 40,
     lineHeight: 53,
@@ -149,12 +159,12 @@ export const globalStyles = StyleSheet.create({
 });
 
 export const screenHeaderOptions: StackNavigationOptions = {
-  headerTintColor: colors.neonPink,
+  headerTintColor: colors.lightBlue,
   headerTitleStyle: [globalStyles.h2, { fontSize: 18 }],
   headerBackTitleStyle: [globalStyles.h2, { fontSize: 16 }],
   headerTransparent: false,
   headerStyle: {
-    backgroundColor: colors.black,
+    backgroundColor: newColors.darkGrey,
     opacity: 1,
     elevation: 0,
     shadowOpacity: 0,

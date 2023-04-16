@@ -1,7 +1,18 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  RefreshControl,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React, { useContext, useEffect } from "react";
-import { colors, globalStyles, screenHeaderOptions } from "../global-styles";
+import {
+  colors,
+  globalStyles,
+  newColors,
+  screenHeaderOptions,
+} from "../global-styles";
 import { Icon, Card, Text } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { Info } from "../api/info";
@@ -43,12 +54,20 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: colors.lightGrey }]}
-      contentContainerStyle={[{ paddingVertical: 4, paddingHorizontal: 16, flexGrow: 1, paddingBottom: 30 }]}
+      style={[{ backgroundColor: newColors.mediumGrey }]}
+      contentContainerStyle={[
+        {
+          paddingVertical: 4,
+          paddingHorizontal: 16,
+          flexGrow: 1,
+          paddingBottom: 30,
+        },
+      ]}
       refreshControl={
         <RefreshControl
           refreshing={status === "refreshing" || status === "initialized"}
           onRefresh={() => setStatus("refreshing")}
+          tintColor={colors.midGrey}
         />
       }
       data={data.sort((a: Info, b: Info) => a.display_order - b.display_order)}
@@ -60,11 +79,12 @@ function InfoScreen({ navigation }: any) {
               flex: 1,
               borderRadius: 8,
               borderWidth: 1,
-              borderColor: colors.midGrey,
+              borderColor: newColors.lightGreen,
               marginVertical: 16,
               marginHorizontal: 0,
               padding: 12,
               paddingLeft: 6,
+              backgroundColor: newColors.darkGrey,
             },
             globalStyles.shadow,
           ]}
@@ -81,13 +101,23 @@ function InfoScreen({ navigation }: any) {
                 reverse
                 name={item.icon}
                 type="font-awesome-5"
-                color={item.icon === "exclamation-triangle" ? colors.orange : colors.purple}
+                color={
+                  item.icon === "exclamation-triangle"
+                    ? colors.orange
+                    : colors.primary
+                }
                 containerStyle={{ marginRight: 12 }}
                 solid={true}
               />
               <View style={{ flex: 1 }}>
-                <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
-                <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
+                <Text
+                  style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}
+                >
+                  {item.title}
+                </Text>
+                <Text style={globalStyles.textSmallRegular}>
+                  {item.subtitle.trim()}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -108,14 +138,20 @@ export function InfoDetails({ route, navigation }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: colors.white }]}
+      style={[{ backgroundColor: newColors.mediumGrey }]}
       contentContainerStyle={[{ paddingVertical: 18, paddingHorizontal: 16 }]}
     >
       <HTML
         source={{ html: infoItem.content }}
-        baseFontStyle={{ fontFamily: "Inter-400", fontSize: 16, lineHeight: 24 }}
+        baseFontStyle={{
+          fontFamily: "Inter-400",
+          fontSize: 16,
+          lineHeight: 24,
+          color: colors.white,
+        }}
         tagsStyles={{
           strong: { fontFamily: "Inter-600" },
+          a: { color: newColors.lightBlue },
         }}
       />
     </ScrollView>

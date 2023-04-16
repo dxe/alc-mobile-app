@@ -1,8 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
-import { logAnalyticsEvent, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
+import {
+  logAnalyticsEvent,
+  showErrorMessage,
+  useCurrentTime,
+  utcToLocal,
+} from "../util";
 import { Icon } from "react-native-elements";
-import { colors, globalStyles } from "../global-styles";
+import { colors, globalStyles, newColors } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
 import { ScheduleContext } from "../ScheduleContext";
@@ -17,7 +22,10 @@ export function ScheduleEvent(props: Props) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { setData } = useContext(ScheduleContext);
   const currentTime = useCurrentTime();
-  const endTime = utcToLocal(props.event.start_time).add(props.event.length, "minute");
+  const endTime = utcToLocal(props.event.start_time).add(
+    props.event.length,
+    "minute"
+  );
 
   // Update this component's state whenever the prop gets updated (via Context).
   useEffect(() => {
@@ -27,7 +35,11 @@ export function ScheduleEvent(props: Props) {
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
     setSubmitting(true);
-    logAnalyticsEvent("SmallRSVPButtonTapped", scheduleItem.id, scheduleItem.name);
+    logAnalyticsEvent(
+      "SmallRSVPButtonTapped",
+      scheduleItem.id,
+      scheduleItem.name
+    );
     (async () => {
       try {
         await postRSVP(
@@ -49,14 +61,23 @@ export function ScheduleEvent(props: Props) {
   return (
     <TouchableOpacity
       onPress={() => {
-        logAnalyticsEvent("ScheduleEventTapped", scheduleItem.id, scheduleItem.name);
+        logAnalyticsEvent(
+          "ScheduleEventTapped",
+          scheduleItem.id,
+          scheduleItem.name
+        );
         props.nav.navigate("Event Details", {
           scheduleItem: scheduleItem as ConferenceEvent,
         });
       }}
       style={{ flex: 1, flexDirection: "row" }}
     >
-      <View style={{ flexGrow: 1, opacity: currentTime.isAfter(endTime) ? 0.4 : 1.0 }}>
+      <View
+        style={{
+          flexGrow: 1,
+          opacity: currentTime.isAfter(endTime) ? 0.75 : 1.0,
+        }}
+      >
         <View style={{ flex: 1, flexDirection: "row" }}>
           <View
             style={{
@@ -67,31 +88,59 @@ export function ScheduleEvent(props: Props) {
             }}
           >
             <View style={{ flex: 1, flexDirection: "row", marginBottom: 12 }}>
-              <Text style={globalStyles.textSmallMedium}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
-              <Text style={[globalStyles.textSmallMedium, { color: colors.mediumGrey }]}>
+              <Text style={globalStyles.textSmallMedium}>
+                {utcToLocal(props.event.start_time).format("h:mm A")}
+              </Text>
+              <Text style={globalStyles.textSmallMedium}>
                 {"  –  " + endTime.format("h:mm A")}
               </Text>
             </View>
 
             {props.event.key_event && (
-              <Text style={[globalStyles.textSmallBoldUppercasePink, { marginBottom: 2 }]}>Main Event</Text>
+              <Text
+                style={[
+                  globalStyles.textSmallBoldUppercasePink,
+                  { marginBottom: 2 },
+                ]}
+              >
+                Main Event
+              </Text>
             )}
 
             {props.event.breakout_session && (
-              <Text style={[globalStyles.textSmallBoldUppercaseGreen, { marginBottom: 2 }]}>Breakout Session</Text>
+              <Text
+                style={[
+                  globalStyles.textSmallBoldUppercaseGreen,
+                  { marginBottom: 2 },
+                ]}
+              >
+                Breakout Session
+              </Text>
             )}
 
-            <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
+            <Text
+              style={[
+                globalStyles.textLargeSemiBold,
+                { marginBottom: 2, marginRight: 12 },
+              ]}
+            >
               {props.event.name}
             </Text>
-            <Text style={globalStyles.textMediumRegular}>{props.event.location.name}</Text>
+            <Text style={globalStyles.textMediumRegular}>
+              {props.event.location.name}
+            </Text>
           </View>
           <TouchableOpacity onPress={eventRSVP} disabled={submitting}>
             {submitting ? (
               <ActivityIndicator
                 size="small"
-                color={colors.purple}
-                style={{ padding: 10, borderWidth: 2, borderRadius: 100, borderColor: colors.purple }}
+                color={colors.primary}
+                style={{
+                  padding: 10,
+                  borderWidth: 2,
+                  borderRadius: 100,
+                  borderColor: colors.primary,
+                }}
               />
             ) : (
               <Icon
@@ -99,13 +148,13 @@ export function ScheduleEvent(props: Props) {
                 raised
                 reverse={scheduleItem.attending}
                 name={scheduleItem.attending ? "check" : "plus"}
-                color={colors.purple}
+                color={newColors.lightGreen}
                 containerStyle={{
                   margin: 0,
                   borderWidth: 2,
                   justifyContent: "center",
                   alignItems: "center",
-                  borderColor: colors.purple,
+                  borderColor: colors.primary,
                 }}
                 size={20}
                 disabled={submitting}
@@ -115,7 +164,7 @@ export function ScheduleEvent(props: Props) {
           <Icon
             type="font-awesome-5"
             name="angle-right"
-            color={colors.purple}
+            color={colors.primary}
             containerStyle={{
               margin: 0,
               marginLeft: 15,

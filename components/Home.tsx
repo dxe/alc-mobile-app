@@ -1,8 +1,26 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, ScrollView, RefreshControl, Image, ImageBackground, TouchableOpacity } from "react-native";
-import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
-import { logAnalyticsEvent, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
+import {
+  Text,
+  View,
+  ScrollView,
+  RefreshControl,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
+import {
+  screenHeaderOptions,
+  globalStyles,
+  colors,
+  newColors,
+} from "../global-styles";
+import {
+  logAnalyticsEvent,
+  showErrorMessage,
+  useCurrentTime,
+  utcToLocal,
+} from "../util";
 import { TripleTextCard } from "./common/TripleTextCard";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ConferenceEvent } from "../api/schedule";
@@ -29,7 +47,7 @@ export default function HomeStack() {
             return (
               <View
                 style={{
-                  backgroundColor: colors.black,
+                  backgroundColor: newColors.darkGrey,
                   justifyContent: "center",
                   alignItems: "center",
                   paddingTop: Constants.statusBarHeight,
@@ -64,12 +82,22 @@ export default function HomeStack() {
 }
 
 function HomeScreen({ navigation }: any) {
-  const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
-  const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
-  const [keyEvents, setKeyEvents] = useState<ConferenceEvent[]>([] as ConferenceEvent[]);
+  const [currentEvents, setCurrentEvents] = useState<ConferenceEvent[]>(
+    [] as ConferenceEvent[]
+  );
+  const [nextEvents, setNextEvents] = useState<ConferenceEvent[]>(
+    [] as ConferenceEvent[]
+  );
+  const [keyEvents, setKeyEvents] = useState<ConferenceEvent[]>(
+    [] as ConferenceEvent[]
+  );
   const { data, status, setStatus } = useContext(ScheduleContext);
   const currentTime = useCurrentTime();
-  const { data: infoData, status: infoStatus, setStatus: setInfoStatus } = useContext(InfoContext);
+  const {
+    data: infoData,
+    status: infoStatus,
+    setStatus: setInfoStatus,
+  } = useContext(InfoContext);
 
   useEffect(() => {
     if (status != "error") return;
@@ -96,14 +124,18 @@ function HomeScreen({ navigation }: any) {
         .filter((x: ConferenceEvent) => {
           return moment(x.start_time).utc(true).isAfter(moment());
         })
-        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))[0]?.start_time;
+        .sort((a: ConferenceEvent, b: ConferenceEvent) =>
+          a.start_time.localeCompare(b.start_time)
+        )[0]?.start_time;
 
       setNextEvents(
         data.events
           .filter((x: ConferenceEvent) => {
             return x.start_time === nextStartTime;
           })
-          .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
+          .sort((a: ConferenceEvent, b: ConferenceEvent) =>
+            a.start_time.localeCompare(b.start_time)
+          )
       );
 
       // Find events happening now.
@@ -115,9 +147,14 @@ function HomeScreen({ navigation }: any) {
           })
           .filter((x: ConferenceEvent) => {
             // Then find events that have not yet ended.
-            return moment(x.start_time).utc(true).add(x.length, "minute").isAfter(currentTime);
+            return moment(x.start_time)
+              .utc(true)
+              .add(x.length, "minute")
+              .isAfter(currentTime);
           })
-          .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
+          .sort((a: ConferenceEvent, b: ConferenceEvent) =>
+            a.start_time.localeCompare(b.start_time)
+          )
       );
 
       // Find key events happening today
@@ -127,11 +164,14 @@ function HomeScreen({ navigation }: any) {
             // First key events whose start date is today.
             return (
               x.key_event &&
-              moment(moment(x.start_time).utc(true).toDate()).local().format("YYYY-MM-DD") ===
-                moment().format("YYYY-MM-DD")
+              moment(moment(x.start_time).utc(true).toDate())
+                .local()
+                .format("YYYY-MM-DD") === moment().format("YYYY-MM-DD")
             );
           })
-          .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
+          .sort((a: ConferenceEvent, b: ConferenceEvent) =>
+            a.start_time.localeCompare(b.start_time)
+          )
       );
     };
     updateFeaturedEvents();
@@ -140,8 +180,10 @@ function HomeScreen({ navigation }: any) {
   return (
     data && (
       <ScrollView
-        style={[{ backgroundColor: colors.purple }]}
-        contentContainerStyle={[{ paddingVertical: 16, paddingHorizontal: 16, paddingBottom: 30 }]}
+        style={[{ backgroundColor: colors.primary }]}
+        contentContainerStyle={[
+          { paddingVertical: 16, paddingHorizontal: 16, paddingBottom: 30 },
+        ]}
         refreshControl={
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}
@@ -152,7 +194,12 @@ function HomeScreen({ navigation }: any) {
       >
         {moment().isAfter(moment(data.conference.end_date).utc(true)) && (
           <View>
-            <Text style={[globalStyles.h2, { color: colors.white, marginBottom: 10 }]}>
+            <Text
+              style={[
+                globalStyles.h2,
+                { color: colors.white, marginBottom: 10 },
+              ]}
+            >
               {data.conference.name} has ended.
             </Text>
             <Text style={[globalStyles.h2, { color: colors.white }]}>
@@ -171,7 +218,11 @@ function HomeScreen({ navigation }: any) {
                   key={e.id + "_current"}
                   navigation={navigation}
                   scheduleItem={e}
-                  topElement={<Text>Started {moment(e.start_time).utc(true).from(currentTime)}</Text>}
+                  topElement={
+                    <Text>
+                      Started {moment(e.start_time).utc(true).from(currentTime)}
+                    </Text>
+                  }
                   middleText={e.name}
                   bottomText={e.location.name + ", " + e.location.city}
                 />
@@ -190,31 +241,9 @@ function HomeScreen({ navigation }: any) {
                   key={e.id + "_next"}
                   navigation={navigation}
                   scheduleItem={e}
-                  topElement={<Text>Starts {moment(e.start_time).utc(true).from(currentTime)}</Text>}
-                  middleText={e.name}
-                  bottomText={e.location.name + ", " + e.location.city}
-                />
-              );
-            })}
-          </View>
-        )}
-
-        {moment().isBefore(moment(data.conference.end_date).utc(true)) && keyEvents && keyEvents.length > 0 && (
-          <View style={{ marginBottom: 26 }}>
-            <Text style={globalStyles.h1}>Today's Main Events</Text>
-
-            {keyEvents.map((e: ConferenceEvent) => {
-              return (
-                <TripleTextCard
-                  key={e.id + "_key"}
-                  navigation={navigation}
-                  scheduleItem={e}
                   topElement={
                     <Text>
-                      <Text>{utcToLocal(e.start_time).format("h:mm A")}</Text>
-                      <Text style={{ color: colors.mediumGrey }}>
-                        {" – " + utcToLocal(e.start_time).add(e.length, "minute").format("h:mm A")}
-                      </Text>
+                      Starts {moment(e.start_time).utc(true).from(currentTime)}
                     </Text>
                   }
                   middleText={e.name}
@@ -225,6 +254,37 @@ function HomeScreen({ navigation }: any) {
           </View>
         )}
 
+        {moment().isBefore(moment(data.conference.end_date).utc(true)) &&
+          keyEvents &&
+          keyEvents.length > 0 && (
+            <View style={{ marginBottom: 26 }}>
+              <Text style={globalStyles.h1}>Today's Main Events</Text>
+
+              {keyEvents.map((e: ConferenceEvent) => {
+                return (
+                  <TripleTextCard
+                    key={e.id + "_key"}
+                    navigation={navigation}
+                    scheduleItem={e}
+                    topElement={
+                      <Text>
+                        <Text>{utcToLocal(e.start_time).format("h:mm A")}</Text>
+                        <Text style={{ color: colors.mediumGrey }}>
+                          {" – " +
+                            utcToLocal(e.start_time)
+                              .add(e.length, "minute")
+                              .format("h:mm A")}
+                        </Text>
+                      </Text>
+                    }
+                    middleText={e.name}
+                    bottomText={e.location.name + ", " + e.location.city}
+                  />
+                );
+              })}
+            </View>
+          )}
+
         <View style={{ marginTop: 16 }}>
           {infoData
             .filter((info: Info) => info.key_info)
@@ -232,14 +292,23 @@ function HomeScreen({ navigation }: any) {
               <View
                 key={item.id + "_info"}
                 style={[
-                  { height: 120, marginBottom: 16, backgroundColor: colors.black, borderRadius: 12 },
+                  {
+                    height: 120,
+                    marginBottom: 16,
+                    backgroundColor: colors.black,
+                    borderRadius: 12,
+                  },
                   globalStyles.shadow,
                 ]}
               >
                 <TouchableOpacity
                   style={{ flex: 1 }}
                   onPress={() => {
-                    logAnalyticsEvent("FeaturedInfoItemTapped", item.id, item.title);
+                    logAnalyticsEvent(
+                      "FeaturedInfoItemTapped",
+                      item.id,
+                      item.title
+                    );
                     navigation.navigate("Info Details", { infoItem: item });
                   }}
                 >
@@ -272,7 +341,9 @@ function HomeScreen({ navigation }: any) {
                       borderWidth: 1,
                     }}
                   >
-                    <Text style={[globalStyles.h1, { textAlign: "center" }]}>{item.title}</Text>
+                    <Text style={[globalStyles.h1, { textAlign: "center" }]}>
+                      {item.title}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
