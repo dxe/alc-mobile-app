@@ -21,7 +21,7 @@ import { ScheduleContext } from "../ScheduleContext";
 import * as Device from "expo-device";
 
 export function ScheduleEventDetails({ route }: any) {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(
     route.params.scheduleItem
   );
@@ -29,7 +29,7 @@ export function ScheduleEventDetails({ route }: any) {
 
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
-    setIsSubmitting(true);
+    setSubmitting(true);
     logAnalyticsEvent(
       "LargeRSVPButtonTapped",
       scheduleItem.id,
@@ -48,7 +48,7 @@ export function ScheduleEventDetails({ route }: any) {
       } catch (e) {
         showErrorMessage("Failed to RSVP.");
       } finally {
-        setIsSubmitting(false);
+        setSubmitting(false);
       }
     })();
   };
@@ -246,11 +246,14 @@ export function ScheduleEventDetails({ route }: any) {
                 : globalStyles.buttonPrimaryOutline,
               { flex: 1 },
             ]}
+            disabledTitleStyle={[
+              globalStyles.textButton,
+              { color: colors.white },
+            ]}
+            disabledStyle={[globalStyles.buttonPrimaryOutline, { flex: 1 }]}
             onPress={eventRSVP}
             icon={
-              isSubmitting ? (
-                <></>
-              ) : (
+              submitting ? undefined : (
                 <Icon
                   name={scheduleItem.attending ? "check" : "plus"}
                   type="font-awesome-5"
@@ -260,7 +263,7 @@ export function ScheduleEventDetails({ route }: any) {
               )
             }
             title={
-              isSubmitting ? (
+              submitting ? (
                 <ActivityIndicator size="small" color={colors.primary} />
               ) : scheduleItem.attending ? (
                 "  Attending"
@@ -268,7 +271,7 @@ export function ScheduleEventDetails({ route }: any) {
                 "  RSVP"
               )
             }
-            disabled={isSubmitting}
+            disabled={submitting}
           />
         </View>
       </View>
