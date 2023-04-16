@@ -27,10 +27,9 @@ import { ConferenceEvent } from "../api/schedule";
 import moment from "moment";
 import { ScheduleContext } from "../ScheduleContext";
 import Constants from "expo-constants";
-import { Info, useInfo } from "../api/info";
+import { Info } from "../api/info";
 import { InfoContext } from "../InfoContext";
 import { InfoDetails } from "./Info";
-import { Card } from "react-native-elements";
 
 const Stack = createStackNavigator();
 

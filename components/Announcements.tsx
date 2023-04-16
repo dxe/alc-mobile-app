@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   screenHeaderOptions,
   colors,
@@ -37,7 +37,7 @@ function AnnouncementsScreen({ navigation }: any) {
 
   // Refresh the screen whenever it is focused.
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setStatus("refreshing");
     }, [])
   );
