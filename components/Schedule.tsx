@@ -1,27 +1,8 @@
-import {
-  createStackNavigator,
-  HeaderStyleInterpolators,
-} from "@react-navigation/stack";
-import {
-  RefreshControl,
-  SectionList,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { createStackNavigator, HeaderStyleInterpolators } from "@react-navigation/stack";
+import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  colors,
-  globalStyles,
-  newColors,
-  screenHeaderOptions,
-} from "../global-styles";
-import {
-  utcToLocal,
-  showErrorMessage,
-  utcToLocalDateString,
-  logAnalyticsEvent,
-} from "../util";
+import { colors, globalStyles, newColors, screenHeaderOptions } from "../global-styles";
+import { utcToLocal, showErrorMessage, utcToLocalDateString, logAnalyticsEvent } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { ListItem } from "react-native-elements";
@@ -74,9 +55,7 @@ const sectionizeSchedule = (data: any[]) => {
 };
 
 function ScheduleScreen({ navigation }: any) {
-  const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>(
-    []
-  );
+  const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>([]);
   const calendarStrip = useRef<any>();
   const eventsList = useRef<any>();
   const { data, status, setStatus } = useContext(ScheduleContext);
@@ -93,17 +72,11 @@ function ScheduleScreen({ navigation }: any) {
     setFilteredSchedule(
       data.events
         .filter((item: ConferenceEvent) => {
-          return (
-            utcToLocalDateString(item.start_time) === date.format("YYYY-MM-DD")
-          );
+          return utcToLocalDateString(item.start_time) === date.format("YYYY-MM-DD");
         })
-        .sort((a: ConferenceEvent, b: ConferenceEvent) =>
-          a.start_time.localeCompare(b.start_time)
-        )
+        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
     );
-    eventsList.current
-      ?.getScrollResponder()
-      .scrollTo({ x: 0, y: 0, animated: true });
+    eventsList.current?.getScrollResponder().scrollTo({ x: 0, y: 0, animated: true });
   };
 
   // Whenever the schedule data is updated, filter it using the selected date.
@@ -112,14 +85,9 @@ function ScheduleScreen({ navigation }: any) {
     setFilteredSchedule(
       data.events
         .filter((item: ConferenceEvent) => {
-          return (
-            utcToLocalDateString(item.start_time) ===
-            calendarStrip.current.getSelectedDate().format("YYYY-MM-DD")
-          );
+          return utcToLocalDateString(item.start_time) === calendarStrip.current.getSelectedDate().format("YYYY-MM-DD");
         })
-        .sort((a: ConferenceEvent, b: ConferenceEvent) =>
-          a.start_time.localeCompare(b.start_time)
-        )
+        .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
     );
   }, [data]);
 
@@ -165,11 +133,7 @@ function ScheduleScreen({ navigation }: any) {
             useIsoWeekday={false}
             minDate={utcToLocal(data.conference.start_date)}
             maxDate={utcToLocal(data.conference.end_date)}
-            selectedDate={
-              moment().isBefore(data.conference.start_date)
-                ? moment(data.conference.start_date)
-                : moment()
-            }
+            selectedDate={moment().isBefore(data.conference.start_date) ? moment(data.conference.start_date) : moment()}
             onDateSelected={onDateSelected}
             ref={calendarStrip}
             maxDayComponentSize={50} // This is needed to prevent UI glitches
@@ -198,9 +162,7 @@ function ScheduleScreen({ navigation }: any) {
                     flex: 1,
                     borderRadius: 8,
                     borderWidth: item.attending ? 2 : 1,
-                    borderColor: item.attending
-                      ? newColors.lightGreen
-                      : colors.lightGrey,
+                    borderColor: item.attending ? newColors.lightGreen : colors.lightGrey,
                     backgroundColor: newColors.darkGrey,
                     marginBottom: index === itemsInSection ? 0 : 18,
                   },

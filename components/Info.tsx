@@ -1,18 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import {
-  ScrollView,
-  RefreshControl,
-  View,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect } from "react";
-import {
-  colors,
-  globalStyles,
-  newColors,
-  screenHeaderOptions,
-} from "../global-styles";
+import { colors, globalStyles, newColors, screenHeaderOptions } from "../global-styles";
 import { Icon, Card, Text } from "react-native-elements";
 import HTML from "react-native-render-html";
 import { Info } from "../api/info";
@@ -101,11 +90,7 @@ function InfoScreen({ navigation }: any) {
                 reverse
                 name={item.icon}
                 type="font-awesome-5"
-                color={
-                  item.icon === "exclamation-triangle"
-                    ? colors.orange
-                    : colors.primary
-                }
+                color={item.icon === "exclamation-triangle" ? colors.orange : colors.primary}
                 containerStyle={{
                   marginRight: 12,
                   backgroundColor: colors.primary,
@@ -113,14 +98,8 @@ function InfoScreen({ navigation }: any) {
                 solid={true}
               />
               <View style={{ flex: 1 }}>
-                <Text
-                  style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}
-                >
-                  {item.title}
-                </Text>
-                <Text style={globalStyles.textSmallRegular}>
-                  {item.subtitle.trim()}
-                </Text>
+                <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
+                <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
               </View>
             </View>
           </TouchableOpacity>

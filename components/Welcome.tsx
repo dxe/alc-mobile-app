@@ -1,19 +1,7 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from "react-native";
 import React, { useContext, useRef, useState } from "react";
 import { colors, globalStyles } from "../global-styles";
-import {
-  getDeviceID,
-  logAnalyticsEvent,
-  showErrorMessage,
-  getOSName,
-} from "../util";
+import { getDeviceID, logAnalyticsEvent, showErrorMessage, getOSName } from "../util";
 import { Button } from "react-native-elements";
 import { UserContext } from "../UserContext";
 import { postAddUser } from "../api/user";
@@ -125,11 +113,7 @@ export function WelcomeScreen() {
 
       <View style={{ backgroundColor: "rgba(0,0,0,0.6)", flex: 1 }}>
         {submitting ? (
-          <ActivityIndicator
-            size="large"
-            color={colors.white}
-            style={{ flex: 1 }}
-          />
+          <ActivityIndicator size="large" color={colors.white} style={{ flex: 1 }} />
         ) : (
           <KeyboardAwareScrollView
             contentContainerStyle={{
@@ -156,19 +140,10 @@ export function WelcomeScreen() {
                 }}
               />
               <View style={{ width: "100%" }}>
-                <Text
-                  style={[
-                    globalStyles.textBodyMedium,
-                    { color: colors.white, marginBottom: 4 },
-                  ]}
-                >
-                  Name
-                </Text>
+                <Text style={[globalStyles.textBodyMedium, { color: colors.white, marginBottom: 4 }]}>Name</Text>
                 <TextInput
                   style={styles.input}
-                  onChangeText={(value) =>
-                    setFormData({ ...formData, name: value })
-                  }
+                  onChangeText={(value) => setFormData({ ...formData, name: value })}
                   value={formData.name}
                   placeholder="Your name"
                   autoCapitalize={"words"}
@@ -181,19 +156,10 @@ export function WelcomeScreen() {
                     emailInput.current?.focus();
                   }}
                 />
-                <Text
-                  style={[
-                    globalStyles.textBodyMedium,
-                    { color: colors.white, marginBottom: 4 },
-                  ]}
-                >
-                  Email
-                </Text>
+                <Text style={[globalStyles.textBodyMedium, { color: colors.white, marginBottom: 4 }]}>Email</Text>
                 <TextInput
                   style={[styles.input, { marginBottom: 32 }]}
-                  onChangeText={(value) =>
-                    setFormData({ ...formData, email: value })
-                  }
+                  onChangeText={(value) => setFormData({ ...formData, email: value })}
                   value={formData.email}
                   placeholder="Your email address"
                   autoCapitalize={"none"}
@@ -207,14 +173,8 @@ export function WelcomeScreen() {
                   }}
                 />
                 <Button
-                  titleStyle={[
-                    globalStyles.textButton,
-                    { color: colors.white },
-                  ]}
-                  buttonStyle={[
-                    globalStyles.buttonPrimary,
-                    { borderColor: colors.primary },
-                  ]}
+                  titleStyle={[globalStyles.textButton, { color: colors.white }]}
+                  buttonStyle={[globalStyles.buttonPrimary, { borderColor: colors.primary }]}
                   onPress={() => {
                     logAnalyticsEvent("SignUpButtonTapped", 0, "");
                     submitRegistration(true, onUserRegistered);
@@ -224,10 +184,7 @@ export function WelcomeScreen() {
                 />
               </View>
               <Button
-                titleStyle={[
-                  globalStyles.textButton,
-                  { color: colors.lightBlue },
-                ]}
+                titleStyle={[globalStyles.textButton, { color: colors.lightBlue }]}
                 buttonStyle={[
                   globalStyles.buttonPrimary,
                   {

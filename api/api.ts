@@ -1,11 +1,5 @@
 import axios from "axios";
-import {
-  getDeviceID,
-  getStoredJSON,
-  ONE_HOUR_MS,
-  storeJSON,
-  waitFunc,
-} from "../util";
+import { getDeviceID, getStoredJSON, ONE_HOUR_MS, storeJSON, waitFunc } from "../util";
 import { useEffect, useState, useRef } from "react";
 import { AppState } from "react-native";
 import * as Device from "expo-device";
@@ -93,10 +87,7 @@ export const useAPI = (options: APIOptions) => {
 
   // Monitor the AppState (foreground, background, inactive).
   useEffect(() => {
-    const subscription = AppState.addEventListener(
-      "change",
-      _handleAppStateChange
-    );
+    const subscription = AppState.addEventListener("change", _handleAppStateChange);
 
     return () => {
       subscription.remove();
@@ -107,10 +98,7 @@ export const useAPI = (options: APIOptions) => {
   // This will prevent stale data if users keep the app in the
   // background but never fully close it.
   const _handleAppStateChange = (nextAppState: any) => {
-    if (
-      appState.current.match(/inactive|background/) &&
-      nextAppState === "active"
-    ) {
+    if (appState.current.match(/inactive|background/) && nextAppState === "active") {
       // AppState has change to the foreground.
       setStatus("refreshing");
     }
