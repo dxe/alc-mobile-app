@@ -4,7 +4,7 @@
     "description": "Animal Liberation Conference",
     "owner": "dxetech",
     "slug": "alc-mobile-app",
-    "version": "6.0.2",
+    "version": "6.0.3",
     "orientation": "portrait",
     "backgroundColor": "#000000",
     "icon": "./assets/icon.png",
@@ -19,7 +19,7 @@
     "assetBundlePatterns": ["assets/*"],
     "ios": {
       "bundleIdentifier": "com.dxe.mobile",
-      "buildNumber": "15",
+      "buildNumber": "16",
       "supportsTablet": false,
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
@@ -28,7 +28,7 @@
     },
     "android": {
       "package": "com.dxe.mobile",
-      "versionCode": 15,
+      "versionCode": 16,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
