@@ -195,21 +195,29 @@ function HomeScreen({ navigation }: any) {
           />
         }
       >
-        {moment().isAfter(moment(data.conference.end_date).utc(true)) && (
-          <View>
-            <Text
-              style={[
-                globalStyles.h2,
-                { color: colors.white, marginBottom: 10 },
-              ]}
-            >
-              {data.conference.name} has ended.
-            </Text>
-            <Text style={[globalStyles.h2, { color: colors.white }]}>
-              We hope to see you again at our next conference!
-            </Text>
-          </View>
-        )}
+        {!currentEvents.length &&
+          !nextEvents.length &&
+          !keyEvents.length &&
+          moment().isAfter(moment(data.conference.end_date).utc(true)) && (
+            <View>
+              <Text
+                style={[
+                  globalStyles.h2,
+                  { color: colors.white, marginBottom: 10 },
+                ]}
+              >
+                {data.conference.name} has ended.
+              </Text>
+              <Text
+                style={[
+                  globalStyles.h2,
+                  { color: colors.white, marginBottom: 20 },
+                ]}
+              >
+                We hope to see you again at our next conference!
+              </Text>
+            </View>
+          )}
         {currentEvents && currentEvents.length > 0 && (
           <View style={{ marginBottom: 26 }}>
             <Text style={[globalStyles.h1]}>Happening Now</Text>
