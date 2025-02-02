@@ -10,12 +10,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import {
-  screenHeaderOptions,
-  globalStyles,
-  colors,
-  newColors,
-} from "../global-styles";
+import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
 import {
   logAnalyticsEvent,
   showErrorMessage,
@@ -48,7 +43,7 @@ export default function HomeStack() {
             return (
               <View
                 style={{
-                  backgroundColor: newColors.darkGrey,
+                  backgroundColor: colors.darkGreen,
                   justifyContent: "center",
                   alignItems: "center",
                   paddingTop:
@@ -58,8 +53,12 @@ export default function HomeStack() {
                 }}
               >
                 <Image
-                  style={{ height: 55, width: 55, resizeMode: "contain" }}
-                  source={require("../assets/adaptive-icon.png")}
+                  style={{
+                    height: 55,
+                    width: 55,
+                    resizeMode: "contain",
+                  }}
+                  source={require("../assets/adaptive-icon-light.png")}
                 />
               </View>
             );
@@ -183,7 +182,7 @@ function HomeScreen({ navigation }: any) {
   return (
     data && (
       <ScrollView
-        style={[{ backgroundColor: colors.primary }]}
+        style={[{ backgroundColor: colors.lightGreen }]}
         contentContainerStyle={[
           { paddingVertical: 16, paddingHorizontal: 16, paddingBottom: 30 },
         ]}

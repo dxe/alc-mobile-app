@@ -10,12 +10,7 @@ import {
   View,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  colors,
-  globalStyles,
-  newColors,
-  screenHeaderOptions,
-} from "../global-styles";
+import { globalStyles, colors, screenHeaderOptions } from "../global-styles";
 import {
   utcToLocal,
   showErrorMessage,
@@ -24,8 +19,8 @@ import {
 } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
-import { ListItem } from "react-native-elements";
-import { Schedule, ConferenceEvent } from "../api/schedule";
+import { ListItem } from "@rneui/base";
+import { ConferenceEvent } from "../api/schedule";
 import { ScheduleEventDetails } from "./ScheduleEventDetails";
 import { ScheduleEvent } from "./ScheduleEvent";
 import { ScheduleContext } from "../ScheduleContext";
@@ -124,20 +119,20 @@ function ScheduleScreen({ navigation }: any) {
   }, [data]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: newColors.mediumGrey }}>
+    <View style={{ flex: 1, backgroundColor: colors.mediumGrey }}>
       <View style={styles.calendarStripWrapper}>
         {data && (
           <CalendarStrip
             style={styles.calendarStrip}
             calendarHeaderStyle={globalStyles.textLabel}
             dateNumberStyle={{
-              color: newColors.lightGreen,
+              color: colors.lightGreen,
               fontFamily: "Inter-400",
               fontSize: 12,
               lineHeight: 14,
             }}
             dateNameStyle={{
-              color: newColors.lightGreen,
+              color: colors.lightGreen,
               fontFamily: "Inter-500",
               fontSize: 12,
               lineHeight: 14,
@@ -156,7 +151,7 @@ function ScheduleScreen({ navigation }: any) {
             }}
             daySelectionAnimation={{
               type: "background",
-              highlightColor: newColors.lightGreen,
+              highlightColor: colors.lightGreen,
               duration: 100,
             }}
             scrollable={false}
@@ -180,7 +175,7 @@ function ScheduleScreen({ navigation }: any) {
       {!filteredSchedule.length && (
         <Text
           style={{
-            backgroundColor: newColors.mediumGrey,
+            backgroundColor: colors.mediumGrey,
             color: colors.white,
             width: "100%",
             textAlign: "center",
@@ -202,7 +197,7 @@ function ScheduleScreen({ navigation }: any) {
               <ListItem
                 containerStyle={{
                   padding: item.attending ? 11 : 12, // to offset border width change
-                  backgroundColor: newColors.darkGrey,
+                  backgroundColor: colors.darkGrey,
                   borderRadius: 8,
                 }}
                 key={item.id}
@@ -212,9 +207,9 @@ function ScheduleScreen({ navigation }: any) {
                     borderRadius: 8,
                     borderWidth: item.attending ? 2 : 1,
                     borderColor: item.attending
-                      ? newColors.lightGreen
+                      ? colors.lightGreen
                       : colors.lightGrey,
-                    backgroundColor: newColors.darkGrey,
+                    backgroundColor: colors.darkGrey,
                     marginBottom: index === itemsInSection ? 0 : 18,
                   },
                   globalStyles.shadow,
@@ -238,7 +233,7 @@ function ScheduleScreen({ navigation }: any) {
               tintColor={colors.midGrey}
             />
           }
-          style={{ backgroundColor: newColors.mediumGrey }}
+          style={{ backgroundColor: colors.mediumGrey }}
           contentContainerStyle={{
             paddingBottom: 30,
             paddingHorizontal: 15,
@@ -257,10 +252,10 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingHorizontal: 1,
     borderBottomWidth: 1,
-    borderColor: newColors.darkGrey,
-    backgroundColor: newColors.darkGrey,
+    borderColor: colors.darkGrey,
+    backgroundColor: colors.darkGrey,
   },
-  calendarStripWrapper: { paddingTop: 10, backgroundColor: newColors.darkGrey },
+  calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.darkGrey },
   sectionHeader: {
     textAlign: "center",
     marginTop: 16,

@@ -64,7 +64,7 @@
         }
       ],
       "@react-native-firebase/app",
-      "./react-native-maps-plugin"
+      "expo-font"
     ],
     "extra": {
       "eas": {

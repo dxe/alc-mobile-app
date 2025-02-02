@@ -1,8 +1,14 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  RefreshControl,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React, { useContext, useEffect } from "react";
-import { colors, globalStyles, newColors, screenHeaderOptions } from "../global-styles";
-import { Icon, Card, Text } from "react-native-elements";
+import { globalStyles, colors, screenHeaderOptions } from "../global-styles";
+import { Icon, Card, Text } from "@rneui/base";
 import HTML from "react-native-render-html";
 import { Info } from "../api/info";
 import { logAnalyticsEvent, showErrorMessage } from "../util";
@@ -43,7 +49,7 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: newColors.mediumGrey }]}
+      style={[{ backgroundColor: colors.mediumGrey }]}
       contentContainerStyle={[
         {
           paddingVertical: 4,
@@ -68,12 +74,12 @@ function InfoScreen({ navigation }: any) {
               flex: 1,
               borderRadius: 8,
               borderWidth: 1,
-              borderColor: newColors.lightGreen,
+              borderColor: colors.lightGreen,
               marginVertical: 16,
               marginHorizontal: 0,
               padding: 12,
               paddingLeft: 6,
-              backgroundColor: newColors.darkGrey,
+              backgroundColor: colors.darkGrey,
             },
             globalStyles.shadow,
           ]}
@@ -90,16 +96,26 @@ function InfoScreen({ navigation }: any) {
                 reverse
                 name={item.icon}
                 type="font-awesome-5"
-                color={item.icon === "exclamation-triangle" ? colors.orange : colors.primary}
+                color={
+                  item.icon === "exclamation-triangle"
+                    ? colors.orange
+                    : colors.lightGreen
+                }
                 containerStyle={{
                   marginRight: 12,
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.lightGreen,
                 }}
                 solid={true}
               />
               <View style={{ flex: 1 }}>
-                <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
-                <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
+                <Text
+                  style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}
+                >
+                  {item.title}
+                </Text>
+                <Text style={globalStyles.textSmallRegular}>
+                  {item.subtitle.trim()}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -120,7 +136,7 @@ export function InfoDetails({ route, navigation }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: newColors.mediumGrey }]}
+      style={[{ backgroundColor: colors.mediumGrey }]}
       contentContainerStyle={[{ paddingVertical: 18, paddingHorizontal: 16 }]}
     >
       <HTML
@@ -133,7 +149,7 @@ export function InfoDetails({ route, navigation }: any) {
         }}
         tagsStyles={{
           strong: { fontFamily: "Inter-600" },
-          a: { color: newColors.lightBlue },
+          a: { color: colors.darkGreen },
         }}
       />
     </ScrollView>

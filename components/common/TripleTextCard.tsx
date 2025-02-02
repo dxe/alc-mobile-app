@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { Card, Icon } from "react-native-elements";
-import { colors, globalStyles, newColors } from "../../global-styles";
+import { Card, Icon } from "@rneui/base";
+import { globalStyles, colors } from "../../global-styles";
 import { ConferenceEvent } from "../../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
 import { logAnalyticsEvent } from "../../util";
@@ -20,7 +20,7 @@ export function TripleTextCard(props: Props) {
       containerStyle={[
         {
           flex: 1,
-          backgroundColor: newColors.darkGrey,
+          backgroundColor: colors.darkGreen,
           borderRadius: 8,
           marginVertical: 16,
           marginHorizontal: 0,
@@ -31,26 +31,40 @@ export function TripleTextCard(props: Props) {
     >
       <TouchableOpacity
         onPress={() => {
-          logAnalyticsEvent("TripleTextCardTapped", props.scheduleItem.id, props.scheduleItem.name);
+          logAnalyticsEvent(
+            "TripleTextCardTapped",
+            props.scheduleItem.id,
+            props.scheduleItem.name
+          );
           props.navigation.navigate("Event Details", {
             scheduleItem: props.scheduleItem,
           });
         }}
       >
-        <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}>
+        <View
+          style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}
+        >
           <View style={{ flex: 1, justifyContent: "flex-start" }}>
             <View>
-              <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>{props.topElement}</Text>
+              <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>
+                {props.topElement}
+              </Text>
             </View>
             <View>
-              <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}>{props.middleText}</Text>
-              <Text style={globalStyles.textMediumRegular}>{props.bottomText}</Text>
+              <Text
+                style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}
+              >
+                {props.middleText}
+              </Text>
+              <Text style={globalStyles.textMediumRegular}>
+                {props.bottomText}
+              </Text>
             </View>
           </View>
           <Icon
             type="font-awesome-5"
             name="angle-right"
-            color={colors.primary}
+            color={colors.white}
             containerStyle={{
               paddingLeft: 15,
               justifyContent: "center",

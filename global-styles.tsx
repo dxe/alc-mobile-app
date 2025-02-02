@@ -1,27 +1,18 @@
 import { StyleSheet } from "react-native";
-import { StackNavigationOptions, HeaderStyleInterpolators } from "@react-navigation/stack";
-import React from "react";
-
-// New colors for 2023.
-export const newColors = {
-  lightGreen: "#62C287",
-  lightBlue: "#A6D8F6",
-  darkGrey: "#292929",
-  mediumGrey: "#404040",
-};
+import { StackNavigationOptions } from "@react-navigation/stack";
 
 export const colors = {
+  // 2025 theme colors.
+  lightGreen: "#EEFEE8",
+  darkGreen: "#5B7045",
+  orange: "#EFAD4B",
+  // Neutral colors.
   white: "#FFFFFF",
-  darkGrey: "#323538",
-  midGrey: "#C4C4C4",
-  black: "#000000",
-  primary: newColors.lightGreen,
-  orange: "#FF8937",
-  lightBlue: newColors.lightBlue,
-  darkestBlue: "#181441",
   lightGrey: "#F4F4F4",
+  midGrey: "#C4C4C4",
   mediumGrey: "#979797",
-  green: "#51A055",
+  darkGrey: "#323538",
+  black: "#000000",
 };
 
 export const globalStyles = StyleSheet.create({
@@ -29,25 +20,25 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-600",
     fontSize: 24,
     lineHeight: 29,
-    color: colors.white,
+    color: colors.black,
   },
   h2: {
     fontFamily: "Inter-600",
     fontSize: 20,
     lineHeight: 24,
-    color: newColors.lightBlue,
+    color: colors.darkGreen,
   },
   textSmallMedium: {
     fontFamily: "Inter-500",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.white,
+    color: colors.orange,
   },
   textSmallRegular: {
     fontFamily: "Inter-400",
     fontSize: 12,
     lineHeight: 18,
-    color: colors.white,
+    color: colors.black,
   },
   textLargeSemiBold: {
     fontFamily: "Inter-600",
@@ -59,13 +50,13 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-600",
     fontSize: 12,
     lineHeight: 15,
-    color: colors.white,
+    color: colors.black,
   },
-  textSmallBoldUppercasePink: {
+  textSmallBoldUppercaseOrange: {
     fontFamily: "Inter-700",
     fontSize: 12,
     lineHeight: 15,
-    color: newColors.lightBlue,
+    color: colors.orange,
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
@@ -73,7 +64,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-700",
     fontSize: 12,
     lineHeight: 15,
-    color: newColors.lightGreen,
+    color: colors.lightGreen,
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
@@ -81,7 +72,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-400",
     fontSize: 14,
     lineHeight: 19,
-    color: colors.white,
+    color: colors.lightGreen,
   },
   textMediumMedium: {
     fontFamily: "Inter-500",
@@ -111,12 +102,12 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-700",
     fontSize: 14,
     lineHeight: 17,
-    color: colors.primary,
+    color: colors.lightGreen,
   },
   buttonPrimaryOutline: {
     borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: newColors.mediumGrey,
+    borderColor: colors.lightGreen,
+    backgroundColor: colors.mediumGrey,
     borderRadius: 23,
     paddingVertical: 12,
     paddingHorizontal: 12,
@@ -124,24 +115,24 @@ export const globalStyles = StyleSheet.create({
     minHeight: 50,
   },
   buttonPrimary: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.lightGreen,
     borderRadius: 23,
     paddingVertical: 12,
     paddingHorizontal: 12,
     minWidth: 140,
     minHeight: 50,
     borderWidth: 2,
-    borderColor: colors.primary,
+    borderColor: colors.lightGreen,
   },
   textLabel: {
     fontFamily: "Inter-500",
     fontSize: 14,
     lineHeight: 17,
-    color: colors.primary,
+    color: colors.lightGreen,
     textTransform: "uppercase",
   },
   textHero: {
-    color: newColors.lightBlue,
+    color: colors.darkGreen,
     fontFamily: "Inter-700",
     fontSize: 40,
     lineHeight: 53,
@@ -156,12 +147,12 @@ export const globalStyles = StyleSheet.create({
 });
 
 export const screenHeaderOptions: StackNavigationOptions = {
-  headerTintColor: newColors.lightBlue,
+  headerTintColor: colors.darkGreen,
   headerTitleStyle: [globalStyles.h2, { fontSize: 18 }],
   headerBackTitleStyle: [globalStyles.h2, { fontSize: 16 }],
   headerTransparent: false,
   headerStyle: {
-    backgroundColor: newColors.darkGrey,
+    backgroundColor: colors.darkGrey,
     opacity: 1,
     elevation: 0,
     shadowOpacity: 0,

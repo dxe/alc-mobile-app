@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors, globalStyles, newColors } from "../global-styles";
+import { colors, globalStyles } from "../global-styles";
 import { logAnalyticsEvent, showErrorMessage, utcToLocal } from "../util";
 import MapView, {
   Marker,
@@ -17,7 +17,7 @@ import MapView, {
 } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useState } from "react";
-import { Button, Icon } from "react-native-elements";
+import { Button, Icon } from "@rneui/base";
 import { ScheduleContext } from "../ScheduleContext";
 import * as Device from "expo-device";
 
@@ -56,7 +56,7 @@ export function ScheduleEventDetails({ route }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: newColors.mediumGrey }]}
+      style={[{ backgroundColor: colors.mediumGrey }]}
       contentContainerStyle={[{ paddingVertical: 24, paddingHorizontal: 16 }]}
     >
       <Text style={[globalStyles.h1, { marginBottom: 5 }]}>
@@ -147,7 +147,7 @@ export function ScheduleEventDetails({ route }: any) {
             flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
-            backgroundColor: newColors.darkGrey,
+            backgroundColor: colors.darkGrey,
             borderRadius: 8,
           }}
         >
@@ -157,7 +157,7 @@ export function ScheduleEventDetails({ route }: any) {
                 borderBottomWidth: 1,
                 borderColor: colors.midGrey,
                 padding: 8,
-                backgroundColor: newColors.darkGrey,
+                backgroundColor: colors.darkGrey,
               }}
             >
               <Text style={globalStyles.textBodyMedium}>
@@ -202,7 +202,7 @@ export function ScheduleEventDetails({ route }: any) {
                   name={"directions"}
                   type={"font-awesome-5"}
                   style={{ marginRight: 7 }}
-                  color={colors.primary}
+                  color={colors.lightGreen}
                 />
                 <Text style={globalStyles.textButton}>Get Directions</Text>
               </TouchableOpacity>
@@ -216,7 +216,7 @@ export function ScheduleEventDetails({ route }: any) {
           <Icon
             type="font-awesome-5"
             name="calendar-check"
-            color={colors.primary}
+            color={colors.lightGreen}
             size={25}
           />
           <Text
@@ -258,14 +258,16 @@ export function ScheduleEventDetails({ route }: any) {
                 <Icon
                   name={scheduleItem.attending ? "check" : "plus"}
                   type="font-awesome-5"
-                  color={scheduleItem.attending ? colors.white : colors.primary}
+                  color={
+                    scheduleItem.attending ? colors.white : colors.lightGreen
+                  }
                   size={16}
                 />
               )
             }
             title={
               submitting ? (
-                <ActivityIndicator size="small" color={colors.primary} />
+                <ActivityIndicator size="small" color={colors.lightGreen} />
               ) : scheduleItem.attending ? (
                 "  Attending"
               ) : (

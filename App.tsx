@@ -10,7 +10,7 @@ import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import { colors, newColors } from "./global-styles";
+import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import {
   getOSName,
@@ -28,7 +28,7 @@ import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
 import { InfoContext } from "./InfoContext";
 import * as Notifications from "expo-notifications";
-import { Icon } from "react-native-elements";
+import { Icon } from "@rneui/base";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
 import * as SplashScreen from "expo-splash-screen";
@@ -247,12 +247,14 @@ export default function App() {
                   },
                 })}
                 tabBarOptions={{
-                  activeTintColor: colors.lightBlue,
-                  inactiveTintColor: colors.midGrey,
+                  activeTintColor: colors.darkGreen,
+                  inactiveTintColor: colors.mediumGrey,
+                  //activeBackgroundColor: colors.lightGreen,
                   style: {
-                    backgroundColor: newColors.darkGrey,
-                    opacity: 0.9,
-                    borderTopWidth: 0,
+                    backgroundColor: colors.white,
+                    borderTopColor: colors.lightGrey,
+                    // opacity: 0.9,
+                    borderTopWidth: 2,
                   },
                 }}
                 initialRouteName={initialRouteName}

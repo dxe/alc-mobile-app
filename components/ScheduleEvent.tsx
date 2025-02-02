@@ -1,8 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
-import { logAnalyticsEvent, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
-import { Icon } from "react-native-elements";
-import { colors, globalStyles, newColors } from "../global-styles";
+import {
+  logAnalyticsEvent,
+  showErrorMessage,
+  useCurrentTime,
+  utcToLocal,
+} from "../util";
+import { Icon } from "@rneui/base";
+import { colors, globalStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
 import { ScheduleContext } from "../ScheduleContext";
@@ -17,7 +22,10 @@ export function ScheduleEvent(props: Props) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { setData } = useContext(ScheduleContext);
   const currentTime = useCurrentTime();
-  const endTime = utcToLocal(props.event.start_time).add(props.event.length, "minute");
+  const endTime = utcToLocal(props.event.start_time).add(
+    props.event.length,
+    "minute"
+  );
 
   // Update this component's state whenever the prop gets updated (via Context).
   useEffect(() => {
@@ -27,7 +35,11 @@ export function ScheduleEvent(props: Props) {
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
     setSubmitting(true);
-    logAnalyticsEvent("SmallRSVPButtonTapped", scheduleItem.id, scheduleItem.name);
+    logAnalyticsEvent(
+      "SmallRSVPButtonTapped",
+      scheduleItem.id,
+      scheduleItem.name
+    );
     (async () => {
       try {
         await postRSVP(
@@ -49,7 +61,11 @@ export function ScheduleEvent(props: Props) {
   return (
     <TouchableOpacity
       onPress={() => {
-        logAnalyticsEvent("ScheduleEventTapped", scheduleItem.id, scheduleItem.name);
+        logAnalyticsEvent(
+          "ScheduleEventTapped",
+          scheduleItem.id,
+          scheduleItem.name
+        );
         props.nav.navigate("Event Details", {
           scheduleItem: scheduleItem as ConferenceEvent,
         });
@@ -72,33 +88,62 @@ export function ScheduleEvent(props: Props) {
             }}
           >
             <View style={{ flex: 1, flexDirection: "row", marginBottom: 12 }}>
-              <Text style={globalStyles.textSmallMedium}>{utcToLocal(props.event.start_time).format("h:mm A")}</Text>
-              <Text style={globalStyles.textSmallMedium}>{"  –  " + endTime.format("h:mm A")}</Text>
+              <Text style={globalStyles.textSmallMedium}>
+                {utcToLocal(props.event.start_time).format("h:mm A")}
+              </Text>
+              <Text style={globalStyles.textSmallMedium}>
+                {"  –  " + endTime.format("h:mm A")}
+              </Text>
             </View>
 
             {props.event.key_event && (
-              <Text style={[globalStyles.textSmallBoldUppercasePink, { marginBottom: 2 }]}>Main Event</Text>
+              <Text
+                style={[
+                  globalStyles.textSmallBoldUppercaseOrange,
+                  { marginBottom: 2 },
+                ]}
+              >
+                Main Event
+              </Text>
             )}
 
             {props.event.breakout_session && (
-              <Text style={[globalStyles.textSmallBoldUppercaseGreen, { marginBottom: 2 }]}>Breakout Session</Text>
+              <Text
+                style={[
+                  globalStyles.textSmallBoldUppercaseGreen,
+                  { marginBottom: 2 },
+                ]}
+              >
+                Breakout Session
+              </Text>
             )}
 
-            <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2, marginRight: 12 }]}>
+            <Text
+              style={[
+                globalStyles.textLargeSemiBold,
+                { marginBottom: 2, marginRight: 12 },
+              ]}
+            >
               {props.event.name}
             </Text>
-            <Text style={globalStyles.textMediumRegular}>{props.event.location.name}</Text>
+            <Text style={globalStyles.textMediumRegular}>
+              {props.event.location.name}
+            </Text>
           </View>
-          <TouchableOpacity onPress={eventRSVP} disabled={submitting} style={{ alignSelf: "flex-start" }}>
+          <TouchableOpacity
+            onPress={eventRSVP}
+            disabled={submitting}
+            style={{ alignSelf: "flex-start" }}
+          >
             {submitting ? (
               <ActivityIndicator
                 size="small"
-                color={colors.primary}
+                color={colors.lightGreen}
                 style={{
                   padding: 10,
                   borderWidth: 2,
                   borderRadius: 100,
-                  borderColor: colors.primary,
+                  borderColor: colors.lightGreen,
                 }}
               />
             ) : (
@@ -107,15 +152,19 @@ export function ScheduleEvent(props: Props) {
                 raised
                 reverse
                 name={scheduleItem.attending ? "check" : "plus"}
-                color={scheduleItem.attending ? newColors.lightGreen : newColors.darkGrey}
-                reverseColor={scheduleItem.attending ? colors.white : colors.primary}
+                color={
+                  scheduleItem.attending ? colors.lightGreen : colors.darkGrey
+                }
+                reverseColor={
+                  scheduleItem.attending ? colors.white : colors.lightGreen
+                }
                 containerStyle={{
                   margin: 0,
                   borderWidth: 2,
                   justifyContent: "center",
                   alignItems: "center",
-                  borderColor: colors.primary,
-                  backgroundColor: colors.primary,
+                  borderColor: colors.lightGreen,
+                  backgroundColor: colors.lightGreen,
                 }}
                 size={20}
                 disabled={submitting}
@@ -125,7 +174,7 @@ export function ScheduleEvent(props: Props) {
           <Icon
             type="font-awesome-5"
             name="angle-right"
-            color={colors.primary}
+            color={colors.lightGreen}
             containerStyle={{
               margin: 0,
               marginLeft: 15,
