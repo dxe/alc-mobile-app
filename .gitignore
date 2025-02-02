@@ -141,6 +141,10 @@ docs/pages/versions/*/react-native/*.diff
 
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# native dirs
+ios/
+android/
+
 # dependencies
 node_modules/
 
