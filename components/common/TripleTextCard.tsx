@@ -31,34 +31,20 @@ export function TripleTextCard(props: Props) {
     >
       <TouchableOpacity
         onPress={() => {
-          logAnalyticsEvent(
-            "TripleTextCardTapped",
-            props.scheduleItem.id,
-            props.scheduleItem.name
-          );
+          logAnalyticsEvent("TripleTextCardTapped", props.scheduleItem.id, props.scheduleItem.name);
           props.navigation.navigate("Event Details", {
             scheduleItem: props.scheduleItem,
           });
         }}
       >
-        <View
-          style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}
-        >
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}>
           <View style={{ flex: 1, justifyContent: "flex-start" }}>
             <View>
-              <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>
-                {props.topElement}
-              </Text>
+              <Text style={[globalStyles.textSmallMedium, { marginBottom: 8 }]}>{props.topElement}</Text>
             </View>
             <View>
-              <Text
-                style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}
-              >
-                {props.middleText}
-              </Text>
-              <Text style={globalStyles.textMediumRegular}>
-                {props.bottomText}
-              </Text>
+              <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 2 }]}>{props.middleText}</Text>
+              <Text style={globalStyles.textMediumRegular}>{props.bottomText}</Text>
             </View>
           </View>
           <Icon

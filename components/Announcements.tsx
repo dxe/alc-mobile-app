@@ -62,9 +62,7 @@ function AnnouncementsScreen({ navigation }: any) {
       }
       data={
         data && Array.isArray(data)
-          ? data.sort((a: Announcement, b: Announcement) =>
-              b.send_time.localeCompare(a.send_time)
-            )
+          ? data.sort((a: Announcement, b: Announcement) => b.send_time.localeCompare(a.send_time))
           : []
       }
       keyExtractor={(item) => item.id.toString()}
@@ -88,34 +86,18 @@ function AnnouncementsScreen({ navigation }: any) {
               reverse
               name={item.icon}
               type="font-awesome-5"
-              color={
-                item.icon === "exclamation-triangle"
-                  ? colors.orange
-                  : colors.darkGrey
-              }
+              color={item.icon === "exclamation-triangle" ? colors.orange : colors.darkGrey}
               containerStyle={{ marginRight: 12 }}
               solid={true}
             />
             <View style={{ flex: 1 }}>
-              <Text
-                style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}
-              >
-                {item.title}
-              </Text>
-              <Text
-                style={[globalStyles.textMediumRegular, { marginBottom: 4 }]}
-              >
-                {item.message.trim()}
-              </Text>
+              <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
+              <Text style={[globalStyles.textMediumRegular, { marginBottom: 4 }]}>{item.message.trim()}</Text>
 
               {item.url != "" && (
                 <TouchableOpacity
                   onPress={() => {
-                    logAnalyticsEvent(
-                      "AnnouncementLinkTapped",
-                      item.id,
-                      item.url
-                    );
+                    logAnalyticsEvent("AnnouncementLinkTapped", item.id, item.url);
                     WebBrowser.openBrowserAsync(item.url);
                   }}
                   style={{
@@ -132,20 +114,13 @@ function AnnouncementsScreen({ navigation }: any) {
                     size={16}
                     color={colors.orange}
                   />
-                  <Text
-                    style={[
-                      globalStyles.textMediumBold,
-                      { color: colors.orange },
-                    ]}
-                  >
+                  <Text style={[globalStyles.textMediumBold, { color: colors.orange }]}>
                     {item.url_text != "" ? item.url_text : item.url}
                   </Text>
                 </TouchableOpacity>
               )}
 
-              <Text style={globalStyles.textSmallRegular}>
-                {moment(item.send_time).utc(true).from(currentTime)}
-              </Text>
+              <Text style={globalStyles.textSmallRegular}>{moment(item.send_time).utc(true).from(currentTime)}</Text>
             </View>
           </View>
         </Card>

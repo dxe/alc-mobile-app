@@ -1,11 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import {
-  ScrollView,
-  RefreshControl,
-  View,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { globalStyles, colors, screenHeaderOptions } from "../global-styles";
 import { Icon, Card, Text } from "@rneui/base";
@@ -88,9 +82,7 @@ function InfoScreen({ navigation }: any) {
               navigation.navigate("Info Details", { infoItem: item });
             }}
           >
-            <View
-              style={{ flex: 1, flexDirection: "column", padding: 4, gap: 8 }}
-            >
+            <View style={{ flex: 1, flexDirection: "column", padding: 4, gap: 8 }}>
               <View
                 style={{
                   flex: 1,
@@ -102,22 +94,14 @@ function InfoScreen({ navigation }: any) {
                 <Icon
                   name={item.icon}
                   type="font-awesome-5"
-                  color={
-                    item.icon === "exclamation-triangle"
-                      ? colors.orange
-                      : colors.lightGreen
-                  }
+                  color={item.icon === "exclamation-triangle" ? colors.orange : colors.lightGreen}
                   containerStyle={{ backgroundColor: colors.darkGreen }}
                   solid
                   size={24}
                 />
-                <Text style={[globalStyles.textLargeSemiBold]}>
-                  {item.title}
-                </Text>
+                <Text style={[globalStyles.textLargeSemiBold]}>{item.title}</Text>
               </View>
-              <Text style={globalStyles.textSmallRegular}>
-                {item.subtitle.trim()}
-              </Text>
+              <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
             </View>
           </TouchableOpacity>
         </Card>
