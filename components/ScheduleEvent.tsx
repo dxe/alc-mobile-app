@@ -149,14 +149,13 @@ export function ScheduleEvent(props: Props) {
             ) : (
               <Icon
                 type="font-awesome-5"
-                raised
                 reverse
                 name={scheduleItem.attending ? "check" : "plus"}
                 color={
-                  scheduleItem.attending ? colors.lightGreen : colors.darkGrey
+                  scheduleItem.attending ? colors.orange : colors.lightGreen
                 }
                 reverseColor={
-                  scheduleItem.attending ? colors.white : colors.lightGreen
+                  scheduleItem.attending ? colors.white : colors.darkGreen
                 }
                 containerStyle={{
                   margin: 0,

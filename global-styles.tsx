@@ -26,7 +26,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-600",
     fontSize: 20,
     lineHeight: 24,
-    color: colors.darkGreen,
+    color: colors.lightGreen,
   },
   textSmallMedium: {
     fontFamily: "Inter-500",
@@ -38,7 +38,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-400",
     fontSize: 12,
     lineHeight: 18,
-    color: colors.black,
+    color: colors.white,
   },
   textLargeSemiBold: {
     fontFamily: "Inter-600",
@@ -78,13 +78,13 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-500",
     fontSize: 14,
     lineHeight: 19,
-    color: colors.white,
+    color: colors.darkGrey,
   },
   textMediumBold: {
     fontFamily: "Inter-700",
     fontSize: 14,
     lineHeight: 17,
-    color: colors.white,
+    color: colors.darkGrey,
   },
   textBodyMedium: {
     fontFamily: "Inter-500",
@@ -96,7 +96,7 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Inter-400",
     fontSize: 16,
     lineHeight: 22,
-    color: colors.white,
+    color: colors.darkGrey,
   },
   textButton: {
     fontFamily: "Inter-700",
@@ -106,8 +106,8 @@ export const globalStyles = StyleSheet.create({
   },
   buttonPrimaryOutline: {
     borderWidth: 2,
-    borderColor: colors.lightGreen,
-    backgroundColor: colors.mediumGrey,
+    borderColor: colors.darkGreen,
+    backgroundColor: "transparent",
     borderRadius: 23,
     paddingVertical: 12,
     paddingHorizontal: 12,
@@ -115,14 +115,14 @@ export const globalStyles = StyleSheet.create({
     minHeight: 50,
   },
   buttonPrimary: {
-    backgroundColor: colors.lightGreen,
+    backgroundColor: colors.darkGreen,
     borderRadius: 23,
     paddingVertical: 12,
     paddingHorizontal: 12,
     minWidth: 140,
     minHeight: 50,
     borderWidth: 2,
-    borderColor: colors.lightGreen,
+    borderColor: colors.darkGreen,
   },
   textLabel: {
     fontFamily: "Inter-500",
@@ -147,12 +147,12 @@ export const globalStyles = StyleSheet.create({
 });
 
 export const screenHeaderOptions: StackNavigationOptions = {
-  headerTintColor: colors.darkGreen,
+  headerTintColor: colors.white,
   headerTitleStyle: [globalStyles.h2, { fontSize: 18 }],
   headerBackTitleStyle: [globalStyles.h2, { fontSize: 16 }],
   headerTransparent: false,
   headerStyle: {
-    backgroundColor: colors.darkGrey,
+    backgroundColor: colors.darkGreen,
     opacity: 1,
     elevation: 0,
     shadowOpacity: 0,

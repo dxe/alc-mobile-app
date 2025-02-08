@@ -1,7 +1,4 @@
-import {
-  createStackNavigator,
-  HeaderStyleInterpolators,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import {
   RefreshControl,
   SectionList,
@@ -119,7 +116,7 @@ function ScheduleScreen({ navigation }: any) {
   }, [data]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.mediumGrey }}>
+    <View style={{ flex: 1, backgroundColor: colors.lightGrey }}>
       <View style={styles.calendarStripWrapper}>
         {data && (
           <CalendarStrip
@@ -138,13 +135,13 @@ function ScheduleScreen({ navigation }: any) {
               lineHeight: 14,
             }}
             highlightDateNumberStyle={{
-              color: colors.white,
+              color: colors.darkGreen,
               fontFamily: "Inter-400",
               fontSize: 12,
               lineHeight: 14,
             }}
             highlightDateNameStyle={{
-              color: colors.white,
+              color: colors.darkGreen,
               fontFamily: "Inter-500",
               fontSize: 12,
               lineHeight: 14,
@@ -175,8 +172,8 @@ function ScheduleScreen({ navigation }: any) {
       {!filteredSchedule.length && (
         <Text
           style={{
-            backgroundColor: colors.mediumGrey,
-            color: colors.white,
+            backgroundColor: colors.lightGrey,
+            color: colors.darkGrey,
             width: "100%",
             textAlign: "center",
             paddingVertical: 20,
@@ -197,7 +194,7 @@ function ScheduleScreen({ navigation }: any) {
               <ListItem
                 containerStyle={{
                   padding: item.attending ? 11 : 12, // to offset border width change
-                  backgroundColor: colors.darkGrey,
+                  backgroundColor: colors.darkGreen,
                   borderRadius: 8,
                 }}
                 key={item.id}
@@ -207,9 +204,9 @@ function ScheduleScreen({ navigation }: any) {
                     borderRadius: 8,
                     borderWidth: item.attending ? 2 : 1,
                     borderColor: item.attending
-                      ? colors.lightGreen
+                      ? colors.orange
                       : colors.lightGrey,
-                    backgroundColor: colors.darkGrey,
+                    backgroundColor: colors.darkGreen,
                     marginBottom: index === itemsInSection ? 0 : 18,
                   },
                   globalStyles.shadow,
@@ -233,7 +230,7 @@ function ScheduleScreen({ navigation }: any) {
               tintColor={colors.midGrey}
             />
           }
-          style={{ backgroundColor: colors.mediumGrey }}
+          style={{ backgroundColor: colors.lightGrey }}
           contentContainerStyle={{
             paddingBottom: 30,
             paddingHorizontal: 15,
@@ -252,10 +249,10 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingHorizontal: 1,
     borderBottomWidth: 1,
-    borderColor: colors.darkGrey,
-    backgroundColor: colors.darkGrey,
+    borderColor: colors.darkGreen,
+    backgroundColor: colors.darkGreen,
   },
-  calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.darkGrey },
+  calendarStripWrapper: { paddingTop: 10, backgroundColor: colors.darkGreen },
   sectionHeader: {
     textAlign: "center",
     marginTop: 16,

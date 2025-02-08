@@ -56,7 +56,7 @@ export function ScheduleEventDetails({ route }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: colors.mediumGrey }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[{ paddingVertical: 24, paddingHorizontal: 16 }]}
     >
       <Text style={[globalStyles.h1, { marginBottom: 5 }]}>
@@ -147,7 +147,7 @@ export function ScheduleEventDetails({ route }: any) {
             flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
-            backgroundColor: colors.darkGrey,
+            backgroundColor: colors.white,
             borderRadius: 8,
           }}
         >
@@ -157,13 +157,21 @@ export function ScheduleEventDetails({ route }: any) {
                 borderBottomWidth: 1,
                 borderColor: colors.midGrey,
                 padding: 8,
-                backgroundColor: colors.darkGrey,
+                backgroundColor: colors.white,
               }}
             >
-              <Text style={globalStyles.textBodyMedium}>
+              <Text
+                style={[
+                  globalStyles.textBodyMedium,
+                  { color: colors.darkGrey },
+                ]}
+              >
                 {scheduleItem.location.name}
               </Text>
-              <Text style={globalStyles.textBody} selectable={true}>
+              <Text
+                style={[globalStyles.textBody, { color: colors.darkGrey }]}
+                selectable={true}
+              >
                 {scheduleItem.location.address +
                   ", " +
                   scheduleItem.location.city}
@@ -202,9 +210,13 @@ export function ScheduleEventDetails({ route }: any) {
                   name={"directions"}
                   type={"font-awesome-5"}
                   style={{ marginRight: 7 }}
-                  color={colors.lightGreen}
+                  color={colors.darkGreen}
                 />
-                <Text style={globalStyles.textButton}>Get Directions</Text>
+                <Text
+                  style={[globalStyles.textButton, { color: colors.darkGreen }]}
+                >
+                  Get Directions
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -216,13 +228,14 @@ export function ScheduleEventDetails({ route }: any) {
           <Icon
             type="font-awesome-5"
             name="calendar-check"
-            color={colors.lightGreen}
+            color={colors.darkGreen}
             size={25}
           />
           <Text
             style={[
               globalStyles.textMediumRegular,
               { alignSelf: "center", paddingLeft: 10 },
+              { color: colors.darkGreen },
             ]}
           >
             {scheduleItem.total_attendees} confirmed attendees
@@ -239,7 +252,7 @@ export function ScheduleEventDetails({ route }: any) {
             titleStyle={
               scheduleItem.attending
                 ? [globalStyles.textButton, { color: colors.white }]
-                : globalStyles.textButton
+                : [globalStyles.textButton, { color: colors.darkGreen }]
             }
             buttonStyle={[
               scheduleItem.attending
@@ -259,7 +272,7 @@ export function ScheduleEventDetails({ route }: any) {
                   name={scheduleItem.attending ? "check" : "plus"}
                   type="font-awesome-5"
                   color={
-                    scheduleItem.attending ? colors.white : colors.lightGreen
+                    scheduleItem.attending ? colors.white : colors.darkGreen
                   }
                   size={16}
                 />
@@ -281,7 +294,12 @@ export function ScheduleEventDetails({ route }: any) {
 
       {scheduleItem.description.trim() != "" && (
         <View style={{ marginBottom: 16 }}>
-          <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 5 }]}>
+          <Text
+            style={[
+              globalStyles.textLargeSemiBold,
+              { marginBottom: 5, color: colors.black },
+            ]}
+          >
             Description
           </Text>
           <Text style={globalStyles.textBody}>

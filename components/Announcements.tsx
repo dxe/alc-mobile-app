@@ -44,7 +44,7 @@ function AnnouncementsScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: colors.mediumGrey }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[
         {
           paddingVertical: 4,
@@ -80,19 +80,18 @@ function AnnouncementsScreen({ navigation }: any) {
             paddingLeft: 6,
             shadowOpacity: 0,
             elevation: 0,
-            backgroundColor: colors.darkGrey,
+            backgroundColor: colors.darkGreen,
           }}
         >
           <View style={{ flex: 1, flexDirection: "row" }}>
             <Icon
-              raised
               reverse
               name={item.icon}
               type="font-awesome-5"
               color={
                 item.icon === "exclamation-triangle"
                   ? colors.orange
-                  : colors.lightGreen
+                  : colors.darkGrey
               }
               containerStyle={{ marginRight: 12 }}
               solid={true}
@@ -131,12 +130,12 @@ function AnnouncementsScreen({ navigation }: any) {
                     name={"external-link-alt"}
                     containerStyle={{ paddingRight: 7 }}
                     size={16}
-                    color={colors.darkGreen}
+                    color={colors.orange}
                   />
                   <Text
                     style={[
                       globalStyles.textMediumBold,
-                      { color: colors.darkGreen },
+                      { color: colors.orange },
                     ]}
                   >
                     {item.url_text != "" ? item.url_text : item.url}

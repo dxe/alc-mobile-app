@@ -24,6 +24,9 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleMapsApiKey": "AIzaSyA2cv39gh8OwETbbwSCDTd2tHr4HbMltk0"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -70,6 +73,7 @@
       "eas": {
         "projectId": "a114cde5-7d72-4393-accd-9932cb79cffd"
       }
-    }
+    },
+    "newArchEnabled": false
   }
 }

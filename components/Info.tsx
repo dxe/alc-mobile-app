@@ -49,7 +49,7 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: colors.mediumGrey }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[
         {
           paddingVertical: 4,
@@ -74,12 +74,10 @@ function InfoScreen({ navigation }: any) {
               flex: 1,
               borderRadius: 8,
               borderWidth: 1,
-              borderColor: colors.lightGreen,
-              marginVertical: 16,
+              borderColor: colors.orange,
               marginHorizontal: 0,
               padding: 12,
-              paddingLeft: 6,
-              backgroundColor: colors.darkGrey,
+              backgroundColor: colors.darkGreen,
             },
             globalStyles.shadow,
           ]}
@@ -90,33 +88,36 @@ function InfoScreen({ navigation }: any) {
               navigation.navigate("Info Details", { infoItem: item });
             }}
           >
-            <View style={{ flex: 1, flexDirection: "row" }}>
-              <Icon
-                raised
-                reverse
-                name={item.icon}
-                type="font-awesome-5"
-                color={
-                  item.icon === "exclamation-triangle"
-                    ? colors.orange
-                    : colors.lightGreen
-                }
-                containerStyle={{
-                  marginRight: 12,
-                  backgroundColor: colors.lightGreen,
+            <View
+              style={{ flex: 1, flexDirection: "column", padding: 4, gap: 8 }}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 12,
                 }}
-                solid={true}
-              />
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}
-                >
+              >
+                <Icon
+                  name={item.icon}
+                  type="font-awesome-5"
+                  color={
+                    item.icon === "exclamation-triangle"
+                      ? colors.orange
+                      : colors.lightGreen
+                  }
+                  containerStyle={{ backgroundColor: colors.darkGreen }}
+                  solid
+                  size={24}
+                />
+                <Text style={[globalStyles.textLargeSemiBold]}>
                   {item.title}
                 </Text>
-                <Text style={globalStyles.textSmallRegular}>
-                  {item.subtitle.trim()}
-                </Text>
               </View>
+              <Text style={globalStyles.textSmallRegular}>
+                {item.subtitle.trim()}
+              </Text>
             </View>
           </TouchableOpacity>
         </Card>
@@ -136,7 +137,7 @@ export function InfoDetails({ route, navigation }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: colors.mediumGrey }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[{ paddingVertical: 18, paddingHorizontal: 16 }]}
     >
       <HTML
@@ -145,7 +146,7 @@ export function InfoDetails({ route, navigation }: any) {
           fontFamily: "Inter-400",
           fontSize: 16,
           lineHeight: 24,
-          color: colors.white,
+          color: colors.darkGrey,
         }}
         tagsStyles={{
           strong: { fontFamily: "Inter-600" },

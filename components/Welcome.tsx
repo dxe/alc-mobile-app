@@ -14,7 +14,7 @@ import {
   showErrorMessage,
   getOSName,
 } from "../util";
-import { Button } from "@rneui/base";
+import { Button, lightColors } from "@rneui/base";
 import { UserContext } from "../UserContext";
 import { postAddUser } from "../api/user";
 import { CONFERENCE_ID } from "../api/api";
@@ -214,7 +214,10 @@ export function WelcomeScreen() {
                   ]}
                   buttonStyle={[
                     globalStyles.buttonPrimary,
-                    { borderColor: colors.lightGreen },
+                    {
+                      borderColor: colors.lightGreen,
+                      backgroundColor: colors.lightGreen,
+                    },
                   ]}
                   onPress={() => {
                     logAnalyticsEvent("SignUpButtonTapped", 0, "");

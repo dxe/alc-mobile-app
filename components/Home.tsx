@@ -49,7 +49,7 @@ export default function HomeStack() {
                   paddingTop:
                     Platform.OS === "ios" ? Constants.statusBarHeight : 3,
                   height:
-                    Platform.OS === "ios" ? Constants.statusBarHeight + 44 : 50,
+                    Platform.OS === "ios" ? Constants.statusBarHeight + 50 : 50,
                 }}
               >
                 <Image
@@ -190,7 +190,7 @@ function HomeScreen({ navigation }: any) {
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}
             onRefresh={onRefresh}
-            tintColor={colors.white}
+            tintColor={colors.mediumGrey}
           />
         }
       >
@@ -202,7 +202,7 @@ function HomeScreen({ navigation }: any) {
               <Text
                 style={[
                   globalStyles.h2,
-                  { color: colors.white, marginBottom: 10 },
+                  { color: colors.darkGrey, marginBottom: 10 },
                 ]}
               >
                 {data.conference.name} has ended.
@@ -210,7 +210,7 @@ function HomeScreen({ navigation }: any) {
               <Text
                 style={[
                   globalStyles.h2,
-                  { color: colors.white, marginBottom: 20 },
+                  { color: colors.darkGrey, marginBottom: 20 },
                 ]}
               >
                 We hope to see you again at our next conference!

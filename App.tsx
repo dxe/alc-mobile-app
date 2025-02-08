@@ -249,7 +249,6 @@ export default function App() {
                 tabBarOptions={{
                   activeTintColor: colors.darkGreen,
                   inactiveTintColor: colors.mediumGrey,
-                  //activeBackgroundColor: colors.lightGreen,
                   style: {
                     backgroundColor: colors.white,
                     borderTopColor: colors.lightGrey,
