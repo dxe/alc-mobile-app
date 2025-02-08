@@ -25,6 +25,7 @@
     "expo-dev-client": "~5.0.11",
     "expo-device": "~7.0.2",
     "expo-font": "~13.0.3",
+    "expo-modules-autolinking": "^2.0.7",
     "expo-notifications": "~0.29.13",
     "expo-splash-screen": "~0.29.21",
     "expo-status-bar": "~2.0.1",

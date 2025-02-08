@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage } from "react-native-flash-message";
 import * as Application from "expo-application";
 import { Platform } from "react-native";
-import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import analytics from "@react-native-firebase/analytics";
@@ -21,7 +20,10 @@ const DEFAULT_TIMEOUT = 500;
 
 // waitFunc wraps an async function and causes it to take at least a certain amount of time to resolve.
 // This is used to improve the UX in case something loads so quickly that the user thinks nothing happened.
-export const waitFunc = async (fn: Promise<any>, timeout: number = DEFAULT_TIMEOUT): Promise<any> => {
+export const waitFunc = async (
+  fn: Promise<any>,
+  timeout: number = DEFAULT_TIMEOUT
+): Promise<any> => {
   const [value] = await Promise.all([fn, wait(timeout)]);
   return value;
 };
@@ -94,7 +96,7 @@ export const getDeviceID = async () => {
 
 // This function was adapted from: https://docs.expo.dev/push-notifications/push-notifications-setup/
 export const registerForPushNotificationsAsync = async (): Promise<string> => {
-  if (!Constants.isDevice) {
+  if (!Device.isDevice) {
     alert("Must use physical device for push notifications!");
     return Promise.reject();
   }
@@ -141,7 +143,9 @@ export const useCurrentTime = () => {
   return currentTime;
 };
 
-export const logAnalyticsScreenChange = async (screenName: string | undefined) => {
+export const logAnalyticsScreenChange = async (
+  screenName: string | undefined
+) => {
   console.log(`Screen changed to ${screenName}`);
   try {
     await analytics().logScreenView({ screen_name: screenName });
@@ -150,7 +154,11 @@ export const logAnalyticsScreenChange = async (screenName: string | undefined) =
   }
 };
 
-export const logAnalyticsEvent = async (eventName: string, itemID: number, itemDescription: string) => {
+export const logAnalyticsEvent = async (
+  eventName: string,
+  itemID: number,
+  itemDescription: string
+) => {
   console.log(`${eventName}: ${itemID} (${itemDescription})`);
   try {
     await analytics().logEvent(eventName, {
@@ -163,5 +171,7 @@ export const logAnalyticsEvent = async (eventName: string, itemID: number, itemD
 };
 
 export const getOSName = () => {
-  return Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
+  return Device.osName === "iOS" || Device.osName === "iPadOS"
+    ? Device.osName
+    : "Android";
 };
