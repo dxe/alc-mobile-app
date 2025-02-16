@@ -2,7 +2,7 @@ import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from "rea
 import React, { useContext, useRef, useState } from "react";
 import { colors, globalStyles } from "../global-styles";
 import { getDeviceID, logAnalyticsEvent, showErrorMessage, getOSName } from "../util";
-import { Button } from "react-native-elements";
+import { Button, lightColors } from "@rneui/base";
 import { UserContext } from "../UserContext";
 import { postAddUser } from "../api/user";
 import { CONFERENCE_ID } from "../api/api";
@@ -11,6 +11,7 @@ import { Video } from "expo-av";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 //@ts-ignore
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
+import { ResizeMode } from "../node_modules/expo-av/src/Video.types";
 
 export function WelcomeScreen() {
   const { onUserRegistered } = useContext(UserContext);
@@ -99,7 +100,7 @@ export function WelcomeScreen() {
         }}
         source={require("../assets/welcome-video.mp4")}
         useNativeControls={false}
-        resizeMode="cover"
+        resizeMode={ResizeMode.COVER}
         isLooping
         status={{ shouldPlay: true, isMuted: true }}
       />
@@ -148,7 +149,7 @@ export function WelcomeScreen() {
                   placeholder="Your name"
                   autoCapitalize={"words"}
                   keyboardType={"ascii-capable"}
-                  autoCompleteType={"name"}
+                  autoComplete={"name"}
                   autoCorrect={false}
                   returnKeyType={"next"}
                   ref={nameInput}
@@ -165,7 +166,7 @@ export function WelcomeScreen() {
                   autoCapitalize={"none"}
                   returnKeyType={"go"}
                   keyboardType={"email-address"}
-                  autoCompleteType={"email"}
+                  autoComplete={"email"}
                   autoCorrect={false}
                   ref={emailInput}
                   onSubmitEditing={() => {
@@ -173,8 +174,14 @@ export function WelcomeScreen() {
                   }}
                 />
                 <Button
-                  titleStyle={[globalStyles.textButton, { color: colors.white }]}
-                  buttonStyle={[globalStyles.buttonPrimary, { borderColor: colors.primary }]}
+                  titleStyle={[globalStyles.textButton, { color: colors.darkGreen }]}
+                  buttonStyle={[
+                    globalStyles.buttonPrimary,
+                    {
+                      borderColor: colors.lightGreen,
+                      backgroundColor: colors.lightGreen,
+                    },
+                  ]}
                   onPress={() => {
                     logAnalyticsEvent("SignUpButtonTapped", 0, "");
                     submitRegistration(true, onUserRegistered);
@@ -184,7 +191,7 @@ export function WelcomeScreen() {
                 />
               </View>
               <Button
-                titleStyle={[globalStyles.textButton, { color: colors.lightBlue }]}
+                titleStyle={[globalStyles.textButton, { color: colors.orange }]}
                 buttonStyle={[
                   globalStyles.buttonPrimary,
                   {

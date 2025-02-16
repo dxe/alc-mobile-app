@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { AppState } from "react-native";
 import * as Device from "expo-device";
 
-export const CONFERENCE_ID = 4;
+export const CONFERENCE_ID = 5;
 export const BASE_URL = "https://alc-mobile-api.dxe.io/api";
 
 interface APIOptions {

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { logAnalyticsEvent, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
-import { Icon } from "react-native-elements";
-import { colors, globalStyles, newColors } from "../global-styles";
+import { Icon } from "@rneui/base";
+import { colors, globalStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
 import { ScheduleContext } from "../ScheduleContext";
@@ -77,7 +77,7 @@ export function ScheduleEvent(props: Props) {
             </View>
 
             {props.event.key_event && (
-              <Text style={[globalStyles.textSmallBoldUppercasePink, { marginBottom: 2 }]}>Main Event</Text>
+              <Text style={[globalStyles.textSmallBoldUppercaseOrange, { marginBottom: 2 }]}>Main Event</Text>
             )}
 
             {props.event.breakout_session && (
@@ -93,29 +93,28 @@ export function ScheduleEvent(props: Props) {
             {submitting ? (
               <ActivityIndicator
                 size="small"
-                color={colors.primary}
+                color={colors.lightGreen}
                 style={{
                   padding: 10,
                   borderWidth: 2,
                   borderRadius: 100,
-                  borderColor: colors.primary,
+                  borderColor: colors.lightGreen,
                 }}
               />
             ) : (
               <Icon
                 type="font-awesome-5"
-                raised
                 reverse
                 name={scheduleItem.attending ? "check" : "plus"}
-                color={scheduleItem.attending ? newColors.lightGreen : newColors.darkGrey}
-                reverseColor={scheduleItem.attending ? colors.white : colors.primary}
+                color={scheduleItem.attending ? colors.orange : colors.lightGreen}
+                reverseColor={scheduleItem.attending ? colors.white : colors.darkGreen}
                 containerStyle={{
                   margin: 0,
                   borderWidth: 2,
                   justifyContent: "center",
                   alignItems: "center",
-                  borderColor: colors.primary,
-                  backgroundColor: colors.primary,
+                  borderColor: colors.lightGreen,
+                  backgroundColor: colors.lightGreen,
                 }}
                 size={20}
                 disabled={submitting}
@@ -125,7 +124,7 @@ export function ScheduleEvent(props: Props) {
           <Icon
             type="font-awesome-5"
             name="angle-right"
-            color={colors.primary}
+            color={colors.lightGreen}
             containerStyle={{
               margin: 0,
               marginLeft: 15,

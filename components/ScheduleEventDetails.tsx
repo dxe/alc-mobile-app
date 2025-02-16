@@ -1,41 +1,23 @@
 import { ConferenceEvent, postRSVP } from "../api/schedule";
-import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { colors, globalStyles, newColors } from "../global-styles";
+import { ActivityIndicator, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { colors, globalStyles } from "../global-styles";
 import { logAnalyticsEvent, showErrorMessage, utcToLocal } from "../util";
-import MapView, {
-  Marker,
-  PROVIDER_DEFAULT,
-  PROVIDER_GOOGLE,
-} from "react-native-maps";
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useState } from "react";
-import { Button, Icon } from "react-native-elements";
+import { Button, Icon } from "@rneui/base";
 import { ScheduleContext } from "../ScheduleContext";
 import * as Device from "expo-device";
 
 export function ScheduleEventDetails({ route }: any) {
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(
-    route.params.scheduleItem
-  );
+  const [scheduleItem, setScheduleItem] = useState<ConferenceEvent>(route.params.scheduleItem);
   const { setData } = useContext(ScheduleContext);
 
   // TODO: refactor this into the postRSVP function to reduce duplication of code?
   const eventRSVP = () => {
     setSubmitting(true);
-    logAnalyticsEvent(
-      "LargeRSVPButtonTapped",
-      scheduleItem.id,
-      scheduleItem.name
-    );
+    logAnalyticsEvent("LargeRSVPButtonTapped", scheduleItem.id, scheduleItem.name);
     (async () => {
       try {
         await postRSVP(
@@ -56,20 +38,14 @@ export function ScheduleEventDetails({ route }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: newColors.mediumGrey }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[{ paddingVertical: 24, paddingHorizontal: 16 }]}
     >
-      <Text style={[globalStyles.h1, { marginBottom: 5 }]}>
-        {scheduleItem.name}
-      </Text>
-      <Text style={globalStyles.textMediumMedium}>
-        {utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}
-      </Text>
+      <Text style={[globalStyles.h1, { marginBottom: 5 }]}>{scheduleItem.name}</Text>
+      <Text style={globalStyles.textMediumMedium}>{utcToLocal(scheduleItem.start_time).format("dddd, MMMM D")}</Text>
       <Text style={globalStyles.textMediumMedium}>
         {utcToLocal(scheduleItem.start_time).format("h:mm A")} -&nbsp;
-        {utcToLocal(scheduleItem.start_time)
-          .add(scheduleItem.length, "minute")
-          .format("h:mm A")}
+        {utcToLocal(scheduleItem.start_time).add(scheduleItem.length, "minute").format("h:mm A")}
       </Text>
 
       {/* Location section */}
@@ -99,11 +75,7 @@ export function ScheduleEventDetails({ route }: any) {
           <MapView
             style={styles.map}
             onPress={() => {
-              logAnalyticsEvent(
-                "MapTapped",
-                scheduleItem.id,
-                scheduleItem.name
-              );
+              logAnalyticsEvent("MapTapped", scheduleItem.id, scheduleItem.name);
               showLocation({
                 latitude: scheduleItem.location.lat,
                 longitude: scheduleItem.location.lng,
@@ -122,9 +94,7 @@ export function ScheduleEventDetails({ route }: any) {
               latitudeDelta: 0.00922,
               longitudeDelta: 0.00421,
             }}
-            provider={
-              Device.brand === "Apple" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE
-            }
+            provider={Device.brand === "Apple" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
           >
             <Marker
               key={scheduleItem.id}
@@ -133,11 +103,7 @@ export function ScheduleEventDetails({ route }: any) {
                 longitude: scheduleItem.location.lng,
               }}
               title={scheduleItem.location.name}
-              description={
-                scheduleItem.location.address +
-                ", " +
-                scheduleItem.location.city
-              }
+              description={scheduleItem.location.address + ", " + scheduleItem.location.city}
             />
           </MapView>
         </View>
@@ -147,7 +113,7 @@ export function ScheduleEventDetails({ route }: any) {
             flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
-            backgroundColor: newColors.darkGrey,
+            backgroundColor: colors.white,
             borderRadius: 8,
           }}
         >
@@ -157,16 +123,14 @@ export function ScheduleEventDetails({ route }: any) {
                 borderBottomWidth: 1,
                 borderColor: colors.midGrey,
                 padding: 8,
-                backgroundColor: newColors.darkGrey,
+                backgroundColor: colors.white,
               }}
             >
-              <Text style={globalStyles.textBodyMedium}>
+              <Text style={[globalStyles.textBodyMedium, { color: colors.darkGrey }]}>
                 {scheduleItem.location.name}
               </Text>
-              <Text style={globalStyles.textBody} selectable={true}>
-                {scheduleItem.location.address +
-                  ", " +
-                  scheduleItem.location.city}
+              <Text style={[globalStyles.textBody, { color: colors.darkGrey }]} selectable={true}>
+                {scheduleItem.location.address + ", " + scheduleItem.location.city}
               </Text>
             </View>
             <View
@@ -183,11 +147,7 @@ export function ScheduleEventDetails({ route }: any) {
                   justifyContent: "center",
                 }}
                 onPress={() => {
-                  logAnalyticsEvent(
-                    "GetDirectionsTapped",
-                    scheduleItem.id,
-                    scheduleItem.name
-                  );
+                  logAnalyticsEvent("GetDirectionsTapped", scheduleItem.id, scheduleItem.name);
                   showLocation({
                     latitude: scheduleItem.location.lat,
                     longitude: scheduleItem.location.lng,
@@ -198,13 +158,8 @@ export function ScheduleEventDetails({ route }: any) {
                   });
                 }}
               >
-                <Icon
-                  name={"directions"}
-                  type={"font-awesome-5"}
-                  style={{ marginRight: 7 }}
-                  color={colors.primary}
-                />
-                <Text style={globalStyles.textButton}>Get Directions</Text>
+                <Icon name={"directions"} type={"font-awesome-5"} style={{ marginRight: 7 }} color={colors.darkGreen} />
+                <Text style={[globalStyles.textButton, { color: colors.darkGreen }]}>Get Directions</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -213,16 +168,12 @@ export function ScheduleEventDetails({ route }: any) {
 
       <View style={{ flex: 1, flexDirection: "row", marginBottom: 16 }}>
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-          <Icon
-            type="font-awesome-5"
-            name="calendar-check"
-            color={colors.primary}
-            size={25}
-          />
+          <Icon type="font-awesome-5" name="calendar-check" color={colors.darkGreen} size={25} />
           <Text
             style={[
               globalStyles.textMediumRegular,
               { alignSelf: "center", paddingLeft: 10 },
+              { color: colors.darkGreen },
             ]}
           >
             {scheduleItem.total_attendees} confirmed attendees
@@ -239,18 +190,13 @@ export function ScheduleEventDetails({ route }: any) {
             titleStyle={
               scheduleItem.attending
                 ? [globalStyles.textButton, { color: colors.white }]
-                : globalStyles.textButton
+                : [globalStyles.textButton, { color: colors.darkGreen }]
             }
             buttonStyle={[
-              scheduleItem.attending
-                ? globalStyles.buttonPrimary
-                : globalStyles.buttonPrimaryOutline,
+              scheduleItem.attending ? globalStyles.buttonPrimary : globalStyles.buttonPrimaryOutline,
               { flex: 1 },
             ]}
-            disabledTitleStyle={[
-              globalStyles.textButton,
-              { color: colors.white },
-            ]}
+            disabledTitleStyle={[globalStyles.textButton, { color: colors.white }]}
             disabledStyle={[globalStyles.buttonPrimaryOutline, { flex: 1 }]}
             onPress={eventRSVP}
             icon={
@@ -258,14 +204,14 @@ export function ScheduleEventDetails({ route }: any) {
                 <Icon
                   name={scheduleItem.attending ? "check" : "plus"}
                   type="font-awesome-5"
-                  color={scheduleItem.attending ? colors.white : colors.primary}
+                  color={scheduleItem.attending ? colors.white : colors.darkGreen}
                   size={16}
                 />
               )
             }
             title={
               submitting ? (
-                <ActivityIndicator size="small" color={colors.primary} />
+                <ActivityIndicator size="small" color={colors.lightGreen} />
               ) : scheduleItem.attending ? (
                 "  Attending"
               ) : (
@@ -279,12 +225,8 @@ export function ScheduleEventDetails({ route }: any) {
 
       {scheduleItem.description.trim() != "" && (
         <View style={{ marginBottom: 16 }}>
-          <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 5 }]}>
-            Description
-          </Text>
-          <Text style={globalStyles.textBody}>
-            {scheduleItem.description.trim()}
-          </Text>
+          <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 5, color: colors.black }]}>Description</Text>
+          <Text style={globalStyles.textBody}>{scheduleItem.description.trim()}</Text>
         </View>
       )}
     </ScrollView>

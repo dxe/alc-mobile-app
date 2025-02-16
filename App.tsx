@@ -1,16 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StatusBar, View } from "react-native";
-import {
-  NavigationContainer,
-  NavigationContainerRef,
-  StackActions,
-} from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef, StackActions } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
 import AnnouncementsStack from "./components/Announcements";
 import InfoStack from "./components/Info";
-import { colors, newColors } from "./global-styles";
+import { colors } from "./global-styles";
 import FlashMessage from "react-native-flash-message";
 import {
   getOSName,
@@ -28,7 +24,7 @@ import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
 import { InfoContext } from "./InfoContext";
 import * as Notifications from "expo-notifications";
-import { Icon } from "react-native-elements";
+import { Icon } from "@rneui/base";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
 import * as SplashScreen from "expo-splash-screen";
@@ -70,15 +66,10 @@ export const _tabNavigationListener = (props: any) => {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [registeredConferenceID, setRegisteredConferenceID] =
-    useState<number>(0);
+  const [registeredConferenceID, setRegisteredConferenceID] = useState<number>(0);
   const [isReady, setIsReady] = useState<boolean>(false);
   const { data, setData, status, setStatus } = useSchedule(null);
-  const {
-    data: infoData,
-    status: infoStatus,
-    setStatus: setInfoStatus,
-  } = useInfo([]);
+  const { data: infoData, status: infoStatus, setStatus: setInfoStatus } = useInfo([]);
   const [notification, setNotification] = useState(null);
   const navigationRef = useRef<NavigationContainerRef>(null);
   const routeNameRef = useRef();
@@ -110,8 +101,7 @@ export default function App() {
     })();
 
     // Fires when a notification is received when app is in foreground.
-    const subscription =
-      Notifications.addNotificationReceivedListener(_handleNotification);
+    const subscription = Notifications.addNotificationReceivedListener(_handleNotification);
     return () => subscription.remove();
   }, []);
 
@@ -119,22 +109,14 @@ export default function App() {
     setNotification(notification);
   };
 
-  const _handleNotificationResponse = (
-    response: NotificationResponse | undefined | null
-  ) => {
+  const _handleNotificationResponse = (response: NotificationResponse | undefined | null) => {
     if (response === undefined || response === null) return;
 
     (async () => {
-      const lastNotificationDate = await getStoredJSON(
-        "last_notification_date"
-      );
+      const lastNotificationDate = await getStoredJSON("last_notification_date");
 
-      if (
-        !lastNotificationDate ||
-        response.notification?.date > lastNotificationDate
-      ) {
-        const notificationTitle =
-          response?.notification?.request?.content?.title || "";
+      if (!lastNotificationDate || response.notification?.date > lastNotificationDate) {
+        const notificationTitle = response?.notification?.request?.content?.title || "";
         logAnalyticsEvent("NotificationTapped", 0, notificationTitle);
         if (navigationRef.current) {
           navigationRef.current.navigate("Announcements");
@@ -183,17 +165,12 @@ export default function App() {
   }
 
   return (
-    <View
-      style={{ flex: 1, backgroundColor: colors.black }}
-      onLayout={onLayoutRootView}
-    >
+    <View style={{ flex: 1, backgroundColor: colors.black }} onLayout={onLayoutRootView}>
       <NavigationContainer
         ref={navigationRef}
         onReady={() => logAnalyticsScreenChange(initialRouteName)}
         onStateChange={() => {
-          logAnalyticsScreenChange(
-            navigationRef.current?.getCurrentRoute()?.name
-          );
+          logAnalyticsScreenChange(navigationRef.current?.getCurrentRoute()?.name);
         }}
       >
         {registeredConferenceID != CONFERENCE_ID ? (
@@ -235,24 +212,17 @@ export default function App() {
                         iconName = "ellipsis-h";
                     }
 
-                    return (
-                      <Icon
-                        name={iconName}
-                        size={size}
-                        type="font-awesome-5"
-                        color={color}
-                        solid={focused}
-                      />
-                    );
+                    return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
                   },
                 })}
                 tabBarOptions={{
-                  activeTintColor: colors.lightBlue,
-                  inactiveTintColor: colors.midGrey,
+                  activeTintColor: colors.darkGreen,
+                  inactiveTintColor: colors.mediumGrey,
                   style: {
-                    backgroundColor: newColors.darkGrey,
-                    opacity: 0.9,
-                    borderTopWidth: 0,
+                    backgroundColor: colors.white,
+                    borderTopColor: colors.lightGrey,
+                    // opacity: 0.9,
+                    borderTopWidth: 2,
                   },
                 }}
                 initialRouteName={initialRouteName}

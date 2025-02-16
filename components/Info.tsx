@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect } from "react";
-import { colors, globalStyles, newColors, screenHeaderOptions } from "../global-styles";
-import { Icon, Card, Text } from "react-native-elements";
+import { globalStyles, colors, screenHeaderOptions } from "../global-styles";
+import { Icon, Card, Text } from "@rneui/base";
 import HTML from "react-native-render-html";
 import { Info } from "../api/info";
 import { logAnalyticsEvent, showErrorMessage } from "../util";
@@ -43,7 +43,7 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: newColors.mediumGrey }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[
         {
           paddingVertical: 4,
@@ -68,12 +68,10 @@ function InfoScreen({ navigation }: any) {
               flex: 1,
               borderRadius: 8,
               borderWidth: 1,
-              borderColor: newColors.lightGreen,
-              marginVertical: 16,
+              borderColor: colors.orange,
               marginHorizontal: 0,
               padding: 12,
-              paddingLeft: 6,
-              backgroundColor: newColors.darkGrey,
+              backgroundColor: colors.darkGreen,
             },
             globalStyles.shadow,
           ]}
@@ -84,23 +82,26 @@ function InfoScreen({ navigation }: any) {
               navigation.navigate("Info Details", { infoItem: item });
             }}
           >
-            <View style={{ flex: 1, flexDirection: "row" }}>
-              <Icon
-                raised
-                reverse
-                name={item.icon}
-                type="font-awesome-5"
-                color={item.icon === "exclamation-triangle" ? colors.orange : colors.primary}
-                containerStyle={{
-                  marginRight: 12,
-                  backgroundColor: colors.primary,
+            <View style={{ flex: 1, flexDirection: "column", padding: 4, gap: 8 }}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 12,
                 }}
-                solid={true}
-              />
-              <View style={{ flex: 1 }}>
-                <Text style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}>{item.title}</Text>
-                <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
+              >
+                <Icon
+                  name={item.icon}
+                  type="font-awesome-5"
+                  color={item.icon === "exclamation-triangle" ? colors.orange : colors.lightGreen}
+                  containerStyle={{ backgroundColor: colors.darkGreen }}
+                  solid
+                  size={24}
+                />
+                <Text style={[globalStyles.textLargeSemiBold]}>{item.title}</Text>
               </View>
+              <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>
             </View>
           </TouchableOpacity>
         </Card>
@@ -120,7 +121,7 @@ export function InfoDetails({ route, navigation }: any) {
 
   return (
     <ScrollView
-      style={[{ backgroundColor: newColors.mediumGrey }]}
+      style={[{ backgroundColor: colors.lightGrey }]}
       contentContainerStyle={[{ paddingVertical: 18, paddingHorizontal: 16 }]}
     >
       <HTML
@@ -129,11 +130,11 @@ export function InfoDetails({ route, navigation }: any) {
           fontFamily: "Inter-400",
           fontSize: 16,
           lineHeight: 24,
-          color: colors.white,
+          color: colors.darkGrey,
         }}
         tagsStyles={{
           strong: { fontFamily: "Inter-600" },
-          a: { color: newColors.lightBlue },
+          a: { color: colors.darkGreen },
         }}
       />
     </ScrollView>

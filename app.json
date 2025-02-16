@@ -8,11 +8,6 @@
     "orientation": "portrait",
     "backgroundColor": "#000000",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#000000"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -24,6 +19,9 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleMapsApiKey": "AIzaSyA2cv39gh8OwETbbwSCDTd2tHr4HbMltk0"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -31,7 +29,7 @@
       "versionCode": 16,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#EEFEE8"
       },
       "googleServicesFile": "./google-services.json",
       "config": {
@@ -64,12 +62,21 @@
         }
       ],
       "@react-native-firebase/app",
-      "./react-native-maps-plugin"
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#5B7045",
+          "image": "./assets/adaptive-icon-light.png",
+          "imageWidth": 200
+        }
+      ]
     ],
     "extra": {
       "eas": {
         "projectId": "a114cde5-7d72-4393-accd-9932cb79cffd"
       }
-    }
+    },
+    "newArchEnabled": false
   }
 }

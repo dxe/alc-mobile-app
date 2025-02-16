@@ -10,12 +10,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import {
-  screenHeaderOptions,
-  globalStyles,
-  colors,
-  newColors,
-} from "../global-styles";
+import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
 import {
   logAnalyticsEvent,
   showErrorMessage,
@@ -48,18 +43,23 @@ export default function HomeStack() {
             return (
               <View
                 style={{
-                  backgroundColor: newColors.darkGrey,
+                  backgroundColor: colors.darkGreen,
                   justifyContent: "center",
                   alignItems: "center",
                   paddingTop:
                     Platform.OS === "ios" ? Constants.statusBarHeight : 3,
+                  marginBottom: -1,
                   height:
-                    Platform.OS === "ios" ? Constants.statusBarHeight + 44 : 50,
+                    Platform.OS === "ios" ? Constants.statusBarHeight + 50 : 50,
                 }}
               >
                 <Image
-                  style={{ height: 55, width: 55, resizeMode: "contain" }}
-                  source={require("../assets/adaptive-icon.png")}
+                  style={{
+                    height: 55,
+                    width: 55,
+                    resizeMode: "contain",
+                  }}
+                  source={require("../assets/adaptive-icon-light.png")}
                 />
               </View>
             );
@@ -183,7 +183,7 @@ function HomeScreen({ navigation }: any) {
   return (
     data && (
       <ScrollView
-        style={[{ backgroundColor: colors.primary }]}
+        style={[{ backgroundColor: colors.lightGreen }]}
         contentContainerStyle={[
           { paddingVertical: 16, paddingHorizontal: 16, paddingBottom: 30 },
         ]}
@@ -191,7 +191,7 @@ function HomeScreen({ navigation }: any) {
           <RefreshControl
             refreshing={status === "refreshing" || status === "initialized"}
             onRefresh={onRefresh}
-            tintColor={colors.white}
+            tintColor={colors.mediumGrey}
           />
         }
       >
@@ -203,7 +203,7 @@ function HomeScreen({ navigation }: any) {
               <Text
                 style={[
                   globalStyles.h2,
-                  { color: colors.white, marginBottom: 10 },
+                  { color: colors.darkGrey, marginBottom: 10 },
                 ]}
               >
                 {data.conference.name} has ended.
@@ -211,7 +211,7 @@ function HomeScreen({ navigation }: any) {
               <Text
                 style={[
                   globalStyles.h2,
-                  { color: colors.white, marginBottom: 20 },
+                  { color: colors.darkGrey, marginBottom: 20 },
                 ]}
               >
                 We hope to see you again at our next conference!
