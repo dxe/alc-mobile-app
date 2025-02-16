@@ -8,11 +8,6 @@
     "orientation": "portrait",
     "backgroundColor": "#000000",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#000000"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -34,7 +29,7 @@
       "versionCode": 16,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#EEFEE8"
       },
       "googleServicesFile": "./google-services.json",
       "config": {
@@ -67,7 +62,15 @@
         }
       ],
       "@react-native-firebase/app",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#5B7045",
+          "image": "./assets/adaptive-icon-light.png",
+          "imageWidth": 200
+        }
+      ]
     ],
     "extra": {
       "eas": {
