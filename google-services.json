@@ -2,22 +2,17 @@
   "project_info": {
     "project_number": "781651139541",
     "project_id": "alc-mobile-app-3ded5",
-    "storage_bucket": "alc-mobile-app-3ded5.appspot.com"
+    "storage_bucket": "alc-mobile-app-3ded5.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:781651139541:android:1ef185d6d1f43ff2a17b5c",
+        "mobilesdk_app_id": "1:781651139541:android:f3a7a2a14cd71b62a17b5c",
         "android_client_info": {
-          "package_name": "com.dxe.mobile"
+          "package_name": "com.directactioneverywhere.mobile"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "781651139541-udmgrl6g82ron5v9fuua3rl6gfs881po.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyBlz1vUTFZC8GRIQpEYCYvUC4slsplCUhg"
@@ -27,8 +22,40 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "781651139541-udmgrl6g82ron5v9fuua3rl6gfs881po.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "781651139541-g1er7ooug0hmtjt78pdf2k0mbpe9bp0g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dxe.mobile",
+                "app_store_id": "1378547442"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781651139541:android:1ef185d6d1f43ff2a17b5c",
+        "android_client_info": {
+          "package_name": "com.dxe.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlz1vUTFZC8GRIQpEYCYvUC4slsplCUhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781651139541-g1er7ooug0hmtjt78pdf2k0mbpe9bp0g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dxe.mobile",
+                "app_store_id": "1378547442"
+              }
             }
           ]
         }
