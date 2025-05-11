@@ -200,7 +200,7 @@ function ScheduleScreen({ navigation }: any) {
               tintColor={colors.midGrey}
             />
           }
-          style={{ backgroundColor: colors.lightGrey }}
+          style={{ backgroundColor: colors.lightBlue }}
           contentContainerStyle={{
             paddingBottom: 30,
             paddingHorizontal: 15,

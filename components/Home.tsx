@@ -277,7 +277,7 @@ function HomeScreen({ navigation }: any) {
                     topElement={
                       <Text>
                         <Text>{utcToLocal(e.start_time).format("h:mm A")}</Text>
-                        <Text style={{ color: colors.mediumGrey }}>
+                        <Text style={{ color: colors.orange }}>
                           {" – " +
                             utcToLocal(e.start_time)
                               .add(e.length, "minute")

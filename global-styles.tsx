@@ -6,6 +6,7 @@ export const colors = {
   lightGreen: "#EEFEE8",
   darkGreen: "#5B7045",
   orange: "#EFAD4B",
+  lightBlue: "#F6FDFF",
   // Neutral colors.
   white: "#FFFFFF",
   lightGrey: "#F4F4F4",

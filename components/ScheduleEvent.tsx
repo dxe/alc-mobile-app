@@ -59,7 +59,7 @@ export function ScheduleEvent(props: Props) {
       <View
         style={{
           flexGrow: 1,
-          opacity: currentTime.isAfter(endTime) ? 0.75 : 1.0,
+          opacity: currentTime.isAfter(endTime) ? 0.5 : 1.0,
         }}
       >
         <View style={{ flex: 1, flexDirection: "row" }}>

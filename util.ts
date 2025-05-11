@@ -20,10 +20,7 @@ const DEFAULT_TIMEOUT = 500;
 
 // waitFunc wraps an async function and causes it to take at least a certain amount of time to resolve.
 // This is used to improve the UX in case something loads so quickly that the user thinks nothing happened.
-export const waitFunc = async (
-  fn: Promise<any>,
-  timeout: number = DEFAULT_TIMEOUT
-): Promise<any> => {
+export const waitFunc = async (fn: Promise<any>, timeout: number = DEFAULT_TIMEOUT): Promise<any> => {
   const [value] = await Promise.all([fn, wait(timeout)]);
   return value;
 };
@@ -143,9 +140,7 @@ export const useCurrentTime = () => {
   return currentTime;
 };
 
-export const logAnalyticsScreenChange = async (
-  screenName: string | undefined
-) => {
+export const logAnalyticsScreenChange = async (screenName: string | undefined) => {
   console.log(`Screen changed to ${screenName}`);
   try {
     await analytics().logScreenView({ screen_name: screenName });
@@ -154,11 +149,7 @@ export const logAnalyticsScreenChange = async (
   }
 };
 
-export const logAnalyticsEvent = async (
-  eventName: string,
-  itemID: number,
-  itemDescription: string
-) => {
+export const logAnalyticsEvent = async (eventName: string, itemID: number, itemDescription: string) => {
   console.log(`${eventName}: ${itemID} (${itemDescription})`);
   try {
     await analytics().logEvent(eventName, {
@@ -171,7 +162,5 @@ export const logAnalyticsEvent = async (
 };
 
 export const getOSName = () => {
-  return Device.osName === "iOS" || Device.osName === "iPadOS"
-    ? Device.osName
-    : "Android";
+  return Device.osName === "iOS" || Device.osName === "iPadOS" ? Device.osName : "Android";
 };

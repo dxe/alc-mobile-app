@@ -43,7 +43,7 @@ function InfoScreen({ navigation }: any) {
 
   return (
     <FlatList
-      style={[{ backgroundColor: colors.lightGrey }]}
+      style={[{ backgroundColor: colors.lightBlue }]}
       contentContainerStyle={[
         {
           paddingVertical: 4,
