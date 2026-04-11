@@ -60,9 +60,9 @@
             "useFrameworks": "static"
           },
           "android": {
-            "targetSdkVersion": 35,
-            "compileSdkVersion": 35,
-            "buildToolsVersion": "35.0.0"
+            "targetSdkVersion": 34,
+            "compileSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
           }
         }
       ],
