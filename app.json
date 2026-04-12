@@ -4,7 +4,7 @@
     "description": "Animal Liberation Conference",
     "owner": "dxetech",
     "slug": "alc-mobile-app",
-    "version": "7.0.2",
+    "version": "7.0.3",
     "orientation": "portrait",
     "backgroundColor": "#000000",
     "icon": "./assets/icon.png",
@@ -14,19 +14,17 @@
     "assetBundlePatterns": ["assets/*"],
     "ios": {
       "bundleIdentifier": "com.dxe.mobile",
-      "buildNumber": "19",
+      "buildNumber": "20",
       "supportsTablet": false,
       "googleServicesFile": "./GoogleService-Info.plist",
-      "config": {
-        "googleMapsApiKey": "AIzaSyA2cv39gh8OwETbbwSCDTd2tHr4HbMltk0"
-      },
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "GMSApiKey": "AIzaSyA2cv39gh8OwETbbwSCDTd2tHr4HbMltk0"
       }
     },
     "android": {
       "package": "com.directactioneverywhere.mobile",
-      "versionCode": 19,
+      "versionCode": 20,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#EEFEE8"
@@ -37,11 +35,6 @@
           "apiKey": "AIzaSyAdCHnX9uQ8U8pH2CwgKeMeyYj-Riq7lYc"
         }
       }
-    },
-    "notification": {
-      "icon": "./assets/notification-icon.png",
-      "color": "#3738AE",
-      "iosDisplayInForeground": true
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -56,18 +49,25 @@
       [
         "expo-build-properties",
         {
-          "ios": {
-            "useFrameworks": "static"
-          },
           "android": {
-            "targetSdkVersion": 34,
-            "compileSdkVersion": 35,
-            "buildToolsVersion": "35.0.0"
+            "targetSdkVersion": 35,
+            "compileSdkVersion": 36,
+            "buildToolsVersion": "36.0.0",
+            "newArchEnabled": false
           }
         }
       ],
       "@react-native-firebase/app",
+      "./plugins/withFirebaseIosFix",
       "expo-font",
+      "expo-video",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#3738AE"
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -82,6 +82,5 @@
         "projectId": "a114cde5-7d72-4393-accd-9932cb79cffd"
       }
     },
-    "newArchEnabled": false
   }
 }

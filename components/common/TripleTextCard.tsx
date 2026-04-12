@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { Card, Icon } from "@rneui/base";
+import { Card } from "@rneui/base";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { globalStyles, colors } from "../../global-styles";
 import { ConferenceEvent } from "../../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
@@ -47,17 +48,9 @@ export function TripleTextCard(props: Props) {
               <Text style={globalStyles.textMediumRegular}>{props.bottomText}</Text>
             </View>
           </View>
-          <Icon
-            type="font-awesome-5"
-            name="angle-right"
-            color={colors.white}
-            containerStyle={{
-              paddingLeft: 15,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            size={20}
-          />
+          <View style={{ paddingLeft: 15, justifyContent: "center", alignItems: "center" }}>
+            <FontAwesome5 name="angle-right" size={20} color={colors.white} solid />
+          </View>
         </View>
       </TouchableOpacity>
     </Card>

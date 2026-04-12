@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { StackNavigationOptions } from "@react-navigation/stack";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export const colors = {
   // 2025 theme colors.
@@ -159,5 +160,6 @@ export const screenHeaderOptions: StackNavigationOptions = {
     shadowOpacity: 0,
     borderBottomWidth: 0,
   },
-  headerBackTitleVisible: false,
+  headerBackButtonDisplayMode: "minimal",
+  headerBackImage: () => <FontAwesome5 name="angle-left" size={26} color={colors.white} solid style={{ paddingHorizontal: 10 }} />,
 };

@@ -1,11 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { screenHeaderOptions, globalStyles, colors } from "../global-styles";
-import { Icon, Text, Card } from "@rneui/base";
+import { Text, Card } from "@rneui/base";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { Announcement, useAnnouncements } from "../api/announcement";
 import { logAnalyticsEvent, showErrorMessage, useCurrentTime } from "../util";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import moment from "moment";
 import * as WebBrowser from "expo-web-browser";
 
@@ -26,13 +27,19 @@ export default function AnnouncementsStack() {
   );
 }
 
-function AnnouncementsScreen({ navigation }: any) {
+function AnnouncementsScreen() {
   const { data, status, setStatus } = useAnnouncements([]);
+  const isFocused = useIsFocused();
+  const listRef = useRef<any>(null);
   const currentTime = useCurrentTime();
 
   // Refresh the screen whenever it is focused.
+  // Scroll to top first so the list is at a known position before the spinner appears,
+  // avoiding the stuck-offset issue where iOS doesn't reset content offset when
+  // endRefreshing() fires on a hidden view.
   useFocusEffect(
     useCallback(() => {
+      listRef.current?.scrollToOffset({ offset: 0, animated: false });
       setStatus("refreshing");
     }, [])
   );
@@ -44,6 +51,7 @@ function AnnouncementsScreen({ navigation }: any) {
 
   return (
     <FlatList
+      ref={listRef}
       style={[{ backgroundColor: colors.lightBlue }]}
       contentContainerStyle={[
         {
@@ -55,7 +63,7 @@ function AnnouncementsScreen({ navigation }: any) {
       ]}
       refreshControl={
         <RefreshControl
-          refreshing={status === "refreshing" || status === "initialized"}
+          refreshing={isFocused && status === "refreshing"}
           onRefresh={() => setStatus("refreshing")}
           tintColor={colors.midGrey}
         />
@@ -84,18 +92,9 @@ function AnnouncementsScreen({ navigation }: any) {
           }}
         >
           <View style={{ flex: 1, flexDirection: "row" }}>
-            <Icon
-              reverse
-              name={item.icon}
-              type="font-awesome-5"
-              color={
-                item.icon === "exclamation-triangle"
-                  ? colors.orange
-                  : colors.darkGrey
-              }
-              containerStyle={{ marginRight: 12 }}
-              solid={true}
-            />
+            <View style={{ marginRight: 12, backgroundColor: item.icon === "exclamation-triangle" ? colors.orange : colors.darkGrey, borderRadius: 100, width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
+              <FontAwesome5 name={item.icon} size={16} color="white" solid />
+            </View>
             <View style={{ flex: 1 }}>
               <Text
                 style={[globalStyles.textLargeSemiBold, { marginBottom: 4 }]}
@@ -125,13 +124,9 @@ function AnnouncementsScreen({ navigation }: any) {
                     padding: 8,
                   }}
                 >
-                  <Icon
-                    type={"font-awesome-5"}
-                    name={"external-link-alt"}
-                    containerStyle={{ paddingRight: 7 }}
-                    size={16}
-                    color={colors.orange}
-                  />
+                  <View style={{ paddingRight: 7 }}>
+                    <FontAwesome5 name={"external-link-alt"} size={16} color={colors.orange} solid />
+                  </View>
                   <Text
                     style={[
                       globalStyles.textMediumBold,

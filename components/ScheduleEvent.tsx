@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { logAnalyticsEvent, showErrorMessage, useCurrentTime, utcToLocal } from "../util";
-import { Icon } from "@rneui/base";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { colors, globalStyles } from "../global-styles";
 import { ConferenceEvent, postRSVP } from "../api/schedule";
 import { NavigationProp } from "@react-navigation/native";
@@ -102,37 +102,14 @@ export function ScheduleEvent(props: Props) {
                 }}
               />
             ) : (
-              <Icon
-                type="font-awesome-5"
-                reverse
-                name={scheduleItem.attending ? "check" : "plus"}
-                color={scheduleItem.attending ? colors.orange : colors.lightGreen}
-                reverseColor={scheduleItem.attending ? colors.white : colors.darkGreen}
-                containerStyle={{
-                  margin: 0,
-                  borderWidth: 2,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderColor: colors.lightGreen,
-                  backgroundColor: colors.lightGreen,
-                }}
-                size={20}
-                disabled={submitting}
-              />
+              <View style={{ margin: 0, borderWidth: 2, borderRadius: 100, borderColor: colors.lightGreen, backgroundColor: scheduleItem.attending ? colors.orange : colors.lightGreen, width: 44, height: 44, justifyContent: "center", alignItems: "center" }}>
+                <FontAwesome5 name={scheduleItem.attending ? "check" : "plus"} size={20} color={scheduleItem.attending ? colors.white : colors.darkGreen} solid />
+              </View>
             )}
           </TouchableOpacity>
-          <Icon
-            type="font-awesome-5"
-            name="angle-right"
-            color={colors.lightGreen}
-            containerStyle={{
-              margin: 0,
-              marginLeft: 15,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            size={20}
-          />
+          <View style={{ margin: 0, marginLeft: 15, justifyContent: "center", alignItems: "center" }}>
+            <FontAwesome5 name="angle-right" size={20} color={colors.lightGreen} solid />
+          </View>
         </View>
       </View>
     </TouchableOpacity>

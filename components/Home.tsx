@@ -26,6 +26,7 @@ import Constants from "expo-constants";
 import { Info } from "../api/info";
 import { InfoContext } from "../InfoContext";
 import { InfoDetails } from "./Info";
+import { useIsFocused } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
@@ -95,6 +96,7 @@ function HomeScreen({ navigation }: any) {
     [] as ConferenceEvent[]
   );
   const { data, status, setStatus } = useContext(ScheduleContext);
+  const isFocused = useIsFocused();
   const currentTime = useCurrentTime();
   const {
     data: infoData,
@@ -189,7 +191,7 @@ function HomeScreen({ navigation }: any) {
         ]}
         refreshControl={
           <RefreshControl
-            refreshing={status === "refreshing" || status === "initialized"}
+            refreshing={isFocused && status === "refreshing"}
             onRefresh={onRefresh}
             tintColor={colors.mediumGrey}
           />
