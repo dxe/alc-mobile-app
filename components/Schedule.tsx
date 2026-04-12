@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RefreshControl, SectionList, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import { globalStyles, colors, screenHeaderOptions } from "../global-styles";
 import { utcToLocal, showErrorMessage, utcToLocalDateString, logAnalyticsEvent } from "../util";
 import CalendarStrip from "react-native-calendar-strip";
@@ -56,9 +57,10 @@ const sectionizeSchedule = (data: any[]) => {
 
 function ScheduleScreen({ navigation }: any) {
   const [filteredSchedule, setFilteredSchedule] = useState<ConferenceEvent[]>([]);
-  const calendarStrip = useRef<any>();
-  const eventsList = useRef<any>();
+  const calendarStrip = useRef<any>(null);
+  const eventsList = useRef<any>(null);
   const { data, status, setStatus } = useContext(ScheduleContext);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (status != "error") return;
@@ -76,7 +78,9 @@ function ScheduleScreen({ navigation }: any) {
         })
         .sort((a: ConferenceEvent, b: ConferenceEvent) => a.start_time.localeCompare(b.start_time))
     );
-    eventsList.current?.getScrollResponder().scrollTo({ x: 0, y: 0, animated: true });
+    if (filteredSchedule.length > 0) {
+      eventsList.current?.scrollToLocation({ sectionIndex: 0, itemIndex: 0, animated: true, viewPosition: 0 });
+    }
   };
 
   // Whenever the schedule data is updated, filter it using the selected date.
@@ -127,6 +131,7 @@ function ScheduleScreen({ navigation }: any) {
               highlightColor: colors.lightGreen,
               duration: 100,
             }}
+            highlightDateContainerStyle={{ borderRadius: 25, overflow: "hidden" }}
             scrollable={false}
             startingDate={utcToLocal(data.conference.start_date)}
             // useIsoWeekday starts the strip on the startingDate instead of on Sunday/Monday.
@@ -169,7 +174,6 @@ function ScheduleScreen({ navigation }: any) {
                   backgroundColor: colors.darkGreen,
                   borderRadius: 8,
                 }}
-                key={item.id}
                 style={[
                   {
                     flex: 1,
@@ -195,7 +199,7 @@ function ScheduleScreen({ navigation }: any) {
           )}
           refreshControl={
             <RefreshControl
-              refreshing={status === "refreshing" || status === "initialized"}
+              refreshing={isFocused && status === "refreshing"}
               onRefresh={() => setStatus("refreshing")}
               tintColor={colors.midGrey}
             />

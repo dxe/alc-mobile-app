@@ -1,8 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, RefreshControl, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import { globalStyles, colors, screenHeaderOptions } from "../global-styles";
-import { Icon, Card, Text } from "@rneui/base";
+import { Card, Text } from "@rneui/base";
+import { FontAwesome5 } from "@expo/vector-icons";
 import HTML from "react-native-render-html";
 import { Info } from "../api/info";
 import { logAnalyticsEvent, showErrorMessage } from "../util";
@@ -35,6 +37,7 @@ export default function InfoStack() {
 
 function InfoScreen({ navigation }: any) {
   const { data, status, setStatus } = useContext(InfoContext);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (status != "error") return;
@@ -54,7 +57,7 @@ function InfoScreen({ navigation }: any) {
       ]}
       refreshControl={
         <RefreshControl
-          refreshing={status === "refreshing" || status === "initialized"}
+          refreshing={isFocused && status === "refreshing"}
           onRefresh={() => setStatus("refreshing")}
           tintColor={colors.midGrey}
         />
@@ -91,14 +94,7 @@ function InfoScreen({ navigation }: any) {
                   gap: 12,
                 }}
               >
-                <Icon
-                  name={item.icon}
-                  type="font-awesome-5"
-                  color={item.icon === "exclamation-triangle" ? colors.orange : colors.lightGreen}
-                  containerStyle={{ backgroundColor: colors.darkGreen }}
-                  solid
-                  size={24}
-                />
+                <FontAwesome5 name={item.icon} size={24} color={item.icon === "exclamation-triangle" ? colors.orange : colors.lightGreen} solid />
                 <Text style={[globalStyles.textLargeSemiBold]}>{item.title}</Text>
               </View>
               <Text style={globalStyles.textSmallRegular}>{item.subtitle.trim()}</Text>

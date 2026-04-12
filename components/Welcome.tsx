@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import React, { useContext, useRef, useState } from "react";
 import { colors, globalStyles } from "../global-styles";
 import { getDeviceID, logAnalyticsEvent, showErrorMessage, getOSName } from "../util";
@@ -7,14 +7,16 @@ import { UserContext } from "../UserContext";
 import { postAddUser } from "../api/user";
 import { CONFERENCE_ID } from "../api/api";
 import * as Device from "expo-device";
-import { Video } from "expo-av";
+import { VideoView, useVideoPlayer } from "expo-video";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-//@ts-ignore
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
-import { ResizeMode } from "../node_modules/expo-av/src/Video.types";
 
 export function WelcomeScreen() {
   const { onUserRegistered } = useContext(UserContext);
+  const player = useVideoPlayer(require("../assets/welcome-video.mp4"), (p) => {
+    p.loop = true;
+    p.muted = true;
+    p.play();
+  });
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
@@ -90,7 +92,7 @@ export function WelcomeScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Video
+      <VideoView
         style={{
           height: "100%",
           width: "100%",
@@ -98,11 +100,9 @@ export function WelcomeScreen() {
           top: 0,
           left: 0,
         }}
-        source={require("../assets/welcome-video.mp4")}
-        useNativeControls={false}
-        resizeMode={ResizeMode.COVER}
-        isLooping
-        status={{ shouldPlay: true, isMuted: true }}
+        player={player}
+        contentFit="cover"
+        nativeControls={false}
       />
 
       <View
@@ -116,13 +116,8 @@ export function WelcomeScreen() {
         {submitting ? (
           <ActivityIndicator size="large" color={colors.white} style={{ flex: 1 }} />
         ) : (
-          <KeyboardAwareScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center" }}>
             <View
               style={{
                 flex: 1,
@@ -207,7 +202,8 @@ export function WelcomeScreen() {
                 disabled={submitting}
               />
             </View>
-          </KeyboardAwareScrollView>
+            </ScrollView>
+          </KeyboardAvoidingView>
         )}
       </View>
     </View>

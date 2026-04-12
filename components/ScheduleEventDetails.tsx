@@ -17,7 +17,8 @@ import MapView, {
 } from "react-native-maps";
 import { showLocation } from "react-native-map-link";
 import React, { useContext, useState } from "react";
-import { Button, Icon } from "@rneui/base";
+import { Button } from "@rneui/base";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { ScheduleContext } from "../ScheduleContext";
 import * as Device from "expo-device";
 
@@ -206,12 +207,9 @@ export function ScheduleEventDetails({ route }: any) {
                   });
                 }}
               >
-                <Icon
-                  name={"directions"}
-                  type={"font-awesome-5"}
-                  style={{ marginRight: 7 }}
-                  color={colors.darkGreen}
-                />
+                <View style={{ marginRight: 7 }}>
+                  <FontAwesome5 name={"directions"} size={24} color={colors.darkGreen} solid />
+                </View>
                 <Text
                   style={[globalStyles.textButton, { color: colors.darkGreen }]}
                 >
@@ -225,12 +223,7 @@ export function ScheduleEventDetails({ route }: any) {
 
       <View style={{ flex: 1, flexDirection: "row", marginBottom: 16 }}>
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-          <Icon
-            type="font-awesome-5"
-            name="calendar-check"
-            color={colors.darkGreen}
-            size={25}
-          />
+          <FontAwesome5 name="calendar-check" size={25} color={colors.darkGreen} solid />
           <Text
             style={[
               globalStyles.textMediumRegular,
@@ -268,14 +261,7 @@ export function ScheduleEventDetails({ route }: any) {
             onPress={eventRSVP}
             icon={
               submitting ? undefined : (
-                <Icon
-                  name={scheduleItem.attending ? "check" : "plus"}
-                  type="font-awesome-5"
-                  color={
-                    scheduleItem.attending ? colors.white : colors.darkGreen
-                  }
-                  size={16}
-                />
+                <FontAwesome5 name={scheduleItem.attending ? "check" : "plus"} size={16} color={scheduleItem.attending ? colors.white : colors.darkGreen} solid />
               )
             }
             title={

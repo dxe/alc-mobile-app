@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StatusBar, View } from "react-native";
-import { NavigationContainer, NavigationContainerRef, StackActions } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef, ParamListBase, StackActions } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./components/Home";
 import ScheduleStack from "./components/Schedule";
@@ -24,7 +24,7 @@ import { useSchedule } from "./api/schedule";
 import { ScheduleContext } from "./ScheduleContext";
 import { InfoContext } from "./InfoContext";
 import * as Notifications from "expo-notifications";
-import { Icon } from "@rneui/base";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import * as Device from "expo-device";
 import * as SplashScreen from "expo-splash-screen";
@@ -38,6 +38,8 @@ SplashScreen.preventAutoHideAsync();
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
@@ -53,11 +55,11 @@ export const _tabNavigationListener = (props: any) => {
   return {
     blur: (e: any) => {
       const target = e.target;
-      const state = navigation.dangerouslyGetState();
+      const state = navigation.getState();
       const route = state.routes.find((r: any) => r.key === target);
       // If we are leaving a tab that has its own stack navigation, then clear it.
       if (route.state?.type === "stack" && route.state.routes?.length > 1) {
-        navigation.dispatch(StackActions.popToTop());
+        navigation.dispatch({ ...StackActions.popToTop(), target: route.state.key });
       }
     },
   };
@@ -71,8 +73,8 @@ export default function App() {
   const { data, setData, status, setStatus } = useSchedule(null);
   const { data: infoData, status: infoStatus, setStatus: setInfoStatus } = useInfo([]);
   const [notification, setNotification] = useState(null);
-  const navigationRef = useRef<NavigationContainerRef>(null);
-  const routeNameRef = useRef();
+  const navigationRef = useRef<NavigationContainerRef<ParamListBase>>(null);
+  const routeNameRef = useRef<string | undefined>(undefined);
   const [initialRouteName, setInitialRouteName] = useState("Home");
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
   let [isFontsLoaded] = useFonts({
@@ -212,19 +214,17 @@ export default function App() {
                         iconName = "ellipsis-h";
                     }
 
-                    return <Icon name={iconName} size={size} type="font-awesome-5" color={color} solid={focused} />;
+                    return <FontAwesome5 name={iconName} size={size} color={color} solid={focused} />;
                   },
-                })}
-                tabBarOptions={{
-                  activeTintColor: colors.darkGreen,
-                  inactiveTintColor: colors.mediumGrey,
-                  style: {
+                  headerShown: false,
+                  tabBarActiveTintColor: colors.darkGreen,
+                  tabBarInactiveTintColor: colors.mediumGrey,
+                  tabBarStyle: {
                     backgroundColor: colors.white,
                     borderTopColor: colors.lightGrey,
-                    // opacity: 0.9,
                     borderTopWidth: 2,
                   },
-                }}
+                })}
                 initialRouteName={initialRouteName}
               >
                 <Tab.Screen
